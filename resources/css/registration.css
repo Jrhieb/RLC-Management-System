@@ -1,0 +1,137 @@
+/* Shared registration presentation. No staff/login selectors or global resets. */
+@import "./registration-email.css";
+
+.rlcp-registration {
+    --registration-red: #b91c1c;
+    --registration-gold: #ffc107;
+    --registration-ink: #181818;
+    --registration-muted: #625d57;
+    color: var(--registration-ink);
+    font-family: "Instrument Sans", "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    text-align: left;
+    color-scheme: light;
+}
+.rlcp-registration *, .rlcp-registration *::before, .rlcp-registration *::after { box-sizing: border-box; }
+.rlcp-registration [hidden] { display: none !important; }
+.rlcp-registration :where(h1, h2, p, ol) { margin: 0; }
+.rlcp-registration :where(button, input) { font: inherit; }
+.rlcp-registration button { cursor: pointer; }
+.rlcp-registration a { color: var(--registration-red); text-underline-offset: 4px; }
+.rlcp-registration :where(a, button, input, [tabindex]):focus-visible { outline: 3px solid #2463b0; outline-offset: 4px; box-shadow: 0 0 0 2px #fff; }
+.rlcp-registration .registration-sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.rlcp-registration .registration-panel { display: grid; grid-template-columns: 1fr 1fr; padding: 8px; background: #fff; border-radius: 30px; min-width: 0; }
+.rlcp-registration .registration-brand {
+    display: flex; flex-direction: column; position: relative; isolation: isolate;
+    padding: 44px 38px 32px; overflow: hidden; border-radius: 24px; color: #fff;
+    background: #8c1717; min-width: 0;
+}
+.rlcp-registration .registration-brand__photo { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: 70% center; }
+.rlcp-registration .registration-brand::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(125deg, rgb(96 9 13 / 94%) 10%, rgb(185 28 28 / 90%) 62%, rgb(107 66 38 / 65%) 86%, rgb(255 193 7 / 70%)); }
+.rlcp-registration .registration-brand__identity { display: flex; align-items: center; gap: 18px; margin-bottom: 60px; }
+.rlcp-registration .registration-brand__identity img { width: 94px; height: 94px; flex: 0 0 94px; object-fit: contain; border-radius: 50%; background: #fff; padding: 4px; }
+.rlcp-registration .registration-brand__identity strong { display: block; font: bold 2.5rem/1.1 Georgia, serif; }
+.rlcp-registration .registration-brand__identity small { display: block; font-size: .7rem; max-width: 22ch; margin-top: 6px; }
+.rlcp-registration .registration-eyebrow { color: var(--registration-red); font-size: .7rem; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; line-height: 1.6; margin-bottom: 14px; }
+.rlcp-registration .registration-brand .registration-eyebrow { color: #ffe399; }
+.rlcp-registration .registration-brand h2 { font-size: clamp(2.4rem, 3.6vw, 3.35rem); line-height: 1.08; font-weight: 700; letter-spacing: -.035em; margin-bottom: 22px; text-wrap: balance; }
+.rlcp-registration .registration-brand h2 span { color: var(--registration-gold); }
+.rlcp-registration .registration-brand__message > p:last-child { max-width: 34ch; font-size: 1rem; color: #fff2e8; }
+.rlcp-registration .registration-steps { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 36px; }
+.rlcp-registration .registration-steps li { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; border: 1px solid #ffffff5c; background: #500d0d66; padding: 16px 12px; border-radius: 14px; font-size: .8rem; font-weight: 600; line-height: 1.4; }
+.rlcp-registration .registration-step-number { display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid #fff; border-radius: 50%; font-size: .9rem; }
+.rlcp-registration .registration-steps [aria-current] { border-color: var(--registration-gold); }
+.rlcp-registration .registration-steps [aria-current] .registration-step-number, .rlcp-registration .registration-steps .is-complete .registration-step-number { background: var(--registration-gold); color: var(--registration-ink); border-color: var(--registration-gold); }
+.rlcp-registration .registration-brand__footer { font-size: .7rem; margin-top: auto; padding-top: 32px; color: #fff2e8; }
+.rlcp-registration .registration-content { min-width: 0; padding: 64px 48px 42px; align-self: center; }
+.rlcp-registration .registration-title { font-size: clamp(1.8rem, 2.6vw, 2.55rem); font-weight: 700; letter-spacing: -.035em; line-height: 1.15; text-wrap: balance; }
+.rlcp-registration .registration-lead { margin-top: 14px; margin-bottom: 30px; color: var(--registration-muted); font-size: 1rem; }
+.rlcp-registration form { display: flex; flex-direction: column; gap: 18px; }
+.rlcp-registration .registration-field { display: flex; flex-direction: column; gap: 9px; }
+.rlcp-registration .registration-field label { font-size: .9rem; font-weight: 600; }
+.rlcp-registration .registration-field input { display: block; width: 100%; min-height: 52px; border: 1px solid #c9c3bb; border-radius: 10px; padding: 12px 15px; color: var(--registration-ink); background: #fff; line-height: 1.5; }
+.rlcp-registration .registration-field input::placeholder { color: #78716a; }
+.rlcp-registration .registration-field input[aria-invalid="true"] { border-color: var(--registration-red); }
+.rlcp-registration .registration-help { font-size: .82rem; line-height: 1.65; color: var(--registration-muted); }
+.rlcp-registration .registration-feedback, .rlcp-registration .registration-error { font-size: .85rem; line-height: 1.55; overflow-wrap: anywhere; }
+.rlcp-registration .registration-feedback { color: #20633b; }
+.rlcp-registration .registration-error { color: var(--registration-red); }
+.rlcp-registration :where(.registration-feedback, .registration-error):empty { display: none; }
+.rlcp-registration .registration-submit {
+    display: flex; align-items: center; justify-content: center; gap: 16px; width: 100%;
+    background: var(--registration-red); color: #fff; border: 0; border-radius: 11px;
+    padding: 14px 20px; min-height: 56px; font-weight: 700; font-size: .95rem; line-height: 1.4;
+    text-decoration: none; transition: background 160ms ease, transform 160ms ease;
+}
+.rlcp-registration .registration-submit:not(:disabled):hover { background: #991b1b; transform: translateY(-1px); }
+.rlcp-registration .registration-submit:disabled { cursor: wait; background: #8e2929; }
+.rlcp-registration .registration-submit__arrow { display: grid; place-items: center; width: 30px; height: 30px; flex: 0 0 30px; border-radius: 50%; background: var(--registration-gold); color: var(--registration-ink); font-size: 1.15rem; }
+.rlcp-registration .registration-pending-note { font-size: .8rem; color: var(--registration-muted); }
+.rlcp-registration .registration-review-note { margin-block: 24px; padding: 16px; border-radius: 10px; background: #fff9ef; border: 1px solid #ede2ce; color: #6b4226; font-size: .8rem; }
+.rlcp-registration .registration-login { border-top: 1px solid #e6dfd5; padding-top: 22px; margin-top: 28px; color: var(--registration-muted); text-align: center; font-size: .9rem; }
+.rlcp-registration .registration-login a { color: var(--registration-red); font-weight: 700; margin-left: 4px; text-decoration: underline; }
+.rlcp-registration .registration-close { position: absolute; top: 18px; right: 18px; z-index: 2; display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: #fff; color: #625d57; padding: 0; font-size: 2rem; font-weight: 400; line-height: 1; }
+.rlcp-registration .registration-close:hover { background: #fff9ef; color: var(--registration-red); }
+.rlcp-registration-dialog { position: fixed; inset: 0; margin: auto; padding: 0; border: 0; border-radius: 30px; width: min(1080px, calc(100% - 48px)); max-width: none; max-height: calc(100dvh - 48px); overflow: auto; overscroll-behavior: contain; background: #fff; box-shadow: 0 24px 80px #0005; }
+.rlcp-registration-dialog:not([open]) { display: none; }
+.rlcp-registration-dialog::backdrop { background: rgb(24 24 24 / 62%); backdrop-filter: blur(5px); }
+.rlcp-registration-dialog[open] { animation: registration-dialog-in 180ms ease-out both; }
+.rlcp-registration-dialog[open]::backdrop { animation: registration-backdrop-in 180ms ease-out both; }
+.rlcp-registration-dialog.is-closing { animation: registration-dialog-out 150ms ease-in both; }
+.rlcp-registration-dialog.is-closing::backdrop { animation: registration-backdrop-out 150ms ease-in both; }
+.registration-scroll-locked { overflow: hidden; }
+.rlcp-public.registration-scroll-locked { position: fixed; top: var(--registration-scroll-top); width: var(--registration-locked-width); }
+.rlcp-registration.registration-notice { position: fixed; right: 24px; bottom: 24px; width: min(420px, calc(100% - 48px)); z-index: 20; padding: 22px 48px 22px 24px; border: 1px solid #e6dfd5; border-left: 4px solid #b91c1c; border-radius: 12px; background: #fff9ef; box-shadow: 0 8px 30px #0002; font-size: .85rem; }
+.rlcp-registration.registration-notice a { display: inline-block; padding-block: 10px 2px; font-weight: 700; text-decoration: underline; }
+.rlcp-registration.registration-notice button { position: absolute; top: 4px; right: 4px; width: 40px; height: 40px; background: none; border: 0; color: #625d57; font-size: 1.6rem; }
+.registration-page { margin: 0; min-height: 100vh; background: #fff9ef; }
+.registration-page__main { width: min(1080px, calc(100% - 48px)); margin: 0 auto; padding-block: 32px 56px; }
+.registration-page__main > .registration-panel { box-shadow: 0 12px 60px #6b422618; border: 1px solid #e6dfd5; }
+.rlcp-registration .registration-back { display: inline-block; padding-block: 12px; margin-bottom: 16px; font-size: .85rem; font-weight: 600; text-decoration: none; }
+.rlcp-registration .registration-verified-email { padding: 16px; border: 1px solid #e6dfd5; border-radius: 10px; background: #fff9ef; margin-bottom: 16px; }
+.rlcp-registration .registration-verified-email span { display: block; font-size: .75rem; color: var(--registration-muted); }
+.rlcp-registration .registration-verified-email strong { display: block; font-size: .9rem; overflow-wrap: anywhere; }
+.rlcp-registration .registration-verified-email ~ form { margin-top: 24px; }
+.rlcp-registration .registration-password { position: relative; }
+.rlcp-registration .registration-password input { padding-right: 72px; }
+.rlcp-registration .registration-password button { position: absolute; right: 4px; top: 4px; min-height: 44px; padding: 8px 10px; font-size: .75rem; font-weight: 600; border: 0; border-radius: 6px; color: var(--registration-red); background: #fff9ef; }
+.rlcp-registration .registration-review-icon { display: grid; place-items: center; width: 68px; height: 68px; border-radius: 50%; background: #ffc107; color: #181818; font-size: 2rem; margin-bottom: 28px; }
+.rlcp-registration .registration-review-icon ~ .registration-submit { margin-top: 32px; }
+@keyframes registration-dialog-in { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: scale(1); } }
+@keyframes registration-dialog-out { to { opacity: 0; transform: scale(.98); } }
+@keyframes registration-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes registration-backdrop-out { to { opacity: 0; } }
+@media (max-width: 900px) {
+    .rlcp-registration .registration-brand { padding: 36px 28px 28px; }
+    .rlcp-registration .registration-brand__identity { flex-wrap: wrap; gap: 14px; margin-bottom: 38px; }
+    .rlcp-registration .registration-content { padding-inline: 32px; }
+    .rlcp-registration .registration-steps { gap: 8px; }
+    .rlcp-registration .registration-steps li { padding: 14px 9px; font-size: .75rem; }
+}
+@media (max-width: 700px) {
+    .rlcp-registration-dialog { width: calc(100% - 24px); max-height: calc(100dvh - 24px); border-radius: 22px; }
+    .rlcp-registration .registration-panel { grid-template-columns: 1fr; padding: 6px; border-radius: 22px; }
+    .rlcp-registration .registration-brand { padding: 24px; border-radius: 17px; }
+    .rlcp-registration .registration-brand__identity { flex-wrap: nowrap; margin-bottom: 20px; gap: 12px; padding-right: 30px; }
+    .rlcp-registration .registration-brand__identity img { width: 58px; height: 58px; flex-basis: 58px; }
+    .rlcp-registration .registration-brand__identity strong { font-size: 1.9rem; }
+    .rlcp-registration .registration-brand__identity small { font-size: .6rem; }
+    .rlcp-registration .registration-brand h2 { font-size: 2rem; margin-bottom: 12px; }
+    .rlcp-registration .registration-brand h2 br { display: none; }
+    .rlcp-registration .registration-brand__message > p:last-child { font-size: .85rem; }
+    .rlcp-registration .registration-brand .registration-eyebrow { font-size: .6rem; margin-bottom: 10px; }
+    .rlcp-registration .registration-steps { margin-top: 22px; }
+    .rlcp-registration .registration-steps li { padding: 12px 8px; font-size: .7rem; gap: 8px; }
+    .rlcp-registration .registration-step-number { width: 28px; height: 28px; font-size: .8rem; }
+    .rlcp-registration .registration-brand__footer { display: none; }
+    .rlcp-registration .registration-content { padding: 32px 22px; }
+    .rlcp-registration .registration-title { font-size: 1.9rem; }
+    .rlcp-registration .registration-close { position: sticky; top: 10px; margin: 10px 10px -54px auto; width: 40px; height: 40px; background: #fff; font-size: 1.8rem; }
+    .registration-page__main { width: calc(100% - 24px); padding-block: 12px 28px; }
+    .rlcp-registration .registration-lead { margin-bottom: 24px; font-size: .95rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .rlcp-registration, .rlcp-registration *, .rlcp-registration::backdrop { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    .rlcp-registration .registration-submit:not(:disabled):hover { transform: none; }
+}

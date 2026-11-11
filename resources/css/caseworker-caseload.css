@@ -1,0 +1,94 @@
+.rlc-caseworker-dashboard .rlc-caseload-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.rlc-caseload-panels {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 20px;
+}
+
+.rlc-caseload-preview {
+    margin: 20px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.rlc-caseload-preview li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px 14px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--rlc-border);
+}
+
+.rlc-caseload-preview li:last-child {
+    border-bottom: 0;
+}
+
+.rlc-caseload-preview .rlcr-person {
+    min-width: 0;
+    grid-row: span 2;
+}
+
+.rlc-caseload-preview .rlcr-id {
+    max-width: 150px;
+    color: var(--rlc-muted);
+    font-size: 12px;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.rlc-caseload-preview .rlcr-status {
+    justify-self: end;
+}
+
+.rlc-caseload-refresh-note,
+.rlc-caseload-error {
+    margin-top: 18px;
+    color: var(--rlc-muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.rlc-caseload-refresh-note a {
+    color: var(--rlc-violet);
+    text-decoration: underline;
+}
+
+@media (max-width: 1100px) {
+    .rlc-caseload-panels {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+    .rlc-caseworker-dashboard .rlc-caseload-stats {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .rlc-caseworker-dashboard .rlc-panel-heading {
+        flex-wrap: wrap;
+    }
+
+    .rlc-caseload-preview li {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .rlc-caseload-preview .rlcr-person {
+        grid-row: auto;
+    }
+
+    .rlc-caseload-preview .rlcr-id {
+        max-width: 100%;
+        margin-left: 52px;
+        text-align: left;
+    }
+
+    .rlc-caseload-preview .rlcr-status {
+        justify-self: start;
+        margin-left: 52px;
+    }
+}

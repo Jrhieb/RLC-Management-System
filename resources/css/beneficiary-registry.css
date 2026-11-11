@@ -1,0 +1,1317 @@
+/* Registry styles stay scoped to the index, including menus in the top layer. */
+.rlc-registry.rlc-registry-index {
+    --rlc-surface: #fff;
+    --rlc-soft: var(--rlcp-soft, #f9f8ff);
+    --rlc-tint: var(--rlcp-tint, #f2edff);
+    --registry-selection: var(--rlcp-tint, #f6f3ff);
+    min-width: 0;
+    padding: 28px 32px 36px;
+}
+.dark .rlc-registry.rlc-registry-index {
+    --rlc-surface: var(--rlcp-surface, #191a23);
+    --rlc-soft: var(--rlcp-soft, #1f202b);
+    --rlc-tint: var(--rlcp-tint, #2b2141);
+    --registry-selection: var(--rlcp-tint, #292137);
+}
+.rlc-registry.rlc-registry-index [x-cloak] {
+    display: none !important;
+}
+.rlc-registry.rlc-registry-index .rlcr-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 12px 0 30px;
+}
+.rlc-registry.rlc-registry-index .rlcr-header h1 {
+    margin: 0;
+    font-size: 32px;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    font-weight: 750;
+}
+.rlc-registry.rlc-registry-index .rlcr-header > div:first-child > p {
+    margin: 8px 0 0;
+    color: var(--rlc-muted);
+    font-size: 15px;
+    line-height: 1.5;
+}
+.rlc-registry.rlc-registry-index .rlcr-header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.rlc-registry.rlc-registry-index .rlcr-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+    min-height: 40px;
+    padding: 9px 16px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background 0.15s;
+}
+.rlc-registry.rlc-registry-index .rlcr-header .rlcr-button {
+    min-height: 44px;
+    padding: 11px 20px;
+    font-size: 14px;
+}
+.rlc-registry.rlc-registry-index .rlcr-button svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+.rlc-registry.rlc-registry-index .rlcr-button-primary {
+    background: linear-gradient(110deg, var(--rlcp-primary, #713bff), var(--rlcp-primary, #7c32f6));
+    color: #fff;
+}
+.rlc-registry.rlc-registry-index .rlcr-button-primary:hover {
+    background: var(--rlcp-primary, #6329de);
+}
+.rlc-registry.rlc-registry-index .rlcr-button-secondary {
+    background: var(--rlc-surface);
+    border-color: var(--rlcp-highlight-text, #a78bfa);
+    color: var(--rlc-violet);
+}
+.rlc-registry.rlc-registry-index .rlcr-button-secondary:hover {
+    background: var(--rlc-tint);
+}
+.rlc-registry.rlc-registry-index .rlcr-button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+.rlc-registry.rlc-registry-index .rlcr-tabs {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    border-bottom: 1px solid var(--rlc-border);
+}
+.rlc-registry.rlc-registry-index .rlcr-tab-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-width: 0;
+}
+.rlc-registry.rlc-registry-index .rlcr-tab-links a {
+    display: flex;
+    align-items: center;
+    margin: 0 0 -1px;
+    padding: 14px 20px;
+    border-bottom: 3px solid transparent;
+    color: var(--rlc-muted);
+    font-size: 15px;
+    font-weight: 550;
+}
+.rlc-registry.rlc-registry-index .rlcr-tab-links a[aria-current] {
+    border-bottom-color: var(--rlc-violet);
+    color: var(--rlc-violet);
+    font-weight: 650;
+}
+.rlc-registry.rlc-registry-index .rlcr-tab-links a:hover {
+    color: var(--rlc-violet);
+    background: var(--rlc-tint);
+}
+.rlc-registry.rlc-registry-index .rlcr-tab-links a:focus-visible {
+    outline: 2px solid var(--rlc-violet);
+    outline-offset: -4px;
+    border-radius: 6px;
+}
+.rlc-registry.rlc-registry-index .rlcr-sort {
+    color: var(--rlc-muted);
+    font-size: 12px;
+    white-space: nowrap;
+}
+.rlc-registry.rlc-registry-index .rlcr-directory {
+    min-width: 0;
+    background: var(--rlc-surface);
+    border: 1px solid var(--rlc-border);
+    border-top: 0;
+    border-radius: 0 0 8px 8px;
+}
+.rlc-registry.rlc-registry-index .rlcr-filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+}
+.rlc-registry.rlc-registry-index .rlcr-search-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 20px;
+    flex: 1;
+    min-width: min(100%, 480px);
+}
+.rlc-registry.rlc-registry-index .rlcr-search-wrap {
+    flex: 1;
+    width: auto;
+    min-width: min(100%, 240px);
+    margin: 0;
+    order: 0;
+}
+.rlc-registry.rlc-registry-index .rlcr-search-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    min-height: 42px;
+    padding: 7px 10px 7px 14px;
+    border: 1px solid var(--rlc-border);
+    border-radius: 7px;
+    background: var(--rlc-soft);
+}
+.rlc-registry.rlc-registry-index .rlcr-search-field > [data-beneficiary-search-icon] {
+    display: flex;
+    flex-shrink: 0;
+    color: var(--rlc-muted);
+}
+.rlc-registry.rlc-registry-index .rlcr-search-field:focus-within > [data-beneficiary-search-icon] {
+    display: none !important;
+}
+.rlc-registry.rlc-registry-index .rlcr-search-field > [data-beneficiary-search-icon] .rlc-icon {
+    width: 18px;
+    height: 18px;
+}
+.rlc-registry.rlc-registry-index .rlcr-search-field input {
+    min-width: 0;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--rlc-ink);
+    font-size: 13px;
+    box-shadow: none;
+}
+.rlc-registry.rlc-registry-index .rlcr-search-field input:focus-visible {
+    outline: none;
+}
+.rlc-registry.rlc-registry-index .rlcr-search-field input::placeholder {
+    color: var(--rlc-muted);
+}
+.rlc-registry.rlc-registry-index .rlcr-search-field input::-webkit-search-cancel-button {
+    display: none;
+}
+.rlc-registry.rlc-registry-index .rlcr-search-field:focus-within {
+    border-color: var(--rlc-violet);
+    box-shadow: 0 0 0 2px var(--rlcp-focus-wash, #7439f71a);
+}
+.rlc-registry.rlc-registry-index .rlcr-search-field button {
+    display: flex;
+    padding: 5px;
+    border-radius: 5px;
+    color: var(--rlc-violet);
+}
+.rlc-registry.rlc-registry-index .rlcr-search-field button:hover {
+    background: var(--rlc-tint);
+}
+.rlc-registry.rlc-registry-index .rlcr-search-field button .rlc-icon {
+    width: 17px;
+    height: 17px;
+}
+.rlc-registry.rlc-registry-index .rlcr-live-feedback {
+    padding: 0 20px;
+    color: var(--rlc-muted);
+    font-size: 12px;
+}
+.rlc-registry.rlc-registry-index .rlcr-live-feedback > span {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-bottom: 12px;
+}
+.rlc-registry.rlc-registry-index .rlcr-live-feedback [hidden] {
+    display: none !important;
+}
+.rlc-registry.rlc-registry-index .rlcr-live-feedback button {
+    color: var(--rlc-violet);
+    text-decoration: underline;
+}
+.rlc-registry.rlc-registry-index .rlcr-search-spinner {
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--rlc-border);
+    border-top-color: var(--rlc-violet);
+    border-radius: 50%;
+    animation: registry-spin 0.7s linear infinite;
+}
+.rlc-registry.rlc-registry-index .rlcr-choice-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    max-width: 100%;
+    color: var(--rlc-muted);
+    font-size: 13px;
+}
+.rlc-registry.rlc-registry-index .rlcr-choice-filter label {
+    flex-shrink: 0;
+}
+.rlc-registry.rlc-registry-index .rlcr-choice-filter select {
+    min-width: 0;
+    min-height: 40px;
+    max-width: 100%;
+    border: 1px solid var(--rlc-border);
+    border-radius: 6px;
+    background: var(--rlc-surface);
+    color: var(--rlc-ink);
+    padding: 8px 10px;
+    font-size: 13px;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-filter select {
+    max-width: 220px;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseload-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 20px;
+    border-bottom: 1px solid var(--rlc-border);
+    background: var(--rlc-soft);
+}
+.rlc-registry.rlc-registry-index .rlcr-caseload-heading p {
+    margin: 0 0 4px;
+    color: var(--rlc-muted);
+    font-size: 12px;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseload-heading h3 {
+    margin: 0;
+    color: var(--rlc-ink);
+    font-size: 19px;
+    font-weight: 650;
+    overflow-wrap: anywhere;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseload-heading > div {
+    min-width: 0;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseloads {
+    padding: 24px 20px;
+    container: rlcr-caseloads / inline-size;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseloads-description {
+    margin: 0 0 20px;
+    color: var(--rlc-muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseload-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: 20px;
+    row-gap: 24px;
+    max-width: 320px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+@container rlcr-caseloads (min-width: 580px) {
+    .rlc-registry.rlc-registry-index .rlcr-caseload-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        max-width: 660px;
+    }
+}
+@container rlcr-caseloads (min-width: 880px) {
+    .rlc-registry.rlc-registry-index .rlcr-caseload-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        max-width: 1000px;
+    }
+}
+@container rlcr-caseloads (min-width: 1180px) {
+    .rlc-registry.rlc-registry-index .rlcr-caseload-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        max-width: 1340px;
+    }
+}
+.rlc-registry.rlc-registry-index .rlcr-caseload-grid li {
+    min-width: 0;
+}
+/* Decorative covers form the folder; its accessible content remains ordinary HTML. */
+.rlc-registry.rlc-registry-index .rlcr-caseload-card {
+    --caseload-selected: var(--rlc-violet);
+    --folder-back-start: color-mix(in srgb, var(--rlc-violet) 45%, var(--rlc-tint));
+    --folder-back-end: color-mix(in srgb, var(--rlc-violet) 65%, var(--rlc-tint));
+    --folder-front-start: color-mix(in srgb, var(--rlc-tint) 80%, var(--rlc-violet));
+    --folder-front-end: color-mix(in srgb, var(--rlc-tint) 70%, var(--rlc-violet));
+    --folder-paper: var(--rlc-surface);
+    --folder-paper-edge: color-mix(in srgb, var(--rlc-surface) 90%, var(--rlc-violet));
+    --folder-focus: var(--rlc-violet);
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+    gap: 8px;
+    padding: 60px 20px 18px;
+    border: 0;
+    background: transparent;
+    color: var(--rlc-ink);
+    transition: transform 150ms ease;
+}
+.rlc-registry.rlc-registry-index .rlcr-folder-art {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+}
+.rlc-registry.rlc-registry-index .rlcr-folder-back-start {
+    stop-color: var(--folder-back-start);
+}
+.rlc-registry.rlc-registry-index .rlcr-folder-back-end {
+    stop-color: var(--folder-back-end);
+}
+.rlc-registry.rlc-registry-index .rlcr-folder-front-start {
+    stop-color: var(--folder-front-start);
+}
+.rlc-registry.rlc-registry-index .rlcr-folder-front-end {
+    stop-color: var(--folder-front-end);
+}
+.rlc-registry.rlc-registry-index .rlcr-folder-paper-back {
+    fill: var(--folder-paper);
+}
+.rlc-registry.rlc-registry-index .rlcr-folder-paper-front {
+    fill: var(--folder-paper-edge);
+}
+.rlc-registry.rlc-registry-index .rlcr-folder-front {
+    filter: drop-shadow(0 -2px 2px color-mix(in srgb, var(--rlc-violet) 18%, transparent))
+        drop-shadow(0 6px 5px color-mix(in srgb, var(--color-black) 14%, transparent));
+    transition: filter 150ms ease;
+}
+.rlc-registry.rlc-registry-index .rlcr-folder-focus {
+    fill: none;
+    stroke: var(--folder-focus);
+    stroke-width: 3px;
+    vector-effect: non-scaling-stroke;
+    opacity: 0;
+}
+.rlc-registry.rlc-registry-index
+    .rlcr-caseload-card
+    :is(.rlcr-caseload-person, .rlcr-caseload-count, .rlcr-caseload-open) {
+    position: relative;
+    z-index: 1;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseload-card:hover {
+    transform: translateY(-2px);
+}
+.rlc-registry.rlc-registry-index .rlcr-caseload-card:hover .rlcr-folder-front {
+    filter: drop-shadow(0 -2px 2px color-mix(in srgb, var(--rlc-violet) 18%, transparent))
+        drop-shadow(0 8px 7px color-mix(in srgb, var(--color-black) 20%, transparent));
+}
+.rlc-registry.rlc-registry-index .rlcr-caseload-card:focus-visible {
+    outline: none;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseload-card:focus-visible .rlcr-folder-focus {
+    opacity: 1;
+}
+.dark .rlc-registry.rlc-registry-index .rlcr-caseload-card {
+    --caseload-selected: color-mix(in srgb, var(--rlc-violet) 70%, var(--color-black));
+    --folder-back-start: color-mix(in srgb, var(--rlc-tint) 90%, var(--rlc-violet));
+    --folder-back-end: color-mix(in srgb, var(--rlc-tint) 96%, var(--rlc-violet));
+    --folder-paper: color-mix(in srgb, var(--rlc-ink) 78%, var(--rlc-surface));
+    --folder-paper-edge: color-mix(in srgb, var(--rlc-ink) 64%, var(--rlc-surface));
+}
+.rlc-registry.rlc-registry-index .rlcr-caseload-card[aria-current="page"] {
+    --folder-back-start: color-mix(in srgb, var(--caseload-selected) 85%, var(--color-black));
+    --folder-back-end: color-mix(in srgb, var(--caseload-selected) 70%, var(--color-black));
+    --folder-front-start: color-mix(in srgb, var(--caseload-selected) 92%, var(--rlc-surface));
+    --folder-front-end: var(--caseload-selected);
+    --folder-focus: var(--color-white);
+    color: var(--color-white);
+}
+.rlc-registry.rlc-registry-index .rlcr-caseload-person {
+    display: flex;
+    align-items: center;
+    height: 45px;
+    flex-shrink: 0;
+    gap: 12px;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseload-person .rlcr-avatar {
+    background: color-mix(in srgb, var(--rlc-violet) 38%, var(--rlc-tint));
+    color: var(--rlc-ink);
+}
+.rlc-registry.rlc-registry-index .rlcr-caseload-card[aria-current="page"] .rlcr-avatar {
+    background: color-mix(in srgb, var(--caseload-selected) 70%, var(--color-black));
+    color: inherit;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseload-person h3 {
+    display: -webkit-box;
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: 16px;
+    line-height: 1.4;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseload-person .rlc-icon {
+    width: 22px;
+    height: 22px;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseload-count {
+    margin: 0;
+    color: var(--rlc-ink);
+    font-size: 13px;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseload-count strong {
+    margin-right: 5px;
+    color: var(--rlc-ink);
+    font-size: 28px;
+    line-height: 1.2;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseload-open {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: auto;
+    color: var(--rlc-ink);
+    font-size: 13px;
+    line-height: 1.4;
+    font-weight: 600;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseload-open .rlc-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+.rlc-registry.rlc-registry-index
+    .rlcr-caseload-card[aria-current="page"]
+    :is(.rlcr-caseload-count, .rlcr-caseload-count strong, .rlcr-caseload-open) {
+    color: inherit;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseloads-empty {
+    margin: 0 0 20px;
+    padding: 16px;
+    border: 1px solid var(--rlc-border);
+    border-radius: 8px;
+    background: var(--rlc-soft);
+}
+.rlc-registry.rlc-registry-index .rlcr-caseloads-empty h3 {
+    margin: 0 0 6px;
+    font-size: 15px;
+    font-weight: 650;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseloads-empty p {
+    margin: 0;
+    color: var(--rlc-muted);
+    font-size: 13px;
+}
+.rlc-registry.rlc-registry-index .rlcr-tools {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-left: auto;
+}
+.rlc-registry.rlc-registry-index .rlcr-view-switch {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+.rlc-registry.rlc-registry-index .rlcr-view-switch button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    color: var(--rlc-muted);
+}
+.rlc-registry.rlc-registry-index .rlcr-view-switch button.is-selected {
+    background: var(--rlc-tint);
+    color: var(--rlc-violet);
+}
+.rlc-registry.rlc-registry-index .rlcr-view-switch svg {
+    width: 19px;
+    height: 19px;
+}
+.rlc-registry.rlc-registry-index .rlcr-archived-link {
+    border-left: 1px solid var(--rlc-border);
+    padding-left: 16px;
+    color: var(--rlc-violet);
+    font-size: 13px;
+    text-decoration: underline;
+    white-space: nowrap;
+}
+.rlc-registry.rlc-registry-index .rlcr-search-summary {
+    margin: 0;
+    padding: 0 20px 16px;
+    color: var(--rlc-muted);
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+.rlc-registry.rlc-registry-index .rlcr-search-summary strong {
+    color: var(--rlc-ink);
+}
+.rlc-registry.rlc-registry-index .rlcr-search-summary a {
+    margin-left: 12px;
+    color: var(--rlc-violet);
+    text-decoration: underline;
+    white-space: nowrap;
+}
+.rlc-registry.rlc-registry-index .rlcr-selection {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 0 12px 12px;
+    padding: 10px 20px;
+    background: var(--registry-selection);
+    border-radius: 6px;
+    font-size: 13px;
+}
+.rlc-registry.rlc-registry-index .rlcr-clear-selection {
+    color: var(--rlc-violet);
+    text-decoration: underline;
+    padding: 6px;
+    font-size: 13px;
+}
+.rlc-registry.rlc-registry-index .rlcr-clear-selection:focus-visible {
+    outline: 2px solid var(--rlc-violet);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+.rlc-registry.rlc-registry-index .rlcr-select-page {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+}
+.rlc-registry.rlc-registry-index .rlcr-selection-notice {
+    flex-basis: 100%;
+    color: var(--rlc-muted);
+}
+.rlc-registry.rlc-registry-index .rlcr-selected-records {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    flex-basis: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.rlc-registry.rlc-registry-index .rlcr-selected-record {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--rlc-border);
+    border-radius: 6px;
+    background: var(--rlc-surface);
+}
+.rlc-registry.rlc-registry-index .rlcr-selected-record > span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+.rlc-registry.rlc-registry-index .rlcr-selected-record strong,
+.rlc-registry.rlc-registry-index .rlcr-selected-record .rlcr-id {
+    display: block;
+}
+.rlc-registry.rlc-registry-index .rlcr-selected-record button {
+    flex-shrink: 0;
+    padding: 6px;
+    color: var(--rlc-violet);
+    font-size: 12px;
+}
+.rlc-registry.rlc-registry-index .rlcr-selected-record button:focus-visible {
+    outline: 2px solid var(--rlc-violet);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+.rlc-registry.rlc-registry-index .rlcr-table-wrap {
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    margin: 0 12px;
+    border-radius: 6px;
+}
+.rlc-registry.rlc-registry-index .rlcr-table {
+    width: 100%;
+    min-width: 892px;
+    border-collapse: collapse;
+    text-align: left;
+}
+.rlc-registry.rlc-registry-index .is-selecting .rlcr-table {
+    min-width: 940px;
+}
+.rlc-registry.rlc-registry-index .rlcr-table th {
+    background: var(--rlc-soft);
+    color: var(--rlc-muted);
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--rlc-border);
+    font-size: 11px;
+    font-weight: 650;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.rlc-registry.rlc-registry-index .rlcr-table td {
+    padding: 10px 18px;
+    border-bottom: 1px solid var(--rlc-border);
+    font-size: 13px;
+}
+.rlc-registry.rlc-registry-index .rlcr-table tbody tr {
+    transition: background 0.15s;
+}
+.rlc-registry.rlc-registry-index .rlcr-table tbody tr:hover {
+    background: var(--rlc-soft);
+}
+.rlc-registry.rlc-registry-index .rlcr-table tbody tr.is-selected {
+    background: var(--registry-selection);
+}
+.rlc-registry.rlc-registry-index .rlcr-table .rlcr-selection-cell {
+    width: 48px;
+    padding-left: 20px;
+    padding-right: 12px;
+}
+.rlc-registry.rlc-registry-index .rlcr-checkbox {
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    accent-color: var(--rlcp-primary, #7439f7);
+    vertical-align: middle;
+    cursor: pointer;
+}
+.rlc-registry.rlc-registry-index .rlcr-checkbox:focus-visible {
+    outline: 2px solid var(--rlc-violet);
+    outline-offset: 3px;
+}
+.rlc-registry.rlc-registry-index .rlcr-person-cell {
+    min-width: 220px;
+}
+.rlc-registry.rlc-registry-index .rlcr-person {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.rlc-registry.rlc-registry-index .rlcr-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    border-radius: 50%;
+    background: var(--rlc-tint);
+    color: var(--rlc-violet);
+    font-size: 14px;
+    font-weight: 600;
+}
+.rlc-registry.rlc-registry-index .rlcr-avatar img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+.rlc-registry.rlc-registry-index .rlcr-person-name {
+    min-width: 0;
+    max-width: 360px;
+    overflow-wrap: anywhere;
+}
+.rlc-registry.rlc-registry-index .rlcr-person-name a,
+.rlc-registry.rlc-registry-index .rlcr-person-name strong {
+    color: var(--rlc-ink);
+    font-size: 14px;
+    font-weight: 550;
+}
+.rlc-registry.rlc-registry-index .rlcr-person-name a:hover {
+    color: var(--rlc-violet);
+    text-decoration: underline;
+}
+.rlc-registry.rlc-registry-index .rlcr-id {
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-cell {
+    min-width: 180px;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-name {
+    max-width: 230px;
+    overflow-wrap: anywhere;
+}
+.rlc-registry.rlc-registry-index .rlcr-unassigned {
+    color: var(--rlc-muted);
+}
+.rlc-registry.rlc-registry-index .rlcr-date-cell {
+    white-space: nowrap;
+}
+.rlc-registry.rlc-registry-index .rlcr-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+.rlc-registry.rlc-registry-index .rlcr-status > span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--rlc-muted);
+}
+.rlc-registry.rlc-registry-index .rlcr-status-active > span {
+    background: #22c55e;
+}
+.rlc-registry.rlc-registry-index .rlcr-status-neutral {
+    color: var(--rlc-muted);
+}
+.rlc-registry.rlc-registry-index .rlcr-row-actions,
+.rlc-registry.rlc-registry-index .rlcr-actions-heading {
+    width: 76px;
+    text-align: center;
+}
+.rlc-registry.rlc-registry-index .rlcr-more {
+    display: inline-block;
+}
+.rlc-registry.rlc-registry-index .rlcr-more > summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    color: var(--rlc-muted);
+    border: 0;
+    border-radius: 6px;
+    list-style: none;
+    cursor: pointer;
+}
+.rlc-registry.rlc-registry-index .rlcr-more > summary::-webkit-details-marker {
+    display: none;
+}
+.rlc-registry.rlc-registry-index .rlcr-more > summary:hover,
+.rlc-registry.rlc-registry-index .rlcr-more[open] > summary {
+    background: var(--rlc-tint);
+    color: var(--rlc-violet);
+}
+.rlc-registry.rlc-registry-index .rlcr-more > summary:focus-visible {
+    outline: 2px solid var(--rlc-violet);
+    outline-offset: 2px;
+}
+.rlc-registry.rlc-registry-index .rlcr-menu {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    width: 210px;
+    max-width: calc(100vw - 24px);
+    max-height: calc(100vh - 24px);
+    overflow: auto;
+    padding: 6px;
+    background: var(--rlc-surface);
+    color: var(--rlc-ink);
+    border: 1px solid var(--rlc-border);
+    border-radius: 9px;
+    box-shadow: 0 8px 24px #0002;
+}
+.rlc-registry.rlc-registry-index .rlcr-menu > a,
+.rlc-registry.rlc-registry-index .rlcr-menu > button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    text-align: left;
+    font-size: 13px;
+    border-radius: 5px;
+}
+.rlc-registry.rlc-registry-index .rlcr-menu > a:hover,
+.rlc-registry.rlc-registry-index .rlcr-menu > button:hover {
+    background: var(--rlc-tint);
+}
+.rlc-registry.rlc-registry-index .rlcr-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 18px;
+    padding: 22px 20px;
+}
+.rlc-registry.rlc-registry-index .rlcr-pagination > p {
+    margin: 0;
+    color: var(--rlc-muted);
+    font-size: 12px;
+}
+.rlc-registry.rlc-registry-index .rlcr-page-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.rlc-registry.rlc-registry-index .rlcr-page-links > a,
+.rlc-registry.rlc-registry-index .rlcr-page-links > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    color: var(--rlc-muted);
+    font-size: 13px;
+}
+.rlc-registry.rlc-registry-index .rlcr-page-links > a:hover {
+    background: var(--rlc-tint);
+    color: var(--rlc-violet);
+}
+.rlc-registry.rlc-registry-index .rlcr-page-links > [aria-current] {
+    background: linear-gradient(110deg, var(--rlcp-primary, #713bff), var(--rlcp-primary, #7c32f6));
+    color: #fff;
+}
+.rlc-registry.rlc-registry-index .rlcr-page-links > [aria-disabled] {
+    opacity: 0.45;
+}
+.rlc-registry.rlc-registry-index .rlcr-empty {
+    padding: 48px 20px;
+    text-align: center;
+}
+.rlc-registry.rlc-registry-index .rlcr-empty-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: var(--rlc-tint);
+    color: var(--rlc-violet);
+}
+.rlc-registry.rlc-registry-index .rlcr-empty-icon .rlc-icon {
+    width: 28px;
+    height: 28px;
+}
+.rlc-registry.rlc-registry-index .rlcr-empty h3 {
+    margin: 18px 0 8px;
+    font-size: 18px;
+    font-weight: 650;
+}
+.rlc-registry.rlc-registry-index .rlcr-empty p {
+    margin: 0 0 20px;
+    color: var(--rlc-muted);
+    font-size: 13px;
+}
+.rlc-registry.rlc-registry-index .rlcr-success {
+    margin-bottom: 18px;
+    padding: 12px 16px;
+    border: 1px solid #b3e4c9;
+    border-radius: 8px;
+    background: #e0f7eb;
+    color: #147b4d;
+    font-size: 13px;
+}
+.dark .rlc-registry.rlc-registry-index .rlcr-success {
+    background: #19392d;
+    color: #77dfa7;
+    border-color: #295b44;
+}
+.rlc-registry.rlc-registry-index .rlcr-bulk-error {
+    margin: 0 20px 16px;
+    color: #b91c1c;
+    font-size: 13px;
+}
+.dark .rlc-registry.rlc-registry-index .rlcr-bulk-error {
+    color: #fca5a5;
+}
+.rlc-registry.rlc-registry-index .rlcr-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+.rlc-registry.rlc-registry-index .rlcr-cards .rlcr-table,
+.rlc-registry.rlc-registry-index .rlcr-cards .rlcr-table tbody {
+    display: block;
+    min-width: 0;
+}
+.rlc-registry.rlc-registry-index .rlcr-cards .rlcr-table thead {
+    display: none;
+}
+.rlc-registry.rlc-registry-index .rlcr-cards .rlcr-table tbody {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    padding: 0 8px 8px;
+}
+.rlc-registry.rlc-registry-index .rlcr-cards .rlcr-table tr {
+    position: relative;
+    display: block;
+    min-width: 0;
+    padding: 16px;
+    border: 1px solid var(--rlc-border);
+    border-radius: 10px;
+}
+.rlc-registry.rlc-registry-index .rlcr-cards .rlcr-table td {
+    display: block;
+    padding: 7px 0;
+    border: 0;
+    font-size: 13px;
+}
+.rlc-registry.rlc-registry-index .rlcr-cards .rlcr-table .rlcr-selection-cell {
+    position: absolute;
+    top: 26px;
+    left: 14px;
+    width: auto;
+    padding: 0;
+}
+.rlc-registry.rlc-registry-index .rlcr-cards .rlcr-table .rlcr-person-cell {
+    min-width: 0;
+    padding: 0 30px 14px 0;
+}
+.rlc-registry.rlc-registry-index .rlcr-cards.is-selecting .rlcr-table .rlcr-person-cell {
+    padding-left: 24px;
+}
+.rlc-registry.rlc-registry-index .rlcr-cards .rlcr-person {
+    gap: 9px;
+}
+.rlc-registry.rlc-registry-index .rlcr-cards .rlcr-table td[data-label] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    overflow-wrap: anywhere;
+}
+.rlc-registry.rlc-registry-index .rlcr-cards td[data-label]::before {
+    content: attr(data-label);
+    flex-shrink: 0;
+    color: var(--rlc-muted);
+    font-size: 11px;
+}
+.rlc-registry.rlc-registry-index .rlcr-cards .rlcr-table .rlcr-row-actions {
+    position: absolute;
+    top: 15px;
+    right: 8px;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    text-align: right;
+}
+.rlc-registry.rlc-registry-index .rlcr-archive-dialog {
+    margin: auto;
+    width: calc(100% - 32px);
+    max-width: 480px;
+    max-height: 90vh;
+    overflow: auto;
+    padding: 26px;
+    border: 1px solid var(--rlc-border);
+    border-radius: 16px;
+    background: var(--rlc-surface);
+    color: var(--rlc-ink);
+}
+.rlc-registry.rlc-registry-index .rlcr-archive-dialog::backdrop {
+    background: #0007;
+}
+.rlc-registry.rlc-registry-index .rlcr-archive-dialog h2 {
+    font-size: 20px;
+    font-weight: 700;
+}
+.rlc-registry.rlc-registry-index .rlcr-archive-dialog p {
+    font-size: 13px;
+    line-height: 1.7;
+    margin: 15px 0;
+}
+.rlc-registry.rlc-registry-index .rlcr-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}
+.rlc-registry.rlc-registry-index .rlcr-saving-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #fff6;
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: registry-spin 0.7s linear infinite;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-dialog {
+    margin: auto;
+    width: calc(100% - 32px);
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 0;
+    border: 1px solid var(--rlc-border);
+    border-radius: 14px;
+    background: var(--rlc-surface);
+    color: var(--rlc-ink);
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-dialog::backdrop {
+    background: var(--rlcp-overlay, #11132e80);
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--rlc-border);
+    background: var(--rlc-soft);
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-heading h2 {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 700;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-heading p {
+    margin: 6px 0 0;
+    font-size: 13px;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    color: var(--rlc-muted);
+    font-size: 24px;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-close:hover {
+    background: var(--rlc-tint);
+    color: var(--rlc-violet);
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-close:disabled {
+    cursor: default;
+    opacity: 0.5;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-fields {
+    display: grid;
+    gap: 16px;
+    padding: 22px 24px;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-field label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 13px;
+    font-weight: 600;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-field input,
+.rlc-registry.rlc-registry-index .rlcr-caseworker-field select {
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    padding: 9px 12px;
+    border: 1px solid var(--rlc-border);
+    border-radius: 7px;
+    background: var(--rlc-surface);
+    color: var(--rlc-ink);
+    font-size: 14px;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-field input:focus-visible,
+.rlc-registry.rlc-registry-index .rlcr-caseworker-field select:focus-visible {
+    outline: 2px solid var(--rlc-violet);
+    outline-offset: 2px;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-field input[readonly] {
+    opacity: 0.7;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-field select:disabled {
+    opacity: 0.7;
+    cursor: default;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-field input[aria-invalid="true"],
+.rlc-registry.rlc-registry-index .rlcr-caseworker-field select[aria-invalid="true"] {
+    border-color: #dc2626;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-field-error,
+.rlc-registry.rlc-registry-index .rlcr-caseworker-error-summary {
+    margin: 7px 0 0;
+    color: #b91c1c;
+    font-size: 12px;
+}
+.dark .rlc-registry.rlc-registry-index .rlcr-caseworker-field-error,
+.dark .rlc-registry.rlc-registry-index .rlcr-caseworker-error-summary {
+    color: #fca5a5;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-setup {
+    margin: 0;
+    padding: 12px 14px;
+    border: 1px solid var(--rlc-border);
+    border-radius: 7px;
+    background: var(--rlc-soft);
+    color: var(--rlc-muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-footer {
+    padding: 16px 24px 22px;
+    border-top: 1px solid var(--rlc-border);
+}
+.rlc-registry.rlc-registry-index .rlcr-caseworker-footer > p {
+    margin: 0 0 12px;
+    color: var(--rlc-muted);
+    font-size: 13px;
+}
+.rlc-registry.rlc-registry-index .rlcr-assignment-summary p {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 0 0 16px;
+    overflow-wrap: anywhere;
+}
+.rlc-registry.rlc-registry-index .rlcr-assignment-summary p span {
+    color: var(--rlc-muted);
+    font-size: 12px;
+}
+.rlc-registry.rlc-registry-index .rlcr-assignment-summary dl {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 12px;
+    margin: 0;
+    font-size: 13px;
+}
+.rlc-registry.rlc-registry-index .rlcr-assignment-summary dt {
+    color: var(--rlc-muted);
+}
+.rlc-registry.rlc-registry-index .rlcr-assignment-summary dd {
+    margin: 0;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+.rlc-registry.rlc-registry-index .rlcr-cards .rlcr-caseworker-cell {
+    min-width: 0;
+}
+@keyframes registry-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+@media (max-width: 1199px) {
+    .rlc-registry.rlc-registry-index {
+        padding: 24px;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-cards .rlcr-table tbody {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+@media (max-width: 767px) {
+    .rlc-registry.rlc-registry-index {
+        padding: 24px 16px 28px;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-header {
+        flex-direction: column;
+        gap: 18px;
+        padding-top: 0;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-header h1 {
+        font-size: 28px;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-header > div:first-child > p {
+        font-size: 13px;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-tabs {
+        flex-wrap: wrap;
+        gap: 0;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-tab-links {
+        gap: 0;
+        width: 100%;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-tab-links a {
+        justify-content: center;
+        flex: 1;
+        padding: 12px 8px;
+        font-size: 13px;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-sort {
+        padding: 8px 10px;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-filter-row {
+        padding: 16px;
+        gap: 12px;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-search-form {
+        width: 100%;
+        min-width: 0;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-search-wrap {
+        flex-basis: 100%;
+        width: 100%;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-choice-filter {
+        width: 100%;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-choice-filter select {
+        flex: 1;
+        max-width: 100%;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-choice-filter label {
+        min-width: 80px;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-caseload-heading {
+        padding: 16px;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-caseload-heading .rlcr-button {
+        width: 100%;
+        white-space: normal;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-caseloads {
+        padding: 20px 16px;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-tools {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-left: 0;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-archived-link {
+        margin-left: auto;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-selection {
+        padding: 12px;
+        gap: 10px;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-selection .rlcr-button {
+        max-width: 100%;
+        white-space: normal;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-cards .rlcr-table tbody {
+        grid-template-columns: 1fr;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-pagination {
+        padding: 20px 16px;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-page-links {
+        max-width: 100%;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .rlc-registry.rlc-registry-index .rlcr-caseload-card,
+    .rlc-registry.rlc-registry-index .rlcr-folder-front {
+        transition: none;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-caseload-card:hover {
+        transform: none;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-saving-spinner,
+    .rlc-registry.rlc-registry-index .rlcr-search-spinner {
+        animation: none;
+    }
+    .rlc-registry.rlc-registry-index .rlcr-button,
+    .rlc-registry.rlc-registry-index .rlcr-table tbody tr {
+        transition: none;
+    }
+}

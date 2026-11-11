@@ -1,0 +1,7 @@
+{
+  "emailPosts": 6,
+  "completionPosts": 1,
+  "csrfPresent": true,
+  "errors": [],
+  "source": "Guarded memory fixtures and intercepted requests only; no live server, SMTP, or real submissions"
+}

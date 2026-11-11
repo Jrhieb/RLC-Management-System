@@ -1,0 +1,28 @@
+{
+  "tabs": [
+    "Package Diagram of the Proposed System",
+    "Use Case Diagram of the Proposed System",
+    "Class Diagram of the Proposed System",
+    "Sequence Diagram of the Proposed System",
+    "Deployment Diagram of the Proposed System",
+    "Process Flow of the Proposed System"
+  ],
+  "tab_count": 6,
+  "pdf_page_count": 6,
+  "pdf_renderer": "Windows.Data.Pdf",
+  "rendered_pages_visually_inspected": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "structural_validation": "0 errors; 0 warnings; unique IDs and valid endpoints on every tab",
+  "direct_link": "Open-RLCP-Diagram.html; encoded XML round-trip verified",
+  "runtime_inspected": false,
+  "sha256": {
+    "RLCP-System-Architecture.drawio": "876c606996c5be423e89ceb429ee555c07a2522f2d9009966112568c561e637b",
+    "RLCP-System-Architecture.pdf": "db3fee4d81e7034a0ae1c17c52b06ef8d4563600f56de42c8e2395fabeccadeb"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "status": "passed",
+  "files": [
+    {
+      "file": "01-package-diagram.drawio",
+      "pages": [
+        "01A | Request and domain packages",
+        "01B | Registration, review and messaging packages"
+      ],
+      "connectors": 15
+    },
+    {
+      "file": "02-use-case-diagram.drawio",
+      "pages": [
+        "02A | Applicants and restricted staff",
+        "02B | Director use cases",
+        "02C | Approved Caseworker use cases"
+      ],
+      "connectors": 18
+    },
+    {
+      "file": "03-domain-data-diagram.drawio",
+      "pages": [
+        "03A | Program records and relationships",
+        "03B | Accounts, registration and support tables"
+      ],
+      "connectors": 7
+    },
+    {
+      "file": "04-registration-approval-flow.drawio",
+      "pages": [
+        "04A | Email-first registration",
+        "04B | Director review and decision delivery"
+      ],
+      "connectors": 10
+    },
+    {
+      "file": "05-attendance-flow.drawio",
+      "pages": [
+        "05A | NFC test-UID attendance",
+        "05B | NFC ownership and staff lookup"
+      ],
+      "connectors": 9
+    },
+    {
+      "file": "06-assistance-report-flow.drawio",
+      "pages": [
+        "06A | Assistance release and idempotency",
+        "06B | Reports and exports"
+      ],
+      "connectors": 10
+    }
+  ],
+  "totalPages": 13,
+  "checks": [
+    "XML parses",
+    "unique cell identifiers",
+    "named pages",
+    "resolvable connectors",
+    "orthogonal connectors",
+    "all vertices within landscape page",
+    "no image shapes",
+    "no email literals or user-home paths in authored files"
+  ],
+  "renderedLegibility": "unverified"
+}

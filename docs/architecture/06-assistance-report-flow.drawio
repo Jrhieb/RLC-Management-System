@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="page-1" name="06A | Assistance release and idempotency">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" background="#FFFFFF" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="06A | Assistance release and idempotency" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;fillColor=#A50021;fontColor=#FFFFFF;strokeColor=#A50021;fontSize=30;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="25" width="1520" height="65" />
+        </mxCell>
+        <mxCell id="takeaway" value="A token replay is accepted only when every release field, including recorder, matches the original." style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=21;align=left;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="100" width="1520" height="55" />
+        </mxCell>
+        <mxCell id="legend" value="Verified: solid outline | Inferred: dashed outline | Solid arrow: sync | Dashed arrow: queued (labeled)&#10;Rule references resolve to source symbols in inventory.md. AUTH-03, AST-01" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;fillColor=#FFF9EF;strokeColor=#D4A039;fontSize=17;align=left;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="880" width="1520" height="85" />
+        </mxCell>
+        <mxCell id="entry" value="GET form / POST assistance&#10;AssistanceTransactionController&#10;Beneficiary update policy&#10;Active status required" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="60" y="200" width="350" height="170" />
+        </mxCell>
+        <mxCell id="validate" value="Validate UUID + release fields&#10;Category and quantity limits&#10;Manila release time -&gt; UTC&#10;Lowercase submission token" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="620" y="200" width="350" height="170" />
+        </mxCell>
+        <mxCell id="find" value="Find by submission_token&#10;Absent: create record directly&#10;Matching unique race: reread&#10;Other DB failure: rethrow" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1180" y="200" width="350" height="170" />
+        </mxCell>
+        <mxCell id="result" value="Redirect beneficiary profile&#10;New: release recorded&#10;Replay: no duplicate created" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="60" y="460" width="350" height="170" />
+        </mxCell>
+        <mxCell id="compare" value="New record: proceed&#10;Existing token: compare all fields&#10;Same payload -&gt; accepted replay&#10;Different payload -&gt; validation error&#10;Unsaved record -&gt; server failure" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="620" y="460" width="350" height="170" />
+        </mxCell>
+        <mxCell id="data" value="AssistanceTransaction&#10;Unique nullable token in schema&#10;Required UUID in request&#10;Beneficiary and recorder relations" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1180" y="460" width="350" height="170" />
+        </mxCell>
+        <mxCell id="edge-11" value="authorized" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#252525;fontColor=#252525;fontSize=17;labelBackgroundColor=#FFFFFF;jettySize=25;" edge="1" parent="1" source="entry" target="validate">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge-12" value="valid" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#252525;fontColor=#252525;fontSize=17;labelBackgroundColor=#FFFFFF;jettySize=25;" edge="1" parent="1" source="validate" target="find">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge-13" value="read / create" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#252525;fontColor=#252525;fontSize=17;labelBackgroundColor=#FFFFFF;jettySize=25;" edge="1" parent="1" source="find" target="data">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge-14" value="new or existing" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#252525;fontColor=#252525;fontSize=17;labelBackgroundColor=#FFFFFF;jettySize=25;" edge="1" parent="1" source="find" target="compare">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge-15" value="new / exact replay" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#252525;fontColor=#252525;fontSize=17;labelBackgroundColor=#FFFFFF;jettySize=25;" edge="1" parent="1" source="compare" target="result">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="notes" value="This records assistance already released; no payment gateway or stock ledger was found. Token creation in the UI is not asserted because view/JS contents were not opened. No application actions were executed." style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;fillColor=#FFF9EF;strokeColor=#D4A039;align=left;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="60" y="740" width="1470" height="105" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page-2" name="06B | Reports and exports">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" background="#FFFFFF" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="06B | Reports and exports" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;fillColor=#A50021;fontColor=#FFFFFF;strokeColor=#A50021;fontSize=30;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="25" width="1520" height="65" />
+        </mxCell>
+        <mxCell id="takeaway" value="Reports read scoped history; exports preserve the same access boundary and never write business records." style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=21;align=left;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="100" width="1520" height="55" />
+        </mxCell>
+        <mxCell id="legend" value="Verified: solid outline | Inferred: dashed outline | Solid arrow: sync | Dashed arrow: queued (labeled)&#10;Rule references resolve to source symbols in inventory.md. REP-01/02, AUTH-03" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;fillColor=#FFF9EF;strokeColor=#D4A039;fontSize=17;align=left;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="880" width="1520" height="85" />
+        </mxCell>
+        <mxCell id="entry" value="GET reports / CSV / PDF&#10;Report*Controller&#10;Staff + viewAny policies&#10;Activity export uses activity view" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="60" y="200" width="350" height="170" />
+        </mxCell>
+        <mxCell id="dates" value="Validate date bounds&#10;Default current Manila month&#10;End before start -&gt; validation&#10;Convert to UTC half-open range" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="620" y="200" width="350" height="170" />
+        </mxCell>
+        <mxCell id="query" value="Attendance / Assistance queries&#10;visibleTo(user), ordered history&#10;Director includes archived history&#10;Caseworker current assignment only" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1180" y="200" width="350" height="170" />
+        </mxCell>
+        <mxCell id="html" value="ReportController::index&#10;Counts + separate pagination&#10;Read-only report view" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="60" y="460" width="350" height="170" />
+        </mxCell>
+        <mxCell id="csv" value="ReportExportController&#10;ExportRows::descending batches&#10;Formula-safe CSV streaming&#10;Activity CSV also supports search" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="620" y="460" width="350" height="170" />
+        </mxCell>
+        <mxCell id="pdf" value="ReportPdfExportController&#10;Over 1000 rows -&gt; validation&#10;Otherwise reports.pdf + Dompdf&#10;A4 landscape, remote/PHP disabled" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1180" y="460" width="350" height="170" />
+        </mxCell>
+        <mxCell id="edge-11" value="report range" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#252525;fontColor=#252525;fontSize=17;labelBackgroundColor=#FFFFFF;jettySize=25;" edge="1" parent="1" source="entry" target="dates">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge-12" value="valid range" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#252525;fontColor=#252525;fontSize=17;labelBackgroundColor=#FFFFFF;jettySize=25;" edge="1" parent="1" source="dates" target="query">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge-13" value="PDF" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#252525;fontColor=#252525;fontSize=17;labelBackgroundColor=#FFFFFF;jettySize=25;" edge="1" parent="1" source="query" target="pdf">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge-14" value="CSV" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#252525;fontColor=#252525;fontSize=17;labelBackgroundColor=#FFFFFF;jettySize=25;" edge="1" parent="1" source="query" target="csv">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge-15" value="scoped queries / HTML" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#252525;fontColor=#252525;fontSize=17;labelBackgroundColor=#FFFFFF;jettySize=25;" edge="1" parent="1" source="dates" target="html">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="notes" value="Activity-specific CSV follows its activity + search filter rather than the report date-range branch. HTML/CSV/PDF may contain no rows. CSV/PDF responses are private/no-store. Runtime export behavior was not exercised." style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;fillColor=#FFF9EF;strokeColor=#D4A039;align=left;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="60" y="740" width="1470" height="105" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

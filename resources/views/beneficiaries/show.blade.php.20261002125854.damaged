@@ -1,0 +1,47 @@
+<x-layouts::app :title="$beneficiary->full_name">
+    <div class="mx-auto w-full max-w-5xl space-y-6 p-4 md:p-8">
+        <a href="{{ route('beneficiaries.index') }}"
+           class="text-sm font-medium text-violet-600 dark:text-violet-400">
+            &larr; Back to beneficiaries
+        </a>
+
+        <div class="flex justify-end">
+            <a href="{{ route('beneficiaries.edit', $beneficiary) }}"
+               class="rounded-xl bg-violet-600 px-5 py-3 text-sm font-semibold text-white hover:bg-violet-700">
+                Edit Profile
+            </a>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-end gap-3">
+            {{-- rlc-archive-link-permission --}}
+@can('viewArchived', \App\Models\Beneficiary::class)
+<a href="{{ route('beneficiaries.archived') }}"
+               class="rounded-xl border border-zinc-300 px-5 py-3 text-sm dark:border-zinc-600">
+                View Archived
+            </a>
+@endcan
+
+            {{-- rlc-archive-button-permission --}}
+@can('delete', $beneficiary)
+<form method="POST"
+                  action="{{ route('beneficiaries.destroy', $beneficiary) }}"
+                  onsubmit="return confirm('Archive this beneficiary? The profile and photo will be retained, and you can restore the record later.');">
+                @csrf
+                @method('DELETE')
+
+                <button type="submit"
+        :disabled="submitting"
+        :aria-busy="submitting"
+        class="rounded-xl bg-violet-600 px-6 py-3 text-sm font-semibold text-white hover:bg-violet-700 disabled:cursor-wait disabled:opacity-60">
+    <span x-text="submitting ? 'Saving...' : 'Record Release'">Record Release</span>
+</button>
+                <button type="button" onclick="this.closest('dialog').close()"
+        class="rounded-xl border border-zinc-300 px-6 py-3 text-sm dark:border-zinc-600">
+    Cancel
+</button>
+            </div>
+        </form>
+                </dialog>
+            @endif
+        @endcan
+</x-layouts::app>

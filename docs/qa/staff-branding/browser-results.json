@@ -1,0 +1,75 @@
+{
+  "comparisons": [
+    {
+      "role": "project_director",
+      "theme": "light",
+      "width": 1440,
+      "measuredElements": 45,
+      "maximumGeometryChange": 0,
+      "contentUnchanged": true,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "project_director",
+      "theme": "light",
+      "width": 768,
+      "measuredElements": 45,
+      "maximumGeometryChange": 0,
+      "contentUnchanged": true,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "project_director",
+      "theme": "dark",
+      "width": 768,
+      "measuredElements": 45,
+      "maximumGeometryChange": 0,
+      "contentUnchanged": true,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "caseworker",
+      "theme": "light",
+      "width": 768,
+      "measuredElements": 22,
+      "maximumGeometryChange": 0,
+      "contentUnchanged": true,
+      "horizontalOverflow": false
+    },
+    {
+      "role": "caseworker",
+      "theme": "dark",
+      "width": 768,
+      "measuredElements": 22,
+      "maximumGeometryChange": 0,
+      "contentUnchanged": true,
+      "horizontalOverflow": false
+    }
+  ],
+  "errors": [],
+  "requests": [
+    "/dashboard",
+    "/build/assets/instrument-sans-400-normal-DRC__1Mx.woff2",
+    "/build/assets/instrument-sans-500-normal-Dk9ku72i.woff2",
+    "/build/assets/instrument-sans-600-normal-B7fBEWYG.woff2",
+    "/build/assets/app-DfvwMcw4.css",
+    "/build/assets/app-9X6CRbj2.js",
+    "/build/assets/registration-email-CP80tbxr.js",
+    "/flux/flux.min.js",
+    "/livewire-e16823c1/livewire.min.js",
+    "/build/assets/instrument-sans-600-normal-B9e8oLYv.woff",
+    "/build/assets/instrument-sans-400-normal-D1W7dsQl.woff",
+    "/build/assets/instrument-sans-500-normal-Z6ESRlEs.woff",
+    "/account/notifications/unread-count",
+    "/favicon.svg",
+    "/favicon.ico",
+    "/build/assets/app-BvsWlS_O.css",
+    "/images/branding/rlc-logo.png",
+    "/dashboard/beneficiary-suggestions",
+    "/account/notifications",
+    "/dashboard/notifications",
+    "/settings/appearance",
+    "/scope-probe"
+  ],
+  "source": "Synthetic isolated fixtures; all requests intercepted; no real data, writes or emails"
+}

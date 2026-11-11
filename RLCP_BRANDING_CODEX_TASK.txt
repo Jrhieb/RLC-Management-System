@@ -1,0 +1,116 @@
+﻿TASK: Implement the approved RLCP branding in the EXISTING
+Laravel Director and Caseworker dashboards.
+
+PROJECT:
+C:\rlcsystem\app
+
+IMPORTANT:
+This is a frontend-only implementation.
+Do not replace the dashboards with newly generated layouts.
+
+INSPECT FIRST:
+- Existing Director dashboard
+- Existing Caseworker dashboard
+- Shared staff layout and sidebar
+- Current CSS and Tailwind theme definitions
+- Public website brand colors
+- Original logo at:
+  public/images/branding/rlc-logo.png
+
+BRANDING REQUIREMENTS:
+
+LIGHT MODE:
+- Warm off-white main background
+- White sidebar
+- White cards
+- Charcoal headings and body text
+- Crimson primary buttons
+- Crimson active sidebar navigation
+- Subtle gold accents
+- Soft card borders and shadows
+
+DARK MODE:
+- Warm charcoal main background
+- Warm charcoal cards and sidebar
+- Off-white headings and body text
+- Crimson primary buttons
+- Crimson active sidebar navigation
+- Readable gold accents
+- Subtle dark-mode borders
+
+LOGO:
+- Reuse the existing original logo.
+- Do not recreate, crop, or modify the image.
+- Preserve transparency and aspect ratio.
+
+PRESERVE EXISTING DIRECTOR DASHBOARD:
+- Four summary cards
+- Three-column lower section
+- Existing card arrangement
+- Existing dynamic data
+- Existing labels and controls
+
+PRESERVE EXISTING CASEWORKER DASHBOARD:
+- Three summary cards
+- Two-column lower section
+- Existing caseload section
+- Existing activity section
+- Existing dynamic data
+- Existing labels and controls
+
+PRESERVE:
+- Sidebar width and navigation order
+- Existing spacing and responsive behavior
+- All links and buttons
+- Role-based visibility
+- Search and notifications
+- Charts and polling
+- Menus and dropdowns
+- Theme switching
+- Keyboard navigation and focus states
+- All Blade conditions and bindings
+- Existing element IDs and JavaScript hooks
+
+HEADER:
+Keep the current geometric header artwork.
+Recolor it only to match the RLCP palette.
+
+STRICTLY FORBIDDEN:
+- Editing controllers
+- Editing models
+- Editing routes
+- Editing policies or middleware
+- Editing services or queries
+- Editing migrations or database
+- Changing business logic
+- Changing .env or configuration
+- Installing dependencies
+- Modifying the public website
+- Restyling unrelated module pages
+- Copying sample data from preview images
+- Accessing real beneficiary records
+- Sending emails or submitting real actions
+
+IMPLEMENTATION:
+1. Inspect the current implementation.
+2. Identify exact frontend files.
+3. Reuse public website branding tokens.
+4. Prefer scoped CSS.
+5. Make minimal presentation-only Blade changes.
+6. Preserve existing functional markup.
+7. Implement light and dark themes.
+8. Verify desktop and mobile layouts.
+9. Test existing controls using available isolated harness.
+10. Run relevant existing checks and npm run build.
+
+REPORT:
+- Exact changed files
+- Changes made
+- Test results
+- Frontend build result
+- Before/after screenshots if available
+- Shared layout effects
+- Remaining verification gaps
+- Confirmation that backend and database were untouched
+
+Do not claim tests passed unless actually executed.

@@ -1,0 +1,132 @@
+﻿/*
+|--------------------------------------------------------------------------
+| RLCP STAFF BRANDING
+| Director and Caseworker — Light and Dark Themes
+|--------------------------------------------------------------------------
+| Scope: staff application only
+| No backend or database changes
+*/
+
+.rlcp-staff {
+    --rlcp-crimson: #A50021;
+    --rlcp-crimson-hover: #85001B;
+    --rlcp-gold: #D4A039;
+
+    --rlcp-canvas: #F8F5F1;
+    --rlcp-surface: #FFFFFF;
+    --rlcp-sidebar: #FFFFFF;
+
+    --rlcp-text: #252020;
+    --rlcp-muted: #6F6868;
+    --rlcp-border: #E8E1DD;
+
+    --rlcp-shadow: 0 4px 18px rgba(50, 25, 25, 0.06);
+
+    color-scheme: light;
+    background-color: var(--rlcp-canvas);
+    color: var(--rlcp-text);
+}
+
+/* Dark mode — supports common Laravel/Tailwind theme patterns */
+
+html.dark .rlcp-staff,
+.dark .rlcp-staff,
+.rlcp-staff.dark,
+.rlcp-staff[data-theme="dark"] {
+    --rlcp-crimson: #B9002A;
+    --rlcp-crimson-hover: #D10A38;
+    --rlcp-gold: #E2B34E;
+
+    --rlcp-canvas: #171313;
+    --rlcp-surface: #252020;
+    --rlcp-sidebar: #201B1B;
+
+    --rlcp-text: #F8F4F0;
+    --rlcp-muted: #C2B7B4;
+    --rlcp-border: #453B3B;
+
+    --rlcp-shadow: 0 4px 20px rgba(0, 0, 0, 0.22);
+
+    color-scheme: dark;
+}
+
+/* Shared surfaces */
+
+.rlcp-staff {
+    background-color: var(--rlcp-canvas);
+    color: var(--rlcp-text);
+}
+
+.rlcp-staff .rlcp-card {
+    background-color: var(--rlcp-surface);
+    border: 1px solid var(--rlcp-border);
+    box-shadow: var(--rlcp-shadow);
+    color: var(--rlcp-text);
+}
+
+.rlcp-staff .rlcp-sidebar {
+    background-color: var(--rlcp-sidebar);
+    border-color: var(--rlcp-border);
+}
+
+.rlcp-staff .rlcp-heading {
+    color: var(--rlcp-text);
+}
+
+.rlcp-staff .rlcp-muted {
+    color: var(--rlcp-muted);
+}
+
+/* Primary buttons */
+
+.rlcp-staff .rlcp-button-primary {
+    background-color: var(--rlcp-crimson);
+    color: #FFFFFF;
+    border-color: var(--rlcp-crimson);
+}
+
+.rlcp-staff .rlcp-button-primary:hover {
+    background-color: var(--rlcp-crimson-hover);
+}
+
+/* Navigation */
+
+.rlcp-staff .rlcp-nav-active {
+    background-color: var(--rlcp-crimson);
+    color: #FFFFFF;
+}
+
+.rlcp-staff .rlcp-nav-active svg {
+    color: currentColor;
+}
+
+/* Accent */
+
+.rlcp-staff .rlcp-accent {
+    color: var(--rlcp-gold);
+}
+
+/* Form controls */
+
+.rlcp-staff .rlcp-input {
+    background-color: var(--rlcp-surface);
+    color: var(--rlcp-text);
+    border: 1px solid var(--rlcp-border);
+}
+
+.rlcp-staff .rlcp-input:focus-visible,
+.rlcp-staff .rlcp-button-primary:focus-visible,
+.rlcp-staff .rlcp-nav-active:focus-visible {
+    outline: 3px solid var(--rlcp-gold);
+    outline-offset: 2px;
+}
+
+/* Original logo */
+
+.rlcp-staff .rlcp-logo {
+    object-fit: contain;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Preserve existing status colors and layout geometry. */

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="640" viewBox="0 0 960 640" fill="none">
+ <title>Fellowship photo coming soon</title>
+ <rect width="960" height="640" fill="#e8ded1"/>
+ <rect x="24" y="24" width="912" height="592" rx="4" stroke="#765640" stroke-opacity=".2" stroke-width="2"/>
+ <path d="M0 576 240 384 528 576 787.1999999999999 339.20000000000005 960 473.6V640H0Z" fill="#d9c5ad" opacity=".65"/>
+ <g transform="translate(409.6 228.096)" stroke="#765640" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="140.8" height="107.00800000000001" rx="8"/>
+  <circle cx="98.56" cy="35.2" r="11.968000000000002"/>
+  <path d="m0 84.48 42.24 -39.42400000000001 33.792 30.976000000000003 22.528000000000002 -16.896 42.24 36.608000000000004"/>
+ </g>
+ <text x="480" y="380.16" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="23" fill="#6b4226">Fellowship photo coming soon</text>
+</svg>
+

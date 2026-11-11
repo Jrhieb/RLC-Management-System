@@ -1,0 +1,39 @@
+{
+  "changedFiles": [
+    "resources\\css\\account-notifications.css",
+    "resources\\css\\attendance-workspace.css",
+    "resources\\css\\beneficiary-registry.css",
+    "resources\\css\\rlcp-dashboard.css",
+    "resources\\css\\staff-brand.css",
+    "resources\\views\\beneficiaries\\archived.blade.php",
+    "resources\\views\\components\\app-logo-icon.blade.php",
+    "resources\\views\\reports\\pdf.blade.php",
+    "resources\\views\\layouts\\app\\header.blade.php",
+    "resources\\views\\layouts\\auth\\card.blade.php",
+    "resources\\views\\layouts\\auth\\simple.blade.php",
+    "resources\\views\\layouts\\auth\\split.blade.php",
+    "tests\\browser\\dashboard-branding.test.mjs"
+  ],
+  "backendSourceAndDependencyHashesUnchanged": true,
+  "publicSourcesAndOriginalLogoUnchanged": true,
+  "existingCssGeometryDeclarationsUnchanged": true,
+  "bladeBindingsAndContentPreservedExceptLogo": true,
+  "baselineDirectory": "C:\\Users\\LOUISE~1\\AppData\\Local\\Temp\\rlcp-staff-ui-5yhphrre",
+  "browserStatus": "Blocked: Edge CDP Page.enable timed out before loading fixture",
+  "javascriptTests": {
+    "passed": 144,
+    "failed": 0
+  },
+  "phpStatus": "Herd directory access denied; accessible PHP 8.2 is below required 8.4.1",
+  "publicCompiledAssetsUnchanged": true,
+  "build": "Passed; npm run build with temporary config using empty envDir",
+  "browserAttempts": 2,
+  "centralTextTokenContrastRatios": {
+    "#ffffff on #b91c1c": 6.47,
+    "#625a52 on #ffffff": 6.77,
+    "#625a52 on #fff9ef": 6.46,
+    "#6b4226 on #ffffff": 8.63,
+    "#c6bdb3 on #24201e": 8.71,
+    "#ffc107 on #24201e": 9.91
+  }
+}

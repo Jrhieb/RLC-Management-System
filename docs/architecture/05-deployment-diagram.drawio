@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="rlcp-windows-lan" name="05 | Windows LAN deployment">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" background="#FFFFFF" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="RLCP | Windows LAN deployment" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#A50021;strokeColor=#A50021;fontColor=#FFFFFF;fontSize=30;fontStyle=1;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="25" width="1520" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="status" value="DOCUMENTED SETUP — RUNTIME STATE UNVERIFIED&#xa;Risen Lord Church Phils., Inc. | Logical deployment; no live devices, processes or services checked." style="text;whiteSpace=wrap;html=1;align=left;fontColor=#252525;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="40" y="105" width="1520" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="windows-host" value="Windows application host | runtime unverified" style="swimlane;startSize=45;container=1;pointerEvents=0;collapsible=0;html=1;whiteSpace=wrap;fillColor=#FFF9EF;swimlaneFillColor=#FFFFFF;strokeColor=#D4A039;dashed=1;fontColor=#252525;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="190" width="610" height="620" as="geometry"/>
+        </mxCell>
+        <mxCell id="web-process" value="PHP web process&#xa;Laravel application&#xa;Handles browser requests" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=10;" vertex="1" parent="windows-host">
+          <mxGeometry x="40" y="90" width="230" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="file-storage" value="File storage&#xa;Application files / uploads&#xa;Local filesystem" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=10;" vertex="1" parent="windows-host">
+          <mxGeometry x="370" y="90" width="210" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="sqlite" value="SQLite database&#xa;Application records&#xa;Database queue: jobs&#xa;Local database file" style="shape=cylinder3;boundedLbl=1;size=15;whiteSpace=wrap;html=1;fillColor=#FFF9EF;strokeColor=#D4A039;fontColor=#252525;fontSize=20;spacing=10;" vertex="1" parent="windows-host">
+          <mxGeometry x="40" y="360" width="230" height="170" as="geometry"/>
+        </mxCell>
+        <mxCell id="mail-worker" value="Mail queue worker&#xa;Separate PHP process&#xa;Runs queued mail jobs" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=10;" vertex="1" parent="windows-host">
+          <mxGeometry x="370" y="380" width="210" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="phone-browser" value="Phone browser&#xa;Staff web interface" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="60" y="240" width="240" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="scanning-computer" value="Scanning computer&#xa;Desktop browser&#xa;Staff attendance interface" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="60" y="480" width="240" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="usb-reader" value="USB keyboard reader&#xa;Card UID as keystrokes&#xa;Physical behavior unverified" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF9EF;strokeColor=#D4A039;fontColor=#252525;fontSize=20;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="60" y="720" width="280" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="lan" value="Local network&#xa;(LAN)&#xa;Browser connectivity" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF9EF;strokeColor=#D4A039;fontColor=#252525;fontSize=20;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="420" y="285" width="180" height="230" as="geometry"/>
+        </mxCell>
+        <mxCell id="smtp-service" value="SMTP service&#xa;Mail delivery transport&#xa;Endpoint unverified" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#252525;dashed=1;fontColor=#252525;fontSize=20;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1340" y="570" width="220" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="phone-lan" value="Web requests&#xa;/ responses" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;startArrow=block;strokeColor=#252525;fontColor=#252525;fontSize=16;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.25;" edge="1" parent="1" source="phone-browser" target="lan">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="desktop-lan" value="Web requests&#xa;/ responses" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;startArrow=block;strokeColor=#252525;fontColor=#252525;fontSize=16;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.8;" edge="1" parent="1" source="scanning-computer" target="lan">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="lan-web" value="HTTP(S)&#xa;web traffic" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;startArrow=block;strokeColor=#252525;fontColor=#252525;fontSize=16;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.26;entryX=0;entryY=0.5;" edge="1" parent="1" source="lan" target="web-process">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="reader-desktop" value="USB HID input&#xa;UID keystrokes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#252525;fontColor=#252525;fontSize=16;labelBackgroundColor=#FFFFFF;exitX=0.43;exitY=0;entryX=0.5;entryY=1;" edge="1" parent="1" source="usb-reader" target="scanning-computer">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="web-files" value="Read/write&#xa;files" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#252525;fontColor=#252525;fontSize=16;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="windows-host" source="web-process" target="file-storage">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="web-database" value="Read/write records;&#xa;enqueue verification job&#xa;after transaction commit" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#252525;fontColor=#252525;fontSize=16;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="windows-host" source="web-process" target="sqlite">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="worker-database" value="Claim jobs;&#xa;read/update&#xa;mail state" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#252525;fontColor=#252525;fontSize=16;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="windows-host" source="mail-worker" target="sqlite">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="worker-smtp" value="SMTP&#xa;send mail" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#252525;fontColor=#252525;fontSize=16;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="mail-worker" target="smtp-service">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="evidence" value="Scope: requested Windows LAN setup; inventory.md REG-02/03 and deployment section. All runtime state is UNVERIFIED.&#xa;Verification explicitly uses the database queue; decision mail queues after commit using configured queue behavior.&#xa;SQLite, SMTP, worker availability, HTTP/TLS configuration and USB input are deployment assumptions, not observed runtime facts.&#xa;RLCP palette: crimson heading; charcoal components; cream/gold infrastructure. Arrows describe the labeled connection purpose." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF9EF;strokeColor=#D4A039;fontColor=#252525;fontSize=17;spacing=12;align=left;" vertex="1" parent="1">
+          <mxGeometry x="40" y="865" width="1520" height="110" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

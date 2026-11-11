@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" fill="none">
+ <title>Decorative placeholder awaiting an approved public photo</title>
+ <rect width="1920" height="1080" fill="#6b4226"/>
+ <rect x="24" y="24" width="1872" height="1032" rx="4" stroke="#b99a78" stroke-opacity=".2" stroke-width="2"/>
+ <path d="M0 972 480 648 1056 972 1574.3999999999999 572.4 1920 799.2V1080H0Z" fill="#775237" opacity=".65"/>
+ <g transform="translate(1340.4 384.912)" stroke="#b99a78" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="237.6" height="180.576" rx="8"/>
+  <circle cx="166.32" cy="59.4" r="20.196"/>
+  <path d="m0 142.56 71.28 -66.528 57.023999999999994 52.272 38.016 -28.511999999999997 71.28 61.776"/>
+ </g>
+ 
+</svg>
+

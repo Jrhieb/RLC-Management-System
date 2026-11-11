@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="page-1" name="03A | Program records and relationships">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" background="#FFFFFF" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="03A | Program records and relationships" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;fillColor=#A50021;fontColor=#FFFFFF;strokeColor=#A50021;fontSize=30;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="25" width="1520" height="65" />
+        </mxCell>
+        <mxCell id="takeaway" value="Beneficiary is a managed record; User is an authenticated account with optional caseload assignments." style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=21;align=left;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="100" width="1520" height="55" />
+        </mxCell>
+        <mxCell id="legend" value="Verified: solid outline | Inferred: dashed outline | Solid arrow: sync | Dashed arrow: queued (labeled)&#10;Rule references resolve to source symbols in inventory.md. AUTH-03, NFC-01/02, ATT-01, AST-01; migrations in inventory section 5" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;fillColor=#FFF9EF;strokeColor=#D4A039;fontSize=17;align=left;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="880" width="1520" height="85" />
+        </mxCell>
+        <mxCell id="user" value="User / users&#10;PK id: bigint&#10;email: string UNIQUE&#10;role: string; approval_status: enum&#10;email_verified_at: timestamp?" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="60" y="190" width="400" height="180" />
+        </mxCell>
+        <mxCell id="ben" value="Beneficiary / beneficiaries&#10;PK id; beneficiary_id: string UNIQUE&#10;caseworker_id: FK User?&#10;nfc_uid: string(64)? UNIQUE&#10;status: string; deleted_at: timestamp?" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="600" y="190" width="420" height="180" />
+        </mxCell>
+        <mxCell id="activity" value="ProgramActivity / program_activities&#10;PK id; title: string&#10;activity_date: date; start_time: time?&#10;created_by: FK User?&#10;development_area: string(30)" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="600" y="640" width="420" height="190" />
+        </mxCell>
+        <mxCell id="attendance" value="ActivityAttendance / activity_attendances&#10;PK id; beneficiary_id: FK&#10;program_activity_id: FK&#10;recorded_by: FK User?&#10;checked_in_at: timestamp; source: string&#10;UNIQUE(activity, beneficiary)" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1120" y="420" width="420" height="210" />
+        </mxCell>
+        <mxCell id="assist" value="AssistanceTransaction&#10;assistance_transactions&#10;PK id; beneficiary_id: FK&#10;recorded_by: FK User?&#10;submission_token: UUID? UNIQUE&#10;quantity: uint; released_at: datetime" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="60" y="420" width="420" height="210" />
+        </mxCell>
+        <mxCell id="edge-10" value="0..many assigned / 0..1 user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#252525;fontColor=#252525;fontSize=17;labelBackgroundColor=#FFFFFF;jettySize=25;" edge="1" parent="1" source="ben" target="user">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge-11" value="many / 1 beneficiary" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#252525;fontColor=#252525;fontSize=17;labelBackgroundColor=#FFFFFF;jettySize=25;" edge="1" parent="1" source="assist" target="ben">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge-12" value="many / 1 beneficiary" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#252525;fontColor=#252525;fontSize=17;labelBackgroundColor=#FFFFFF;jettySize=25;" edge="1" parent="1" source="attendance" target="ben">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge-13" value="many / 1 activity" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#252525;fontColor=#252525;fontSize=17;labelBackgroundColor=#FFFFFF;jettySize=25;" edge="1" parent="1" source="attendance" target="activity">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge-14" value="many / 0..1 recorder" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#252525;fontColor=#252525;fontSize=17;labelBackgroundColor=#FFFFFF;jettySize=25;" edge="1" parent="1" source="assist" target="user">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="note" value="Verified: creator and recorder FKs also point to User (omitted repeated arrows for clarity).&#10;Beneficiary/activity deletion restricted by attendance; beneficiary deletion restricted by assistance.&#10;User references null on delete. Soft archive retains history. All fields are schema names only." style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;fillColor=#FFF9EF;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="60" y="680" width="440" height="150" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page-2" name="03B | Accounts, registration and support tables">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" background="#FFFFFF" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="03B | Accounts, registration and support tables" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;fillColor=#A50021;fontColor=#FFFFFF;strokeColor=#A50021;fontSize=30;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="25" width="1520" height="65" />
+        </mxCell>
+        <mxCell id="takeaway" value="Registration requests match email in application logic; there is no registration-request-to-user foreign key." style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=21;align=left;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="100" width="1520" height="55" />
+        </mxCell>
+        <mxCell id="legend" value="Verified: solid outline | Inferred: dashed outline | Solid arrow: sync | Dashed arrow: queued (labeled)&#10;Rule references resolve to source symbols in inventory.md. REG-01/02/03, ACC-01; migrations in inventory section 5" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;fillColor=#FFF9EF;strokeColor=#D4A039;fontSize=17;align=left;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="880" width="1520" height="85" />
+        </mxCell>
+        <mxCell id="user" value="users&#10;PK id; email UNIQUE&#10;approval_reviewed_by: FK users?&#10;approval_reviewed_at: timestamp?&#10;rejection_reason: text?&#10;2FA fields nullable" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="620" y="190" width="390" height="200" />
+        </mxCell>
+        <mxCell id="registration" value="registration_requests&#10;PK id; email UNIQUE&#10;token_hash: char(64)? UNIQUE&#10;session_token_hash: char(64)? UNIQUE&#10;expiry / verification / completion timestamps&#10;No User FK" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="70" y="190" width="420" height="210" />
+        </mxCell>
+        <mxCell id="notifications" value="account_notifications&#10;PK id: UUID&#10;recipient_id / account_id: FK users&#10;kind; event_key; read_at?&#10;added_count / removed_count&#10;UNIQUE(recipient_id, event_key)" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1110" y="190" width="420" height="210" />
+        </mxCell>
+        <mxCell id="passkeys" value="passkeys&#10;PK id; user_id: FK users&#10;credential_id UNIQUE&#10;credential: JSON&#10;last_used_at: timestamp?" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="620" y="580" width="390" height="190" />
+        </mxCell>
+        <mxCell id="edge-9" value="many / 1 each; cascade delete" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#252525;fontColor=#252525;fontSize=17;labelBackgroundColor=#FFFFFF;jettySize=25;" edge="1" parent="1" source="notifications" target="user">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="edge-10" value="many / 1; cascade delete" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;strokeColor=#252525;fontColor=#252525;fontSize=17;labelBackgroundColor=#FFFFFF;jettySize=25;" edge="1" parent="1" source="passkeys" target="user">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="infra" value="Support schema (Verified migrations)&#10;jobs / job_batches / failed_jobs&#10;cache / cache_locks&#10;sessions / password_reset_tokens&#10;No runtime contents inspected" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;fillColor=#FFF9EF;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="70" y="580" width="420" height="190" />
+        </mxCell>
+        <mxCell id="note" value="Verified application relationships&#10;Reviewing user: self-FK, nullable&#10;Sessions user_id: index, NOT declared FK&#10;User model exposes assignedBeneficiaries&#10;Notification scope filters recipient + kind" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFFFFF;strokeColor=#252525;fontColor=#252525;fontSize=20;spacing=12;verticalAlign=middle;fillColor=#FFF9EF;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1110" y="580" width="420" height="190" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

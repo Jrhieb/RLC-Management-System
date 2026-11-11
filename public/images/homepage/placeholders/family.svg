@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640" fill="none">
+ <title>Family photo coming soon</title>
+ <rect width="640" height="640" fill="#efe0c6"/>
+ <rect x="24" y="24" width="592" height="592" rx="4" stroke="#846035" stroke-opacity=".2" stroke-width="2"/>
+ <path d="M0 576 160 384 352 576 524.8 339.20000000000005 640 473.6V640H0Z" fill="#e2ceaa" opacity=".65"/>
+ <g transform="translate(249.6 228.096)" stroke="#846035" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="140.8" height="107.00800000000001" rx="8"/>
+  <circle cx="98.56" cy="35.2" r="11.968000000000002"/>
+  <path d="m0 84.48 42.24 -39.42400000000001 33.792 30.976000000000003 22.528000000000002 -16.896 42.24 36.608000000000004"/>
+ </g>
+ <text x="320" y="380.16" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="18" fill="#6b4226">Family photo coming soon</text>
+</svg>
+

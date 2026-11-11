@@ -1,0 +1,357 @@
+/* Public-site palette, scoped to staff pages and staff-themed authentication.
+ * Keep the existing rlc-* geometry, responsive rules, hooks and semantic colors.
+ * --rlc-violet is a legacy component token; here it becomes the brand link color.
+ */
+.rlcp-staff-brand {
+    --rlcp-canvas: #fff9ef;
+    --rlcp-surface: #ffffff;
+    --rlcp-soft: #fff9ef;
+    --rlcp-tint: #fff0d5;
+    --rlcp-text: #181818;
+    --rlcp-muted: #625a52;
+    --rlcp-border: #e4ded6;
+    --rlcp-link: #6b4226;
+    --rlcp-primary: #b91c1c;
+    --rlcp-primary-hover: #991b1b;
+    --rlcp-primary-text: #ffffff;
+    --rlcp-highlight: #fdeaea;
+    --rlcp-highlight-text: #b91c1c;
+    --rlcp-focus-ring: #6b4226;
+    --rlcp-focus-wash: #b91c1c20;
+    --rlcp-shadow-ink: #6b422610;
+    --rlcp-shadow-faint: #6b422608;
+    --rlcp-overlay: #18181880;
+    --registry-selection: var(--rlcp-tint);
+
+    /* Existing utility names remain intact, including dynamically generated ones.
+       These values inherit only inside the staff body; semantic colors are untouched. */
+    --color-violet-50: #fff9ef;
+    --color-violet-100: #fff0d5;
+    --color-violet-200: #e4c3a8;
+    --color-violet-300: #d9a4a4;
+    --color-violet-400: #f3a6a6;
+    --color-violet-500: #b91c1c;
+    --color-violet-600: #b91c1c;
+    --color-violet-700: #991b1b;
+    --color-violet-800: #6b4226;
+    --color-violet-900: #592626;
+    --color-violet-950: #30201c;
+    --color-zinc-50: #fff9ef;
+    --color-zinc-100: #f5efe7;
+    --color-zinc-200: #e4ded6;
+    --color-zinc-300: #c6bdb3;
+    --color-zinc-400: #95897e;
+    --color-zinc-500: #74685d;
+    --color-zinc-600: #625a52;
+    --color-zinc-700: #4b4038;
+    --color-zinc-800: #2d2724;
+    --color-zinc-900: #24201e;
+    --color-zinc-950: #181818;
+    color: var(--rlcp-text);
+    color-scheme: light;
+}
+.dark .rlcp-staff-brand {
+    --rlcp-canvas: #181818;
+    --rlcp-surface: #24201e;
+    --rlcp-soft: #2d2724;
+    --rlcp-tint: #44321e;
+    --rlcp-text: #fff9ef;
+    --rlcp-muted: #c6bdb3;
+    --rlcp-border: #4b4038;
+    --rlcp-link: #ffc107;
+    --rlcp-highlight: #591d22;
+    --rlcp-highlight-text: #ffc107;
+    --rlcp-focus-ring: #ffc107;
+    --rlcp-focus-wash: #ffc10730;
+    --rlcp-shadow-ink: #00000020;
+    --rlcp-shadow-faint: #0000000a;
+    color-scheme: dark;
+}
+
+.rlcp-staff-brand,
+.rlcp-staff-brand .rlc-dashboard,
+.rlcp-staff-brand .rlc-registry.rlc-registry-index {
+    --rlc-ink: var(--rlcp-text);
+    --rlc-muted: var(--rlcp-muted);
+    --rlc-border: var(--rlcp-border);
+    --rlc-surface: var(--rlcp-surface);
+    --rlc-soft: var(--rlcp-soft);
+    --rlc-violet: var(--rlcp-link);
+    --rlc-tint: var(--rlcp-tint);
+    --rlcp-crimson: var(--rlcp-primary);
+    --rlcp-crimson-hover: var(--rlcp-primary-hover);
+    --rlcp-gold: #ffc107;
+    --rlcp-focus: var(--rlcp-focus-ring);
+    --rlcp-emblem-tint: var(--rlcp-highlight);
+    --rlcp-emblem-ink: var(--rlcp-highlight-text);
+    --color-accent: #b91c1c;
+    --color-accent-content: #b91c1c;
+    --color-accent-foreground: #ffffff;
+}
+
+.dark .rlcp-staff-brand,
+.dark .rlcp-staff-brand .rlc-dashboard,
+.dark .rlcp-staff-brand .rlc-registry.rlc-registry-index {
+    --rlc-ink: var(--rlcp-text);
+    --rlc-muted: var(--rlcp-muted);
+    --rlc-border: var(--rlcp-border);
+    --rlc-surface: var(--rlcp-surface);
+    --rlc-soft: var(--rlcp-soft);
+    --rlc-violet: var(--rlcp-link);
+    --rlc-tint: var(--rlcp-tint);
+    --rlcp-focus: var(--rlcp-focus-ring);
+    --rlcp-emblem-tint: var(--rlcp-highlight);
+    --rlcp-emblem-ink: var(--rlcp-highlight-text);
+    --color-accent-content: #ffc107;
+}
+
+/* All staff pages retain the same canvas across wire:navigate transitions. */
+.rlcp-staff-brand {
+    background: var(--rlcp-canvas);
+}
+.dark .rlcp-staff-brand {
+    background: var(--rlcp-canvas);
+}
+
+.rlcp-staff-brand .rlc-sidebar {
+    background: var(--rlc-surface) !important;
+    border-color: var(--rlc-border) !important;
+    color: var(--rlc-ink);
+}
+.rlcp-staff-brand > [data-flux-header] {
+    background: var(--rlc-surface);
+    border-color: var(--rlc-border);
+    color: var(--rlc-ink);
+}
+.rlcp-staff-brand .rlc-brand {
+    color: var(--rlc-ink);
+}
+.rlcp-staff-brand .rlc-brand small {
+    color: var(--rlc-muted);
+}
+.rlcp-staff-brand .rlc-brand-mark {
+    background: #ffffff;
+    box-shadow: 0 0 0 1px var(--rlc-border);
+}
+.rlcp-staff-brand .rlc-brand-mark img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.rlcp-staff-brand .rlc-sidebar-footer {
+    border-color: var(--rlc-border);
+}
+.rlcp-staff-brand .rlc-sidebar [data-flux-sidebar-group] > div:first-child {
+    color: var(--rlc-muted);
+}
+.rlcp-staff-brand .rlc-sidebar [data-flux-sidebar-item] {
+    color: var(--rlc-ink);
+}
+.rlcp-staff-brand .rlc-sidebar [data-flux-sidebar-item]:hover {
+    background: var(--rlc-soft);
+}
+.rlcp-staff-brand .rlc-sidebar [data-flux-sidebar-item][data-current] {
+    background: var(--rlcp-crimson) !important;
+    border-color: var(--rlcp-crimson);
+    color: #ffffff !important;
+}
+.rlcp-staff-brand .rlc-sidebar [data-flux-sidebar-item][data-current]:hover {
+    background: var(--rlcp-crimson-hover) !important;
+}
+.rlcp-staff-brand
+    :is(.rlc-sidebar, [data-flux-header])
+    :is(
+        [data-flux-heading],
+        [data-flux-sidebar-profile],
+        [data-flux-profile],
+        [data-flux-menu-item]
+    ) {
+    color: var(--rlc-ink);
+}
+.rlcp-staff-brand :is(.rlc-sidebar, [data-flux-header]) [data-flux-text] {
+    color: var(--rlc-muted);
+}
+.rlcp-staff-brand :is(.rlc-sidebar, [data-flux-header]) [data-flux-menu] {
+    background: var(--rlc-surface);
+    border-color: var(--rlc-border);
+    color: var(--rlc-ink);
+}
+.rlcp-staff-brand
+    :is(.rlc-sidebar, [data-flux-header])
+    :is(
+        [data-flux-menu-item][data-active],
+        [data-flux-sidebar-profile]:hover,
+        [data-flux-profile]:hover
+    ) {
+    background: var(--rlc-soft);
+}
+.rlcp-staff-brand :is(.rlc-sidebar, [data-flux-header]) [data-flux-menu-separator] {
+    background: var(--rlc-border);
+}
+.rlcp-staff-brand :is(.rlc-sidebar, [data-flux-header]) :focus-visible {
+    outline-color: var(--rlcp-focus);
+}
+.rlcp-staff-brand > [data-flux-header] .rlc-notification-count {
+    background: var(--rlcp-crimson);
+}
+
+/* Dashboard colors only: no sizing, order, spacing or breakpoint overrides. */
+.rlcp-dashboard-brand .rlc-panel {
+    box-shadow: 0 5px 24px #6b422608;
+}
+.dark .rlcp-dashboard-brand .rlc-panel {
+    box-shadow: 0 4px 24px #0000000a;
+}
+.rlcp-dashboard-brand :is(a, button, input):focus-visible {
+    outline-color: var(--rlcp-focus);
+}
+.rlcp-dashboard-brand .rlc-search-wrap .rlc-search:has(input:focus-visible) {
+    border-color: var(--rlcp-focus);
+}
+.rlcp-dashboard-brand .rlc-search {
+    box-shadow: 0 4px 16px #6b422604;
+}
+.rlcp-dashboard-brand .rlc-tone-violet .rlc-icon-box,
+.rlcp-dashboard-brand .rlc-avatar {
+    background: var(--rlcp-emblem-tint);
+    color: var(--rlcp-emblem-ink);
+}
+.rlcp-dashboard-brand .rlc-stat-bottom > .rlc-icon {
+    color: var(--rlc-violet);
+    opacity: 1;
+}
+.rlcp-dashboard-brand .rlc-button:is(.rlc-button-small, .rlc-button-primary, .rlc-button-tinted) {
+    background: var(--rlcp-crimson);
+    border-color: var(--rlcp-crimson);
+    color: #ffffff;
+    box-shadow: none;
+}
+.rlcp-dashboard-brand
+    .rlc-button:is(.rlc-button-small, .rlc-button-primary, .rlc-button-tinted):hover {
+    background: var(--rlcp-crimson-hover);
+    border-color: var(--rlcp-crimson-hover);
+}
+.rlcp-dashboard-brand .rlc-interactive:hover {
+    border-color: #cba98b;
+    box-shadow: 0 8px 22px #6b422610;
+}
+.dark .rlcp-dashboard-brand .rlc-interactive:hover {
+    border-color: #a17a4e;
+    box-shadow: 0 8px 22px #00000020;
+}
+.rlcp-dashboard-brand .rlc-bar {
+    background: linear-gradient(180deg, #cc2929, #b91c1c);
+}
+.dark .rlcp-dashboard-brand .rlc-bar {
+    background: linear-gradient(180deg, #ef6262, #d94343);
+}
+.rlcp-dashboard-brand .rlc-empty > .rlc-icon {
+    color: #8a7563;
+}
+.dark .rlcp-dashboard-brand .rlc-empty > .rlc-icon {
+    color: #bdab96;
+}
+.rlcp-dashboard-brand .rlc-calendar-tile {
+    background: var(--rlcp-emblem-tint);
+    color: var(--rlcp-emblem-ink);
+}
+.rlcp-dashboard-brand .rlc-calendar-tile strong {
+    color: inherit;
+}
+.rlcp-dashboard-brand .rlc-landscape {
+    background:
+        radial-gradient(ellipse at 95% 25%, #fff0cb 0, transparent 65%),
+        linear-gradient(180deg, #f9dfdf90, transparent);
+}
+.rlcp-dashboard-brand .rlc-mountain-back {
+    fill: #d9a4a4;
+}
+.rlcp-dashboard-brand .rlc-mountain-front {
+    fill: #deb96c;
+}
+.rlcp-dashboard-brand .rlc-church {
+    fill: #6b4226;
+}
+.dark .rlcp-dashboard-brand .rlc-landscape {
+    background:
+        radial-gradient(ellipse at 95% 30%, #b91c1c40, transparent 62%),
+        linear-gradient(180deg, #6b422645, transparent);
+}
+.dark .rlcp-dashboard-brand .rlc-mountain-back {
+    fill: #9d2630;
+}
+.dark .rlcp-dashboard-brand .rlc-mountain-front {
+    fill: #592626;
+}
+.dark .rlcp-dashboard-brand .rlc-church {
+    fill: #c99b55;
+}
+
+/* Shared controls use existing geometry and semantic variants. */
+.rlcp-staff-brand .rlcp-logo-image {
+    object-fit: contain;
+    width: auto;
+    max-width: 100%;
+    background: #ffffff;
+    border-radius: inherit;
+}
+.rlcp-staff-brand :is(.rlc-dashboard, .rlc-registry.rlc-registry-index) {
+    --registry-selection: var(--rlcp-tint);
+}
+.rlcp-staff-brand :is(.rlc-button-primary, .rlcr-button-primary) {
+    background: var(--rlcp-primary);
+    color: var(--rlcp-primary-text);
+    border-color: var(--rlcp-primary);
+}
+.rlcp-staff-brand :is(.rlc-button-primary, .rlcr-button-primary):hover {
+    background: var(--rlcp-primary-hover);
+}
+.rlcp-staff-brand :is(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline-color: var(--rlcp-focus-ring);
+}
+.rlcp-staff-brand :is([data-flux-menu], [data-flux-modal] > dialog:not([data-flux-modal-overflow]), [data-flux-modal-content]) {
+    background-color: var(--rlcp-surface);
+    border-color: var(--rlcp-border);
+    color: var(--rlcp-text);
+}
+.rlcp-staff-brand [data-flux-navbar-item][data-current] {
+    color: var(--rlcp-primary-text);
+    background: var(--rlcp-primary);
+}
+.rlcp-staff-brand :is(input[type="checkbox"], input[type="radio"]) {
+    accent-color: var(--rlcp-primary);
+}
+.rlcp-staff-brand .rlc-attendance-workspace [data-count-card="test_uid"] .rlca-stat-icon {
+    color: var(--rlcp-highlight-text);
+    background: var(--rlcp-highlight);
+}
+.rlcp-staff-brand :is(.text-violet-600, .text-violet-700) {
+    color: var(--rlcp-link);
+}
+.dark .rlcp-staff-brand .dark\:text-violet-400 {
+    color: var(--rlcp-link);
+}
+.rlcp-staff-brand .rlc-notification-panel {
+    background: var(--rlcp-surface);
+    border-color: var(--rlcp-border);
+    color: var(--rlcp-text);
+}
+.rlcp-staff-brand .rlc-notification-panel :is(small, .rlc-notification-message, .rlc-notification-footer) {
+    color: var(--rlcp-muted);
+}
+
+.dark .rlcp-staff-brand .text-zinc-500 { color: var(--rlcp-muted); }
+
+/* Selected folders and pagination retain white text on crimson, not gold. */
+.rlcp-staff-brand .rlc-registry.rlc-registry-index .rlcr-caseload-card {
+    --caseload-selected: var(--rlcp-primary);
+}
+.rlcp-staff-brand .rlc-registry.rlc-registry-index .rlcr-button-primary,
+.rlcp-staff-brand .rlc-registry.rlc-registry-index .rlcr-page-links [aria-current="page"],
+.rlcp-staff-brand .rlc-attendance-workspace .rlca-pagination nav [aria-current="page"] > span {
+    background: var(--rlcp-primary);
+    color: var(--rlcp-primary-text);
+}
+.rlcp-staff-brand .rlc-registry.rlc-registry-index .rlcr-button-primary:hover {
+    background: var(--rlcp-primary-hover);
+}

@@ -1,0 +1,17 @@
+{
+  "viewportWidths": [
+    1440,
+    1024,
+    768,
+    390,
+    320
+  ],
+  "consoleErrors": [],
+  "requestCount": 37,
+  "source": "Isolated PHP public render; all browser requests intercepted; no live application access",
+  "screenshots": [
+    "desktop.png",
+    "tablet.png",
+    "mobile.png"
+  ]
+}
