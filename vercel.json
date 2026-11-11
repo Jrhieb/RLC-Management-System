@@ -3,7 +3,7 @@
     "services": {
         "app": {
             "root": ".",
-            "entrypoint": "Dockerfile.vercel",
+            "entrypoint": "Dockerfile",
             "runtime": "container"
         }
     },
