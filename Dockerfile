@@ -34,10 +34,10 @@ COPY --from=dependencies --chown=www-data:www-data /app /app
 COPY --from=assets --chown=www-data:www-data /app/public /app/public
 COPY Caddyfile /etc/frankenphp/Caddyfile
 
-RUN setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/frankenphp \
+RUN setcap -r /usr/local/bin/frankenphp \
     && chown -R www-data:www-data /config/caddy /data/caddy
 
-ENV PORT=80 \
+ENV PORT=10000 \
     APP_ENV=production \
     APP_DEBUG=false \
     LOG_CHANNEL=stderr \
@@ -50,6 +50,6 @@ ENV PORT=80 \
 
 USER www-data
 
-EXPOSE 80
+EXPOSE 10000
 
 CMD ["frankenphp", "run", "--config", "/etc/frankenphp/Caddyfile"]
