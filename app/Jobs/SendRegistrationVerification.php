@@ -18,9 +18,7 @@ class SendRegistrationVerification implements ShouldQueueAfterCommit
         public int $registrationRequestId,
         public string $tokenHash,
         public string $encryptedToken,
-    ) {
-        $this->onConnection('database');
-    }
+    ) {}
 
     public function handle(EmailRegistrationService $registration): void
     {

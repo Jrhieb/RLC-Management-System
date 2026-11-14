@@ -191,3 +191,24 @@ For each completed task, append the date, selected commit/service when relevant,
 - Render Free service limits: https://render.com/docs/free
 - Render Blueprint configuration: https://render.com/docs/blueprint-spec
 - Supabase Laravel setup: https://supabase.com/docs/guides/getting-started/quickstarts/laravel
+
+## Verified staging recovery — 2026-11-15 (Asia/Manila)
+
+- Authenticated Render access verified in confirmed My Workspace; exact service `rlc-staging` (`srv-dbrcj6l6e07s73b8stl0`), existing Free Docker service, branch `main`.
+- Confirmed runtime failure: PostgreSQL connection refused at `127.0.0.1:5432`. Running configuration was falling back to localhost instead of the existing Supabase staging database.
+- Merged existing private `.env.staging` Supabase `DB_URL` securely into Render; set `DB_CONNECTION=pgsql`, `SESSION_CONNECTION=pgsql`, `DB_SEARCH_PATH=laravel`, `DB_SSLMODE=require`, `APP_DEBUG=false`, and the actual staging HTTPS `APP_URL`. Existing `APP_KEY` was omitted from the merge and preserved. No database migration or data operation was required.
+- Render automatically deployed the configuration update as `dep-dbs90iuk1f9s738kfm10`, live at 2026-11-14 16:46:43 UTC, using existing GitHub commit `e1e85942cb3654b003b97ed0e0a68b44057308dd`. No application code change was needed.
+- Verified `/up`, homepage, and database-session `/login`: HTTP 200. Seven referenced build assets (fonts, CSS, JavaScript) returned 200. Login CSRF token persisted across requests with the same cookie jar; session cookies were Secure. HTTP redirected to HTTPS.
+- Queried application `production.ERROR` logs from the corrected deployment's live timestamp after verification requests; no matching new errors returned.
+- Remaining limits: no authenticated staff workflow exercised; no claim of full migration inventory or cache-table audit. Successful database-backed sessions demonstrate connectivity and session-table access for the verified requests.
+
+## Brevo HTTPS registration delivery — setup and verification
+
+- Laravel mail transport `brevo` sends existing rendered mail through `https://api.brevo.com/v3/smtp/email` over HTTPS. No dependencies added. Requires HTTP 201 and nonempty messageId; acceptance is not proof of inbox delivery. Failures expose static errors only, with no provider body or chained sensitive exception. No automatic retry after ambiguous acceptance.
+- Registration jobs honor QUEUE_CONNECTION; staging uses sync because the Free web service has no queue worker. Failure invalidates the current registration generation and returns the existing unavailable response. Existing code/link expiry, one-time use, rate limits, and Director review remain unchanged.
+- Brevo setup: verify an owned sender in Settings > Senders, Domains, IPs > Senders; confirm Transactional > Email is enabled (request activation from Brevo support if disabled); create an API key under SMTP & API > API Keys, not an SMTP key.
+- Enter BREVO_API_KEY privately in the existing Render service Environment. Set MAIL_FROM_ADDRESS to the verified sender and MAIL_FROM_NAME to RLC Management System; MAIL_MAILER=brevo and QUEUE_CONNECTION=sync. Preserve APP_KEY, database settings, and APP_DEBUG=false. Never place the key in Git or chat.
+- Without a custom domain, Brevo may rewrite a free-address sender using a compliant Brevo domain. This is a temporary provider behavior, not assurance of account eligibility or delivery. The onrender.com website hostname is not an owned sending domain.
+- Automated checks: transport and existing registration tests cover success, unauthorized/sender rejection/rate-limit/server errors, malformed acceptance, connection failure, no network with missing key, sync success and failure, expiry, invalid/reused codes, and resend limits. All requests in these tests are faked and SQLite is isolated in memory.
+- Pending real verification: user must confirm Brevo transactional activation, verified sender, secure API-key entry, and provide an owned test recipient. Must then confirm actual inbox receipt, verify through the existing code/link flow, resend within limits, inspect fresh sanitized logs. Do not treat provider acceptance alone as successful delivery.
+- Official references: https://developers.brevo.com/reference/send-transac-email ; https://help.brevo.com/hc/en-us/articles/115000188150-Troubleshooting-Issues-with-Brevo-SMTP ; https://help.brevo.com/hc/en-us/articles/14925263522578-Comply-with-Gmail-Yahoo-and-Microsoft-s-requirements-for-email-senders
