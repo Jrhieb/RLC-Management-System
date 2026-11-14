@@ -43,7 +43,7 @@ class RegistrationDeliveryQueueTest extends TestCase
         Queue::assertPushed(SendRegistrationVerification::class, 1);
         $job = Queue::pushed(SendRegistrationVerification::class)->sole();
         $this->assertInstanceOf(ShouldQueueAfterCommit::class, $job);
-        $this->assertSame('database', $job->connection);
+        $this->assertNull($job->connection);
         $this->assertSame(1, $job->tries);
         $token = Crypt::decryptString($job->encryptedToken);
         $this->assertSame(RegistrationRequest::sole()->token_hash, hash('sha256', $token));

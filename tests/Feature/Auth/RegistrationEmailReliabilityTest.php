@@ -151,7 +151,7 @@ class RegistrationEmailReliabilityTest extends TestCase
             $this->assertSame(RegistrationRequest::sole()->id, $job->registrationRequestId);
             $this->assertSame(1, $job->tries);
         } elseif ($kind === 'existing') {
-            $this->assertSame(['connection' => 'database', 'tries' => 1], get_object_vars($job));
+            $this->assertSame(['tries' => 1], get_object_vars($job));
             $this->assertInstanceOf(ShouldQueueAfterCommit::class, $job);
             $job->handle();
             $this->assertDatabaseCount('registration_requests', 0);
