@@ -37,6 +37,88 @@ class RegistrationTest extends TestCase
 
     private const PASSWORD = 'Registration-Password-123!';
 
+    public function test_resending_invalidates_the_previous_code_and_browser_challenge(): void
+    {
+        $this->requestLink();
+        $oldCode = substr($this->linkToken(), 0, 8);
+        $oldChallenge = session('registration_code_challenge');
+        $this->travel(61)->seconds();
+        $this->post(route('registration.request'), ['email' => self::EMAIL])->assertSessionHasNoErrors();
+        $this->withSession(['registration_code_challenge' => $oldChallenge])
+            ->post('/register/code', ['code' => $oldCode])->assertSessionHasErrors('code');
+        $this->assertNull(RegistrationRequest::sole()->verified_at);
+    }
+
+    public function test_code_requires_the_requesting_browser_and_is_not_flashed_on_validation_error(): void
+    {
+        $this->requestLink();
+        $code = substr($this->linkToken(), 0, 8);
+        $this->withSession(['registration_code_challenge' => null])
+            ->post('/register/code', ['code' => $code])->assertSessionHasErrors('code');
+        $this->post('/register/code', ['code' => 'invalid-code'])
+            ->assertRedirect(route('registration.code'))->assertSessionHasErrors('code')
+            ->assertSessionMissing('_old_input.code');
+        $this->assertDatabaseCount('users', 0);
+    }
+
+    public function test_registration_email_contains_the_code_without_a_bearer_link(): void
+    {
+        $this->requestLink();
+        $token = $this->linkToken();
+        $job = Queue::pushed(SendRegistrationVerification::class)->sole();
+        $job->handle(app(EmailRegistrationService::class));
+        Mail::assertSent(RegistrationVerificationMail::class, function ($mail) use ($token): bool {
+            $mail->assertSeeInHtml(substr($token, 0, 8));
+            $mail->assertDontSeeInHtml($token);
+
+            return true;
+        });
+    }
+
+    public function test_emailed_code_verifies_registration_and_keeps_account_pending(): void
+    {
+        $this->requestLink();
+        $code = substr($this->linkToken(), 0, 8);
+        $this->assertMatchesRegularExpression('/^[0-9]{8}$/', $code);
+        $this->get('/register/code')->assertOk()->assertSee('Verification code');
+        $this->post('/register/code', ['code' => $code])->assertRedirect(route('registration.complete'));
+        $this->post(route('registration.complete.store'), $this->payload())
+            ->assertRedirect(route('registration.awaiting-approval'));
+        $this->assertSame('pending', User::sole()->approval_status);
+        $this->assertTrue(User::sole()->hasVerifiedEmail());
+        $this->assertFalse(User::sole()->canAccessStaff());
+        $this->assertGuest();
+    }
+
+    public function test_registration_code_is_locked_after_five_wrong_attempts(): void
+    {
+        $this->requestLink();
+        $code = substr($this->linkToken(), 0, 8);
+        $wrong = $code === '00000000' ? '11111111' : '00000000';
+        for ($attempt = 0; $attempt < 5; $attempt++) {
+            $this->post('/register/code', ['code' => $wrong])->assertSessionHasErrors('code');
+        }
+        $this->post('/register/code', ['code' => $code])->assertSessionHasErrors('code');
+        $this->assertDatabaseCount('users', 0);
+        $this->assertNull(RegistrationRequest::sole()->verified_at);
+    }
+
+    public function test_registration_code_expires_and_cannot_be_replayed(): void
+    {
+        $this->requestLink();
+        $code = substr($this->linkToken(), 0, 8);
+        $challenge = session('registration_code_challenge');
+        $this->travel(31)->minutes();
+        $this->post('/register/code', ['code' => $code])->assertSessionHasErrors('code');
+        $this->assertNull(RegistrationRequest::sole()->verified_at);
+
+        $this->travelBack();
+        $this->withSession(['registration_code_challenge' => $challenge])
+            ->post('/register/code', ['code' => $code])->assertRedirect(route('registration.complete'));
+        $this->withSession(['registration_code_challenge' => $challenge])
+            ->post('/register/code', ['code' => $code])->assertSessionHasErrors('code');
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -85,7 +167,7 @@ class RegistrationTest extends TestCase
         $this->assertStringNotContainsString($token, $response->getContent());
         $this->assertStringNotContainsString($token, json_encode(session()->all()));
         $this->assertStringNotContainsString($token, serialize(Queue::pushed(SendRegistrationVerification::class)->sole()));
-        $this->get(route('register'))->assertOk()->assertSee('Resend verification link')->assertDontSee($token);
+        $this->get(route('register'))->assertOk()->assertSee('Resend verification code')->assertDontSee($token);
         $this->assertDatabaseCount('users', 0);
         $this->assertGuest();
         Notification::assertNothingSent();
@@ -417,14 +499,15 @@ class RegistrationTest extends TestCase
         $this->assertSame('https', parse_url($url, PHP_URL_SCHEME));
     }
 
-    public function test_mail_template_contains_the_link_only_in_the_fake_email(): void
+    public function test_mail_template_contains_the_code_only_in_the_fake_email(): void
     {
         $this->requestLink();
         Queue::pushed(SendRegistrationVerification::class)->last()->handle(app(EmailRegistrationService::class));
         $mail = Mail::sent(RegistrationVerificationMail::class)->last();
         $rendered = $mail->render();
-        $this->assertStringContainsString('Verify email', $rendered);
-        $this->assertStringContainsString($this->linkToken(), $rendered);
+        $this->assertStringContainsString('verification code', $rendered);
+        $this->assertStringContainsString(substr($this->linkToken(), 0, 8), $rendered);
+        $this->assertStringNotContainsString($this->linkToken(), $rendered);
         $this->get(route('register'))->assertDontSee($this->linkToken());
     }
 

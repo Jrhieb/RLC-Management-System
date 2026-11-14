@@ -33,6 +33,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias(['password.confirm' => RequirePasswordConfirmation::class]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        $exceptions->dontFlash(['code']);
         // Routing pipelines render exceptions before outer middleware can catch them.
         // Registration failures must never report a bearer URL, mail body, or password.
         $exceptions->report(function (Throwable $exception): ?bool {
@@ -46,12 +47,20 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (Throwable $exception, Request $request): ?Response {
+            if ($exception instanceof ValidationException && $request->routeIs('login.store')) {
+                $exception->redirectTo(route('login'));
+            }
+
             if (! $request->is('register', 'register/*')) {
                 return null;
             }
 
             if ($exception instanceof ValidationException) {
-                $exception->redirectTo(route($request->routeIs('registration.complete.store') ? 'registration.complete' : 'register'));
+                $exception->redirectTo(route(match (true) {
+                    $request->routeIs('registration.complete.store') => 'registration.complete',
+                    $request->routeIs('registration.code.verify') => 'registration.code',
+                    default => 'register',
+                }));
 
                 return null;
             }

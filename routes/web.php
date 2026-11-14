@@ -29,9 +29,16 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
 Route::view('/', 'welcome')->name('home');
+Route::view('/about', 'public.about')->name('about');
+Route::view('/programs', 'public.programs')->name('programs');
+Route::view('/community/activities', 'public.activities')->name('public.activities.index');
+Route::view('/application', 'public.application')->name('program-application');
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegistrationController::class, 'show'])->name('register');
+    Route::get('register/code', [RegistrationController::class, 'showCode'])->name('registration.code');
+    Route::post('register/code', [RegistrationController::class, 'verifyCode'])
+        ->middleware('throttle:10,1')->name('registration.code.verify');
     Route::post('register', [RegistrationController::class, 'requestLink'])
         ->middleware('throttle:registration-email')->name('registration.request');
     Route::get('register/verify/{token}', [RegistrationController::class, 'verify'])

@@ -70,7 +70,9 @@ class RegistrationPresentationTest extends TestCase
                 ->assertSee('name="_token"', false)
                 ->assertSee('autocomplete="email"', false)
                 ->assertSee(route('registration.request'), false)
-                ->assertDontSee('name="password"', false);
+                ->assertSee('Become a Caseworker');
+            $this->assertSame(1, preg_match('/<form\b[^>]*data-registration-form[^>]*>.*?<\/form>/s', $response->getContent(), $registrationForm));
+            $this->assertStringNotContainsString('name="password"', $registrationForm[0]);
             $this->assertSame(1, substr_count($response->getContent(), 'data-registration-form'));
             $this->exportFixture($fixture, $response->getContent());
         }
@@ -117,7 +119,7 @@ class RegistrationPresentationTest extends TestCase
     {
         $this->post(route('registration.request'), ['email' => 'native@example.test'])
             ->assertRedirect(route('register'))->assertSessionHas('status');
-        $this->get(route('register'))->assertOk()->assertSee('Resend verification link')
+        $this->get(route('register'))->assertOk()->assertSee('Resend verification code')
             ->assertSee('If this email is available, a verification email has been queued.');
         Queue::assertPushed(SendRegistrationVerification::class, 1);
         Mail::assertNothingOutgoing();
@@ -175,7 +177,9 @@ class RegistrationPresentationTest extends TestCase
             'name' => 'Synthetic Caseworker', 'password' => 'short', 'password_confirmation' => 'different',
         ])->assertRedirect(route('registration.complete'))->assertSessionHasErrors('password')
             ->assertSessionMissing('_old_input.password')->assertSessionMissing('_old_input.password_confirmation');
-        $response = $this->get(route('registration.complete'))->assertOk()->assertSee('Synthetic Caseworker')
+        $response = $this->withCookie(config('session.cookie'), $this->app['session']->getId())
+            ->get(route('registration.complete'))->assertOk()->assertSee('Synthetic Caseworker')
+            ->assertSee('aria-invalid="true"', false)
             ->assertDontSee('value="short"', false)->assertDontSee('value="different"', false);
         $this->exportFixture('complete-invalid', $response->getContent());
         $this->assertDatabaseCount('users', 0);

@@ -2,10 +2,10 @@
 @import "./registration-email.css";
 
 .rlcp-registration {
-    --registration-red: #b91c1c;
-    --registration-gold: #ffc107;
-    --registration-ink: #181818;
-    --registration-muted: #625d57;
+    --registration-red: #b50516;
+    --registration-gold: #ffda4e;
+    --registration-ink: #191624;
+    --registration-muted: #686572;
     color: var(--registration-ink);
     font-family: "Instrument Sans", "Segoe UI", sans-serif;
     font-size: 16px;
@@ -102,6 +102,35 @@
 @keyframes registration-dialog-out { to { opacity: 0; transform: scale(.98); } }
 @keyframes registration-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes registration-backdrop-out { to { opacity: 0; } }
+/* Match the Staff Login presentation across the page and embedded dialog. */
+.rlcp-registration .registration-panel { grid-template-columns: 1.05fr 1fr; padding: 6px; border-radius: 26px; }
+.rlcp-registration .registration-brand { padding: 30px; border-radius: 20px; min-height: 580px; }
+.rlcp-registration .registration-brand::after { background: linear-gradient(130deg, #69040ccc, #8e090a66 45%, #eab52cb3), linear-gradient(0deg, #8c0609 5%, transparent 90%); }
+.rlcp-registration .registration-brand__identity { flex-direction: column; align-items: flex-start; gap: 5px; margin-bottom: 55px; }
+.rlcp-registration .registration-brand__identity img { width: 126px; height: 126px; flex-basis: auto; padding: 0; background: transparent; border-radius: 0; }
+.rlcp-registration .registration-brand__identity small { margin: 0; max-width: none; font-size: 11px; font-weight: 600; }
+.rlcp-registration .registration-brand__message { margin-top: auto; }
+.rlcp-registration .registration-brand h2 { font-size: clamp(30px, 3.8vw, 45px); font-weight: 800; line-height: 1.05; margin-bottom: 12px; }
+.rlcp-registration .registration-brand__message > p:last-child { font-size: 16px; line-height: 1.45; }
+.rlcp-registration .registration-steps { margin-top: 24px; gap: 9px; }
+.rlcp-registration .registration-steps li { padding: 14px 10px; border-radius: 12px; background: #ffffff21; border-color: #ffffff30; font-size: 12px; }
+.rlcp-registration .registration-steps [aria-current] { border-color: var(--registration-gold); }
+.rlcp-registration .registration-brand__footer { margin-top: 0; padding-top: 24px; }
+.rlcp-registration .registration-content { padding: 58px 38px 30px; }
+.rlcp-registration .registration-title { font-size: clamp(28px, 3vw, 38px); font-weight: 800; letter-spacing: -1.2px; }
+.rlcp-registration .registration-eyebrow { font-size: 10px; margin-bottom: 10px; }
+.rlcp-registration .registration-lead { margin: 10px 0 26px; font-size: 15px; }
+.rlcp-registration .registration-field label { font-size: 12px; font-weight: 700; }
+.rlcp-registration .registration-field input { min-height: 46px; border-color: #dedee5; border-radius: 9px; background: #fcfcfd; font-size: 13px; }
+.rlcp-registration .registration-help { font-size: 12px; line-height: 1.6; }
+.rlcp-registration .registration-submit { min-height: 48px; padding: 11px 16px; border-radius: 9px; background: linear-gradient(110deg, #c60920, #ac0010); font-size: 14px; }
+.rlcp-registration .registration-submit__arrow { width: 27px; height: 27px; flex-basis: 27px; }
+.rlcp-registration .registration-review-note { font-size: 12px; padding: 12px; margin-block: 22px; }
+.rlcp-registration .registration-login { font-size: 12px; margin-top: 24px; padding-top: 20px; border-color: #e5e4e9; }
+.rlcp-registration-dialog { width: min(900px, calc(100% - 32px)); max-height: calc(100dvh - 32px); border: 1px solid #e6e4e7; border-radius: 26px; box-shadow: 0 28px 80px #0005; }
+.rlcp-registration-dialog::backdrop { background: #17101680; }
+.registration-page { background: radial-gradient(ellipse at top left, #f8e3df, transparent 60%), #faf7f3; }
+.registration-page__main { width: min(900px, calc(100% - 32px)); }
 @media (max-width: 900px) {
     .rlcp-registration .registration-brand { padding: 36px 28px 28px; }
     .rlcp-registration .registration-brand__identity { flex-wrap: wrap; gap: 14px; margin-bottom: 38px; }
@@ -112,7 +141,7 @@
 @media (max-width: 700px) {
     .rlcp-registration-dialog { width: calc(100% - 24px); max-height: calc(100dvh - 24px); border-radius: 22px; }
     .rlcp-registration .registration-panel { grid-template-columns: 1fr; padding: 6px; border-radius: 22px; }
-    .rlcp-registration .registration-brand { padding: 24px; border-radius: 17px; }
+    .rlcp-registration .registration-brand { padding: 24px; border-radius: 17px; min-height: auto; }
     .rlcp-registration .registration-brand__identity { flex-wrap: nowrap; margin-bottom: 20px; gap: 12px; padding-right: 30px; }
     .rlcp-registration .registration-brand__identity img { width: 58px; height: 58px; flex-basis: 58px; }
     .rlcp-registration .registration-brand__identity strong { font-size: 1.9rem; }

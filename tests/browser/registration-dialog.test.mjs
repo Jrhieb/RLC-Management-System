@@ -6,6 +6,19 @@ const binary = process.env.REGISTRATION_UI_BROWSER;
 const fixtures = process.env.REGISTRATION_UI_FIXTURES;
 const confirmation = "If this email is available, a verification email has been queued. Check your inbox shortly.";
 
+test("registration-login-fallback opens the staff overlay", { skip: !binary || !fixtures, timeout: 30000 }, async () => {
+    const ui = await registrationBrowser(binary, fixtures);
+    try {
+        await ui.navigate('/register');
+        await ui.evaluate("document.querySelector('.registration-login a').click()");
+        await ui.until("document.querySelector('#staff-login-dialog')?.open");
+        assert.equal(await ui.evaluate('location.pathname'), '/');
+        assert.equal(await ui.evaluate('document.activeElement.id'), 'staff-login-email');
+        assert.equal(await ui.evaluate("document.querySelector('#staff-login-dialog').matches(':modal')"), true);
+        assert.equal(ui.stats.emailPosts, 0);
+    } finally { await ui.close(); }
+});
+
 test("Caseworker registration presentation, using only intercepted requests", { skip: !binary || !fixtures, timeout: 120000 }, async (t) => {
     const ui = await registrationBrowser(binary, fixtures);
     const { evaluate, until, command, key } = ui;
@@ -23,6 +36,28 @@ test("Caseworker registration presentation, using only intercepted requests", { 
         await ui.viewport(1440);
         await ui.navigate();
         await until("document.querySelector('[data-registration-dialog]').dataset.initialized === 'true'");
+        await t.test("login switches to registration without navigation or sending email", async () => {
+            await evaluate("document.querySelector('[data-staff-login-open]').click()");
+            await until("document.querySelector('#staff-login-dialog').open");
+            await evaluate("document.querySelector('#staff-login-dialog [name=password]').value = 'Synthetic-Secret'; document.querySelector('#staff-login-dialog [data-registration-open]').click()");
+            await until("document.querySelector('[data-registration-dialog]').open && !document.querySelector('#staff-login-dialog').open");
+            await delay(200);
+            assert.equal(await evaluate("location.pathname"), "/");
+            assert.equal(await evaluate("document.querySelectorAll('dialog[open]').length"), 1);
+            assert.equal(await evaluate("document.activeElement.id"), "registration-email");
+            assert.equal(await evaluate("document.querySelector('#staff-login-dialog [name=password]').value"), "");
+            assert.equal(ui.stats.emailPosts, 0);
+            await evaluate("document.querySelector('[data-registration-dialog] [data-staff-login-open]').click()");
+            await until("document.querySelector('#staff-login-dialog').open && !document.querySelector('[data-registration-dialog]').open");
+            assert.equal(await evaluate("location.pathname"), "/");
+            assert.equal(await evaluate("document.activeElement.id"), "staff-login-email");
+            assert.equal(await evaluate("document.querySelector('main').inert"), false);
+            assert.equal(await evaluate("document.body.classList.contains('registration-scroll-locked')"), false);
+            await evaluate("document.querySelector('#staff-login-dialog [data-registration-open]').click()");
+            await until("document.querySelector('[data-registration-dialog]').open && !document.querySelector('#staff-login-dialog').open");
+            await close();
+            assert.equal(await evaluate("document.activeElement.matches('[data-staff-login-open]')"), true);
+        });
         await t.test("real fallback link, keyboard opening, focus containment, Escape and scroll restoration", async () => {
             assert.equal(await evaluate("document.querySelector('footer [data-registration-open]').getAttribute('href').endsWith('/register')"), true);
             await evaluate("document.querySelector('footer [data-registration-open]').focus()");
@@ -36,7 +71,7 @@ test("Caseworker registration presentation, using only intercepted requests", { 
             assert.equal(await evaluate("document.querySelector('[data-registration-dialog]').getAttribute('aria-labelledby')"), "registration-team-title");
             await evaluate("document.querySelector('[data-registration-close]').focus()");
             await key("Tab", 8);
-            assert.equal(await evaluate("document.activeElement.getAttribute('href').endsWith('/login')"), true);
+            assert.equal(await evaluate("new URL(document.activeElement.href).pathname"), "/login");
             await key("Tab");
             assert.equal(await evaluate("document.activeElement.matches('[data-registration-close]')"), true);
             assert.equal(await evaluate("getComputedStyle(document.activeElement).outlineStyle"), "solid");
@@ -103,7 +138,9 @@ test("Caseworker registration presentation, using only intercepted requests", { 
             assert.equal(await evaluate("document.querySelector('[data-registration-notice-text]').textContent"), confirmation);
             await open();
             assert.equal(await evaluate("document.querySelector('[data-registration-feedback]').textContent"), confirmation);
-            assert.equal(await evaluate("document.querySelector('[data-registration-idle]').textContent"), "Resend verification link");
+            assert.equal(await evaluate("document.querySelector('[data-registration-idle]').textContent"), "Resend verification code");
+            assert.equal(await evaluate("document.querySelector('[data-registration-code-form]').hidden"), false);
+            assert.equal(await evaluate("document.querySelector('[autocomplete=one-time-code]').getAttribute('maxlength')"), "8");
             assert.equal(await evaluate("document.querySelector('.registration-steps [aria-current]').textContent.includes('Verify Email')"), true);
             assert.equal(await evaluate("document.querySelector('[data-test=registration-email-button]').disabled"), false);
             assert.equal(ui.stats.csrfPresent, true);

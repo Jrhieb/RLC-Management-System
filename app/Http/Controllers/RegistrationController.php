@@ -30,7 +30,8 @@ class RegistrationController extends Controller
 
         $validated = $request->validate(['email' => ['required', 'string', 'email', 'max:255']]);
         $request->session()->forget([EmailRegistrationService::SESSION_KEY, 'registration_completed']);
-        $this->registration->requestLink($validated['email']);
+        $challenge = $this->registration->requestLink($validated['email']);
+        $request->session()->put('registration_code_challenge', $challenge);
 
         $message = 'If this email is available, a verification email has been queued. Check your inbox shortly.';
         if ($request->expectsJson()) {
@@ -39,6 +40,28 @@ class RegistrationController extends Controller
 
         return redirect()->route('register')->withInput($request->only('email'))
             ->with('status', $message);
+    }
+
+    public function showCode(): View
+    {
+        return view('livewire.auth.registration-code');
+    }
+
+    public function verifyCode(Request $request): RedirectResponse
+    {
+        $validated = $request->validate(['code' => ['required', 'string', 'regex:/\A[0-9]{8}\z/']]);
+        $session = $this->registration->verifyCode($request->session()->get('registration_code_challenge'), $validated['code']);
+        if ($session === null) {
+            return redirect()->route('registration.code')->withErrors([
+                'code' => 'The code is incorrect, expired, already used, or has too many attempts. Request a new code if needed.',
+            ]);
+        }
+
+        $request->session()->regenerate();
+        $request->session()->forget(['registration_code_challenge', 'registration_completed']);
+        $request->session()->put(EmailRegistrationService::SESSION_KEY, $session);
+
+        return redirect()->route('registration.complete');
     }
 
     public function verify(Request $request, string $token): RedirectResponse

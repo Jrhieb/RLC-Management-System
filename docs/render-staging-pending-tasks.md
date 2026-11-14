@@ -155,6 +155,37 @@ Completion: production has its own reviewed release plan. A working free staging
 
 For each completed task, append the date, selected commit/service when relevant, checks run, sanitized results, remaining limitations, and cleanup outcome. Never record `APP_KEY`, database passwords, full connection strings, API secrets, session tokens, or real beneficiary data.
 
+### Hosted deployment follow-up — 2026-11-13
+
+- User's Render screenshot reports deployment `98a3e52` as Live. The same commit is present in the local checkout. This supersedes the initial local-only deployment status above; account settings and container-build logs have not been independently inspected.
+- User reports HTTP 500 on the hosted home page. Hosted application verification remains incomplete even though Render reports Live.
+- Supplied runtime log contains `Cannot modify header information - headers already sent`, with output beginning in Symfony's `Response::sendContent()` and the exception stack passing through Laravel's shutdown handler.
+- Local source inspection confirms that this stack involves an attempt to render another exception response after response content was sent. It does not identify the initial cause of the home-page failure.
+- Next evidence needed: the first Laravel error and preceding log lines for the same failing request. Keep `APP_DEBUG=false`; check effective `LOG_CHANNEL=stderr` and `LOG_LEVEL=error` if application errors are missing from Render logs.
+- No application code, environment values, database records, or dependencies were changed as part of this investigation. No migrations or resets were run.
+
+### Confirmed encryption configuration failure — 2026-11-14
+
+- User-supplied runtime trace at 14:21:32 UTC reaches `EncryptionServiceProvider::key()` through its `tap()` callback before the secondary response-header failures. Inspection of the installed provider confirms that this callback throws `MissingAppKeyException` when the effective `config('app.key')` is empty. This identifies an empty effective key, rather than the malformed-key/cipher validation path.
+- The trace also reaches `Kernel::terminateMiddleware()` after response content was sent, explaining why another attempt to render the encryption exception triggers `headers already sent`.
+- `config/app.php` reads `APP_KEY` and uses AES-256-CBC. The Dockerfile does not generate keys or run `config:cache`; `.dockerignore` excludes private `.env*` files and `bootstrap/cache/*`. Local credentials are intentionally not uploaded.
+- Render account access remains unavailable. It is not possible to distinguish an absent/empty hosted variable, an unapplied environment edit, the wrong service/deployment, or an unexpected runtime configuration cache from this trace alone. No key was generated, rotated, displayed, or changed.
+- Minimum dashboard action: in the existing `rlc-staging` service, verify the exact `APP_KEY` variable contains the existing valid dedicated staging key, then select Save and deploy if the corrected environment has not been applied. Preserve an existing valid key. Verify the active deployment after that change; do not repeatedly redeploy or change vendor response handling.
+- If a new request still reaches the same key callback after that deployment, inspect effective configuration and configuration-cache presence privately through authenticated service access. Do not expose a diagnostic endpoint or print credentials.
+- Hosted homepage, assets, HTTPS redirects, sessions, and login remain unvalidated. No application source changes, deployment, database changes, or test-account writes were performed for this diagnosis.
+
+### Application release verification — 2026-11-14
+
+- User authorized publishing the latest public pages, staff login dialog, registration code flow, and required public images to `main`. Architecture artifacts, generated QA screenshots, README/discovery documents, the unrelated Supabase CLI dependency addition, and root image deletions remain outside the release.
+- Release review found that failed logins submitted from a public-page dialog returned to a closed dialog. Validation failures on `login.store` now redirect to the existing login screen, retaining the email/error and excluding the password. A regression test reproduced the old redirect and passes with the fix; login throttling remains enforced.
+- Verification passed: Pint; frontend build; 152 affected PHP tests with 2,430 assertions; 144 JavaScript tests; and 26 isolated Edge browser checks. Browser checks intercept requests and use synthetic memory fixtures. Their allowlist now serves the installed Livewire script and locally generated bootstrap assets, and their simulated nonstandard HTTP response includes an explicit reason phrase. No live accounts or mail delivery were used.
+- The initial feature run overlapped an asset rebuild and temporarily failed to find a font file. The subsequent complete affected-test runs passed after the build. The initial browser run exposed fixture transport/session-continuity problems; these were corrected and all browser checks then passed.
+- Build warnings remain: optional optimized font fallbacks lack the optional `fontaine` package, and the root-relative hero SVG is resolved at runtime. The SVG exists and is tracked; neither warning prevented the successful build.
+- Integrity hashes confirm `.env`, `.env.staging`, and `bootstrap/cache/config.php` are unchanged. The local SQLite file hash changed during the verification window while other local PHP processes were active. Static review found no SQLite write path in the Node asset build, and feature tests guard SQLite `:memory:` before provider boot. The writer is not established; the database was not restored, reset, or overwritten. SQLite byte-for-byte preservation therefore cannot be claimed.
+- The plugin registry now reports Render installed, but this conversation still exposes no Render service/deploy tools. Account authorization, hosted environment values, and the active deployed revision cannot be inspected here. Installation alone does not establish working account access.
+- Required connection step: start a new Codex thread after plugin installation, invoke Render `list_workspaces`, and approve the browser OAuth prompt if requested. Select the workspace containing the existing Free `rlc-staging` service. Do not create another service or rotate its key. Render documents this initialization at https://render.com/agents/codex-desktop.
+- Hosted deployment remains pending authenticated access. Preserve a valid hosted staging key; if its effective configuration is empty, apply the existing valid dedicated staging key privately. The local `.env.staging` key was validated for the configured cipher without displaying it. Do not upload environment files. Recheck homepage/assets, HTTP-to-HTTPS redirects, secure session persistence, and sanitized runtime logs after deployment; `/up` alone is insufficient.
+
 ## References
 
 - Render Free service limits: https://render.com/docs/free

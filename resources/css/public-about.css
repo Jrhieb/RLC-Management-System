@@ -1,0 +1,108 @@
+/* About presentation only; public tokens and responsive navigation are shared. */
+.rlcp-public.public-about-page { background: var(--public-soft); }
+.rlcp-public.public-about-page .about-header { background: #950f1b; border-bottom: 1px solid #c45b62; }
+.rlcp-public.public-about-page .about-header .public-header { position: relative; left: auto; transform: none; color: #fff; }
+.rlcp-public.public-about-page .public-navigation > a[aria-current="page"] { color: var(--public-gold); }
+.rlcp-public.public-about-page .public-footer nav a[aria-current="page"] { color: var(--public-gold); text-decoration: underline; text-underline-offset: 5px; }
+.rlcp-public.public-about-page .about-hero { padding-block: 28px; background: linear-gradient(120deg, #790c19, #b91c1c 55%, #5b0b17); color: #fff; }
+.rlcp-public.public-about-page .about-hero__frame { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; min-width: 0; aspect-ratio: 3 / 1; min-height: 240px; border: 1px solid #e4b6ad; padding: 76px 24px; text-align: center; background: linear-gradient(155deg, #ffffff09, #18181820); }
+.rlcp-public.public-about-page .about-hero h1 { font-size: clamp(2.5rem, 5.6vw, 5rem); letter-spacing: -.035em; }
+.rlcp-public.public-about-page .about-hero__label { position: absolute; top: 22px; left: 26px; right: 26px; display: flex; align-items: center; gap: 10px; font-size: .78rem; font-weight: 600; letter-spacing: .07em; text-align: left; }
+.rlcp-public.public-about-page .about-hero__note { position: absolute; bottom: 24px; inset-inline: 16px; color: #f2d4ce; font-size: .85rem; }
+.rlcp-public.public-about-page .about-story__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+.rlcp-public.public-about-page .about-section-label { display: inline-flex; align-items: center; gap: 10px; padding: 7px 20px; border: 1px solid var(--public-border); border-radius: 99px; background: var(--public-surface); color: var(--public-ink); font-size: .75rem; font-weight: 700; letter-spacing: .055em; text-transform: uppercase; margin-bottom: 20px; box-shadow: 0 2px 4px #6b42260b; }
+.rlcp-public.public-about-page .about-section-label::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--public-red); }
+.rlcp-public.public-about-page :is(.about-story h2, .about-section-heading h2) > span { color: var(--public-accent-text); }
+.rlcp-public.public-about-page .about-story h2 { font-size: clamp(1.8rem, 3vw, 2.7rem); }
+.rlcp-public.public-about-page .about-gold-rule { display: block; width: 80px; height: 3px; margin-top: 22px; background: #b87913; }
+.rlcp-public.public-about-page .about-story__notes { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.rlcp-public.public-about-page .about-story__notes p { padding-left: 24px; border-left: 1px solid #b87913; font-size: .95rem; }
+.rlcp-public.public-about-page .about-story__notes p span { display: block; margin-top: 8px; color: var(--public-muted); }
+.rlcp-public.public-about-page .about-principles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; margin-block: 48px 64px; }
+.rlcp-public.public-about-page .about-principle { display: flex; align-items: center; gap: 24px; padding: 28px 24px; background: var(--public-surface); border: 1px solid var(--public-border); border-radius: 22px; box-shadow: 0 5px 10px #1818180c; }
+.rlcp-public.public-about-page .about-principle__icon { display: grid; place-items: center; flex: 0 0 64px; width: 64px; height: 64px; border-radius: 50%; background: var(--public-red); color: #fff; }
+.rlcp-public.public-about-page .about-principle__icon svg { width: 34px; height: 34px; }
+.rlcp-public.public-about-page .about-principle:nth-child(2) .about-principle__icon { background: var(--public-gold); color: #181818; }
+.rlcp-public.public-about-page .about-principle > div { border-left: 1px solid #b87913; padding-left: 22px; }
+.rlcp-public.public-about-page .about-principle h3 { font-size: 1.5rem; }
+.rlcp-public.public-about-page .about-principle p { color: var(--public-muted); font-size: .86rem; line-height: 1.55; margin-top: 8px; }
+.rlcp-public.public-about-page .about-media { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: end; }
+.rlcp-public.public-about-page .about-community-photo { position: relative; grid-column: 1 / 9; grid-row: 1; display: grid; place-items: center; aspect-ratio: 3 / 2; overflow: hidden; border: 1px solid #bdb9b4; border-radius: 22px; background: linear-gradient(135deg, #dedbd6, #c4c0bb); color: #44403b; }
+.rlcp-public.public-about-page .about-community-photo__art { position: absolute; inset: 0; display: grid; place-items: center; padding-bottom: 96px; }
+.rlcp-public.public-about-page .about-community-photo__art svg { width: 80px; height: 80px; color: #706b65; stroke-width: 1.2; }
+.rlcp-public.public-about-page .about-community-photo figcaption { position: relative; max-width: 34ch; text-align: center; padding: 110px 24px 24px; }
+.rlcp-public.public-about-page .about-community-photo figcaption strong { font-size: .95rem; letter-spacing: .05em; }
+.rlcp-public.public-about-page .about-community-photo figcaption span { display: block; margin-top: 8px; font-size: .85rem; }
+.rlcp-public.public-about-page .about-video { z-index: 1; grid-column: 8 / -1; grid-row: 1; align-self: end; margin-bottom: 42px; min-height: 250px; padding: 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: #494441; color: #fff9ef; border: 6px solid var(--public-surface); border-radius: 24px; box-shadow: 0 8px 14px #1818181a; }
+.rlcp-public.public-about-page .about-video > svg { width: 40px; height: 40px; color: #ffc107; margin-bottom: 20px; }
+.rlcp-public.public-about-page .about-video h3 { font-size: 1.2rem; }
+.rlcp-public.public-about-page .about-video p { color: #e8e1d8; font-size: .9rem; max-width: 28ch; margin-top: 12px; }
+.rlcp-public.public-about-page .about-journey { padding-top: 64px; }
+.rlcp-public.public-about-page .about-section-heading { text-align: center; }
+.rlcp-public.public-about-page .about-section-heading h2 { font-size: clamp(2rem, 3.5vw, 2.8rem); }
+.rlcp-public.public-about-page .about-section-note { color: var(--public-muted); margin-top: 18px; font-size: .95rem; }
+.rlcp-public.public-about-page .about-timeline { position: relative; list-style: none; padding: 0; margin: 40px 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 80px; }
+.rlcp-public.public-about-page .about-timeline::before { content: ""; position: absolute; top: 13px; left: calc((100% - 160px) / 6); right: calc((100% - 160px) / 6); height: 2px; background: #b87913; }
+.rlcp-public.public-about-page .about-timeline li { position: relative; }
+.rlcp-public.public-about-page .about-timeline__dot { position: relative; display: block; width: 28px; height: 28px; border: 5px solid #b87913; border-radius: 50%; background: var(--public-soft); margin: 0 auto 24px; }
+.rlcp-public.public-about-page .about-timeline p { display: flex; align-items: center; justify-content: center; gap: 16px; background: var(--public-surface); border: 1px solid var(--public-border); border-radius: 16px; padding: 22px; font-size: .95rem; }
+.rlcp-public.public-about-page .about-timeline svg { color: var(--public-accent-text); }
+.rlcp-public.public-about-page .about-people { background: var(--public-surface); border-top: 1px solid var(--public-border); }
+.rlcp-public.public-about-page .about-people__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; margin-top: 40px; }
+.rlcp-public.public-about-page .about-person { overflow: hidden; background: var(--public-soft); border: 1px solid var(--public-border); border-radius: 22px; box-shadow: 0 4px 10px #18181808; }
+.rlcp-public.public-about-page .about-person__portrait { display: flex; justify-content: center; align-items: end; aspect-ratio: 3 / 2; padding-top: 24px; background: linear-gradient(135deg, #dedbd6, #c4c0bb); color: #8d8881; }
+.rlcp-public.public-about-page .about-person__portrait svg { width: 58%; height: 90%; stroke-width: 1.2; }
+.rlcp-public.public-about-page .about-person figcaption { padding: 26px 22px; text-align: center; font-size: .9rem; line-height: 1.5; }
+.rlcp-public.public-about-page .about-person .about-gold-rule { width: 64px; margin: 20px auto 0; }
+@media (max-width: 1100px) {
+    .rlcp-public.public-about-page .about-principle { gap: 16px; padding: 24px 18px; }
+    .rlcp-public.public-about-page .about-principle__icon { flex-basis: 48px; width: 48px; height: 48px; }
+    .rlcp-public.public-about-page .about-principle > div { padding-left: 16px; }
+    .rlcp-public.public-about-page .about-principle p { font-size: .8rem; }
+}
+@media (max-width: 960px) {
+    .rlcp-public.public-about-page .public-navigation > a[aria-current="page"] { color: var(--public-warm-link); }
+    .rlcp-public.public-about-page:not(.has-public-menu) .public-navigation > a[aria-current="page"] { color: #ffc107; }
+    .rlcp-public.public-about-page .about-story__grid { grid-template-columns: 1fr; gap: 32px; }
+    .rlcp-public.public-about-page .about-story__notes { max-width: 70ch; }
+    .rlcp-public.public-about-page .about-principles { gap: 20px; }
+    .rlcp-public.public-about-page .about-principle { align-items: flex-start; flex-direction: column; }
+    .rlcp-public.public-about-page .about-principle > div { padding-left: 0; border-left: 0; }
+    .rlcp-public.public-about-page .about-principle p { font-size: .86rem; }
+    .rlcp-public.public-about-page .about-video { min-height: 210px; padding: 24px; margin-bottom: 24px; }
+    .rlcp-public.public-about-page .about-timeline { gap: 24px; }
+    .rlcp-public.public-about-page .about-timeline::before { left: calc((100% - 48px) / 6); right: calc((100% - 48px) / 6); }
+    .rlcp-public.public-about-page .about-timeline p { padding: 18px; font-size: .9rem; }
+    .rlcp-public.public-about-page .about-people__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 700px) {
+    .rlcp-public.public-about-page .about-hero { padding-block: 20px; }
+    .rlcp-public.public-about-page .about-hero__frame { min-height: 260px; padding-inline: 16px; }
+    .rlcp-public.public-about-page .about-hero__label { top: 20px; inset-inline: 16px; font-size: .75rem; }
+    .rlcp-public.public-about-page .about-hero__note { font-size: .75rem; }
+    .rlcp-public.public-about-page .about-story__notes { grid-template-columns: 1fr; gap: 24px; }
+    .rlcp-public.public-about-page .about-story__notes p { padding-left: 20px; }
+    .rlcp-public.public-about-page .about-principles { grid-template-columns: 1fr; margin-block: 36px 40px; gap: 20px; }
+    .rlcp-public.public-about-page .about-principle { align-items: center; flex-direction: row; gap: 24px; padding: 24px; }
+    .rlcp-public.public-about-page .about-principle > div { border-left: 1px solid #b87913; padding-left: 22px; }
+    .rlcp-public.public-about-page .about-media { display: flex; flex-direction: column; align-items: stretch; gap: 24px; }
+    .rlcp-public.public-about-page .about-community-photo { width: 100%; }
+    .rlcp-public.public-about-page .about-community-photo__art { padding-bottom: 72px; }
+    .rlcp-public.public-about-page .about-community-photo__art svg { width: 52px; height: 52px; }
+    .rlcp-public.public-about-page .about-community-photo figcaption { padding: 72px 16px 16px; }
+    .rlcp-public.public-about-page .about-community-photo figcaption strong { font-size: .8rem; }
+    .rlcp-public.public-about-page .about-community-photo figcaption span { font-size: .75rem; }
+    .rlcp-public.public-about-page .about-video { align-self: stretch; margin-bottom: 0; border-width: 4px; min-height: 220px; }
+    .rlcp-public.public-about-page .about-journey { padding-top: 48px; }
+    .rlcp-public.public-about-page .about-timeline { grid-template-columns: 1fr; gap: 24px; margin-top: 32px; }
+    .rlcp-public.public-about-page .about-timeline::before { top: 40px; bottom: 40px; left: 13px; right: auto; width: 2px; height: auto; }
+    .rlcp-public.public-about-page .about-timeline li { display: flex; align-items: center; gap: 20px; }
+    .rlcp-public.public-about-page .about-timeline__dot { flex: 0 0 28px; margin: 0; }
+    .rlcp-public.public-about-page .about-timeline p { justify-content: flex-start; flex: 1; }
+    .rlcp-public.public-about-page .about-people__grid { gap: 20px; }
+}
+@media (max-width: 380px) {
+    .rlcp-public.public-about-page .about-principle { gap: 16px; padding: 20px; }
+    .rlcp-public.public-about-page .about-principle > div { padding-left: 16px; }
+    .rlcp-public.public-about-page .about-people__grid { grid-template-columns: 1fr; }
+}

@@ -1,4 +1,7 @@
 import "./registration-ui.js";
+import "./staff-login-dialog.js";
+import { initializePublicTheme } from "./public-theme.js";
+import { initializeApplicationDraft } from "./public-application.js";
 
 // Homepage navigation never fetches operational application data.
 export function initializePublicHome(root) {
@@ -6,6 +9,8 @@ export function initializePublicHome(root) {
     const view = root.ownerDocument.defaultView;
     const doc = root.ownerDocument;
     root.dataset.publicInitialized = "true";
+    initializePublicTheme(root);
+    initializeApplicationDraft(root.querySelector("[data-application-draft]"));
 
     const toggle = root.querySelector("[data-menu-toggle]");
     const navigation = root.querySelector("[data-public-navigation]");

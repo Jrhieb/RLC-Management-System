@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailables\Envelope;
 
 class RegistrationVerificationMail extends Mailable
 {
-    public function __construct(protected string $verificationUrl, protected int $expiresInMinutes) {}
+    public function __construct(protected string $verificationUrl, protected int $expiresInMinutes, protected ?string $verificationCode = null) {}
 
     public function envelope(): Envelope
     {
@@ -20,6 +20,7 @@ class RegistrationVerificationMail extends Mailable
         return new Content(markdown: 'mail.registration-verification', with: [
             'verificationUrl' => $this->verificationUrl,
             'expiresInMinutes' => $this->expiresInMinutes,
+            'verificationCode' => $this->verificationCode,
         ]);
     }
 }

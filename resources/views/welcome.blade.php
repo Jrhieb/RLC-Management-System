@@ -14,33 +14,18 @@
     {{-- Public presentation only. Draft copy and replacement images: docs/public-homepage.md.
          Never use operational activities, beneficiary records, or private files here. --}}
     <a class="public-skip" href="#main-content">Skip to content</a>
-    <div class="public-welcome">Welcome to Risen Lord Church Phils., Inc.</div>
-    <header class="public-header public-container" data-public-header>
-        <x-public.brand />
-        <button class="public-menu-toggle" type="button" aria-controls="public-navigation" aria-expanded="false" hidden data-menu-toggle>
-            <span data-menu-label>Menu</span><x-public.icon name="menu" />
-        </button>
-        <nav class="public-navigation" id="public-navigation" aria-label="Main navigation" data-public-navigation>
-            <a href="#home" aria-current="location">Home</a>
-            <a href="#about">About</a>
-            <a href="#programs">Programs</a>
-            <a href="#activities">Activities</a>
-            <a href="#contact">Contact</a>
-            <a class="public-button public-button--gold public-nav-login" href="{{ route('login') }}">Staff Login <span class="public-button__arrow"><x-public.icon name="arrow" /></span></a>
-        </nav>
-    </header>
+    <x-public.header :landing="true" />
     <main id="main-content" tabindex="-1">
         <section class="public-hero" id="home" aria-labelledby="hero-title">
-            <img class="public-hero__image" src="{{ asset('images/homepage/placeholders/hero.svg') }}" alt="" width="1920" height="1080" fetchpriority="high">
+            <img class="public-hero__image" src="{{ asset('images/homepage/placeholders/Herobanner.png') }}" alt="" width="1920" height="1280" fetchpriority="high">
             <div class="public-hero__content public-container">
                 <p class="public-eyebrow public-eyebrow--hero">Faith <span>•</span> Care <span>•</span> Community</p>
                 <h1 id="hero-title">Growing in Faith.<br><span>Building Brighter Futures.</span></h1>
                 <p class="public-hero__intro">Supporting children and families through faith, learning, and community care.</p>
                 <div class="public-actions">
-                    <a class="public-button public-button--gold" href="#programs">Explore Our Programs <span class="public-button__arrow"><x-public.icon name="arrow" /></span></a>
-                    <a class="public-button public-button--outline" href="#about">About RLCP <span class="public-button__arrow"><x-public.icon name="arrow" /></span></a>
+                    <a class="public-button public-button--gold" href="{{ route('programs') }}">Explore Our Programs <span class="public-button__arrow"><x-public.icon name="arrow" /></span></a>
+                    <a class="public-button public-button--outline" href="{{ route('about') }}">About RLCP <span class="public-button__arrow"><x-public.icon name="arrow" /></span></a>
                 </div>
-                <p class="public-hero__photo-note">Community photo coming soon</p>
             </div>
         </section>
 
@@ -48,8 +33,8 @@
             <div class="public-container">
                 <div class="public-about__grid">
                     <div class="public-collage" data-public-reveal>
-                        <img class="public-collage__rectangle" src="{{ asset('images/homepage/placeholders/learning.svg') }}" alt="Learning activity photo coming soon" width="960" height="640" loading="lazy" decoding="async">
-                        <img class="public-collage__circle" src="{{ asset('images/homepage/placeholders/family.svg') }}" alt="Community portrait coming soon" width="640" height="640" loading="lazy" decoding="async">
+                        <img class="public-collage__rectangle" src="{{ asset('images/homepage/placeholders/learning.png') }}" alt="Learning activities" width="960" height="640" loading="lazy" decoding="async">
+                        <img class="public-collage__circle" src="{{ asset('images/homepage/placeholders/family.jpg') }}" alt="Family engagement" width="640" height="640" loading="lazy" decoding="async">
                         <span class="public-faith-seal">Rooted<br>in Faith<span aria-hidden="true"></span></span>
                     </div>
                     <div class="public-about__copy" data-public-reveal>
@@ -101,12 +86,12 @@
                 </div>
                 <div class="public-card-grid">
                     @foreach ([
-                        ['education-learning', 'learning', 'Education & Learning', 'Creating learning opportunities for a brighter tomorrow.', 'A space to learn, build confidence, and develop everyday skills, with care and encouragement along the way.'],
-                        ['health-wellbeing', 'wellbeing', 'Health & Well-being', 'Promoting healthy and happy children and families.', 'Care begins with well-being. We encourage healthy habits, kindness, and supportive connections for children and their families.'],
-                        ['faith-community', 'fellowship', 'Faith & Community', 'Building strong families through faith and fellowship.', 'Shared faith brings us together. Through fellowship and community life, we make room for connection, encouragement, and spiritual growth.'],
+                        ['education-learning', 'learning.png', 'Education & Learning', 'Creating learning opportunities for a brighter tomorrow.', 'A space to learn, build confidence, and develop everyday skills, with care and encouragement along the way.'],
+                        ['health-wellbeing', 'wellbeing.jpg', 'Health & Well-being', 'Promoting healthy and happy children and families.', 'Care begins with well-being. We encourage healthy habits, kindness, and supportive connections for children and their families.'],
+                        ['faith-community', 'fellowship.jpg', 'Faith & Community', 'Building strong families through faith and fellowship.', 'Shared faith brings us together. Through fellowship and community life, we make room for connection, encouragement, and spiritual growth.'],
                     ] as [$id, $photo, $title, $description, $detail])
                         <article class="public-program-card" id="{{ $id }}" data-public-reveal>
-                            <img src="{{ asset('images/homepage/placeholders/'.$photo.'.svg') }}" alt="{{ $title }} photo coming soon" width="960" height="640" loading="lazy" decoding="async">
+                            <img src="{{ asset('images/homepage/placeholders/'.$photo) }}" alt="{{ $title }}" width="960" height="640" loading="lazy" decoding="async">
                             <div class="public-program-card__body">
                                 <h3>{{ $title }}</h3><p>{{ $description }}</p>
                                 <details class="public-program-detail">
@@ -122,7 +107,7 @@
 
         <section class="public-section public-care" id="care" aria-labelledby="care-title">
             <div class="public-container public-care__grid">
-                <img class="public-care__image" src="{{ asset('images/homepage/placeholders/community.svg') }}" alt="RLCP community setting photo coming soon" width="1200" height="680" loading="lazy" decoding="async" data-public-reveal>
+                <img class="public-care__image" src="{{ asset('images/homepage/placeholders/community.jpg') }}" alt="RLCP community" width="1200" height="680" loading="lazy" decoding="async" data-public-reveal>
                 <div data-public-reveal>
                     <p class="public-eyebrow">Walking alongside families</p>
                     <h2 id="care-title">Growing Together<br>Through Care</h2>
@@ -137,12 +122,12 @@
                 <h2 class="public-lined-heading" id="community-title">Life in <span class="public-warm-text">Our Community</span></h2>
                 <div class="public-card-grid">
                     @foreach ([
-                        ['learning', 'Learning Activities', 'Fun and meaningful learning experiences for children.', 'education-learning', 'Explore Education & Learning'],
-                        ['fellowship', 'Community Fellowship', 'Building friendships and stronger community ties.', 'faith-community', 'Explore Faith & Community'],
-                        ['family', 'Family Engagement', 'Supporting and empowering families for a better tomorrow.', 'care', 'Learn about our care'],
+                        ['learning.png', 'Learning Activities', 'Fun and meaningful learning experiences for children.', 'education-learning', 'Explore Education & Learning'],
+                        ['fellowship.jpg', 'Community Fellowship', 'Building friendships and stronger community ties.', 'faith-community', 'Explore Faith & Community'],
+                        ['family.jpg', 'Family Engagement', 'Supporting and empowering families for a better tomorrow.', 'care', 'Learn about our care'],
                     ] as [$photo, $title, $description, $target, $label])
                         <figure class="public-gallery-card" data-public-reveal>
-                            <img src="{{ asset('images/homepage/placeholders/'.$photo.'.svg') }}" alt="{{ $title }} photo coming soon" width="960" height="640" loading="lazy" decoding="async">
+                            <img src="{{ asset('images/homepage/placeholders/'.$photo) }}" alt="{{ $title }}" width="960" height="640" loading="lazy" decoding="async">
                             <figcaption>
                                 <div><h3>{{ $title }}</h3><p>{{ $description }}</p></div>
                                 <a class="public-card-arrow" href="#{{ $target }}" aria-label="{{ $label }}"><x-public.icon name="arrow" /></a>
@@ -150,12 +135,11 @@
                         </figure>
                     @endforeach
                 </div>
-                <p class="public-photo-note">Community photos coming soon.</p>
             </div>
         </section>
 
         <section class="public-section public-contact" id="contact" aria-labelledby="contact-title">
-            <img class="public-contact__image" src="{{ asset('images/homepage/placeholders/contact.svg') }}" alt="" width="1200" height="680" loading="lazy" decoding="async">
+            <img class="public-contact__image" src="{{ asset('images/homepage/placeholders/contact.jpg') }}" alt="" width="1200" height="680" loading="lazy" decoding="async">
             <div class="public-container public-contact__content" data-public-reveal>
                 <p class="public-eyebrow">Faith. Care. Connection.</p>
                 <h2 id="contact-title">Let’s Connect With Our Community</h2>
@@ -179,17 +163,8 @@
         </section>
     </main>
 
-    <footer class="public-footer">
-        <div class="public-container">
-            <div class="public-footer__grid">
-                <div class="public-footer__identity"><x-public.brand /><p>Daraga, Albay, Philippines</p><p>Rooted in faith.<br>Growing together in care.</p></div>
-                <nav aria-label="Footer navigation"><h2>Explore</h2><a href="#home">Home</a><a href="#about">About RLCP</a><a href="#programs">Programs</a><a href="#activities">Activities</a><a href="#contact">Contact</a></nav>
-                <nav aria-label="Program navigation"><h2>Our Programs</h2><a href="#education-learning">Education & Learning</a><a href="#health-wellbeing">Health & Well-being</a><a href="#faith-community">Faith & Community</a></nav>
-                <nav aria-label="Staff access"><h2>For Staff</h2><a href="{{ route('login') }}">Staff Login</a><a href="{{ route('register') }}" data-registration-open>Apply as Caseworker</a></nav>
-            </div>
-            <div class="public-footer__bottom"><p>Risen Lord Church Phils., Inc.</p><p>All for God’s glory. For children. For families. For a brighter Daraga, Albay.</p><a href="#home">Back to top <x-public.icon name="arrow" /></a></div>
-        </div>
-    </footer>
+    <x-public.footer :landing="true" />
     <x-registration.dialog />
+    <x-staff-login-dialog />
 </body>
 </html>

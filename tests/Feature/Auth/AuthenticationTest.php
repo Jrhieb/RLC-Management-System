@@ -38,12 +38,34 @@ class AuthenticationTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->post(route('login.store'), [
+        $response = $this->from(route('home'))->post(route('login.store'), [
             'email' => $user->email,
             'password' => 'wrong-password',
         ]);
 
-        $response->assertSessionHasErrorsIn('email');
+        $response->assertRedirect(route('login'))
+            ->assertSessionHasErrors(['email' => __('auth.failed')])
+            ->assertSessionHasInput('email', $user->email)
+            ->assertSessionMissing('_old_input.password');
+
+        $this->withCookie(config('session.cookie'), $this->app['session']->getId())
+            ->get(route('login'))->assertOk()->assertSee(__('auth.failed'));
+
+        $this->assertGuest();
+    }
+
+    public function test_login_attempts_from_public_pages_are_still_throttled(): void
+    {
+        $user = User::factory()->create();
+        $credentials = ['email' => $user->email, 'password' => 'wrong-password'];
+
+        for ($attempt = 0; $attempt < 5; $attempt++) {
+            $this->from(route('home'))->post(route('login.store'), $credentials)
+                ->assertSessionHasErrors('email');
+        }
+
+        $this->from(route('home'))->post(route('login.store'), $credentials)
+            ->assertTooManyRequests();
 
         $this->assertGuest();
     }

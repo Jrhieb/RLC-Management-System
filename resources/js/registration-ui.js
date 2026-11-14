@@ -19,11 +19,13 @@ export function bindRegistrationEmail(root, onStateChange = () => {}) {
         submit.disabled = model.submitting;
         submit.setAttribute("aria-disabled", String(model.submitting));
         form.querySelector("[data-registration-idle]").hidden = model.submitting;
-        form.querySelector("[data-registration-idle]").textContent = model.hasRequested ? "Resend verification link" : "Send verification link";
+        form.querySelector("[data-registration-idle]").textContent = model.hasRequested ? "Resend verification code" : "Send verification code";
         form.querySelector("[data-registration-loading]").hidden = !model.submitting;
         form.querySelector("[data-registration-pending]").hidden = !model.submitting;
         feedback.textContent = model.submitting ? "Queuing verification email…" : model.feedback;
         error.textContent = model.error;
+        const codeForm = root.querySelector('[data-registration-code-form]');
+        if (codeForm) codeForm.hidden = !model.hasRequested;
         onStateChange(model);
     }
     form.addEventListener("submit", async (event) => {
@@ -77,7 +79,8 @@ export function initializeRegistration(doc = document) {
             // A status-link opener may be hidden while the dialog is open.
             if (opener?.isConnected) {
                 if (notice?.contains(opener)) notice.hidden = false;
-                opener.focus({ preventScroll: true });
+                const target = opener.getClientRects().length ? opener : doc.querySelector('[data-menu-toggle]');
+                target?.focus({ preventScroll: true });
             }
             updateNotice(controller.model);
         }
@@ -109,11 +112,12 @@ export function initializeRegistration(doc = document) {
         doc.addEventListener("click", (event) => {
             const link = event.target.closest("a[data-registration-open]");
             if (!link || event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || link.target === "_blank") return;
-            // No login modal exists. Let real links handle any other open dialog.
-            if (doc.querySelector("dialog[open]") && !dialog.open) return;
+            const loginDialog = link.closest('#staff-login-dialog');
+            if (doc.querySelector("dialog[open]") && !dialog.open && !loginDialog?.open) return;
             event.preventDefault();
             if (dialog.open || closing) return;
-            opener = link;
+            if (loginDialog?.open) loginDialog.close();
+            opener = loginDialog ? doc.querySelector('[data-staff-login-open]') : link;
             scrollX = view.scrollX;
             scrollY = view.scrollY;
             doc.body.style.setProperty("--registration-scroll-top", `${-scrollY}px`);

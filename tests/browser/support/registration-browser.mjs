@@ -42,8 +42,9 @@ export async function registrationBrowser(binary, fixtureDirectory) {
     }
     async function intercept(params) {
         const url = new URL(params.request.url);
-        if (url.origin !== origin) throw new Error("Unexpected external browser request");
         const pathname = decodeURIComponent(url.pathname);
+        const bootstrapAsset = url.origin === "http://localhost" && pathname.startsWith("/build/") && params.request.method === "GET";
+        if (url.origin !== origin && !bootstrapAsset) throw new Error("Unexpected external browser request");
         if (params.request.method === "POST") {
             if (pathname === "/register") {
                 stats.emailPosts++;
@@ -63,6 +64,10 @@ export async function registrationBrowser(binary, fixtureDirectory) {
         let body, type = "text/html; charset=utf-8";
         const routes = { "/": "homepage", "/register": "register", "/register/complete": completionFailure ? "complete-invalid" : "complete", "/register/awaiting-approval": "awaiting" };
         if (routes[pathname]) body = await readFile(path.join(fixtures, routes[pathname] + ".html"));
+        else if (/^\/livewire-[a-f0-9]+\/livewire\.min\.js$/.test(pathname)) {
+            body = await readFile(path.join(workspace, "vendor/livewire/livewire/dist/livewire.min.js"));
+            type = "text/javascript";
+        }
         else if (pathname === "/favicon.ico") body = Buffer.alloc(0);
         else if (pathname.startsWith("/build/") || pathname.startsWith("/images/homepage/") || pathname === "/images/branding/rlc-logo.png") {
             const target = await realpath(path.resolve(publicRoot, "." + pathname));
@@ -70,7 +75,7 @@ export async function registrationBrowser(binary, fixtureDirectory) {
             body = await readFile(target);
             type = ({ ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".png": "image/png", ".woff": "font/woff", ".woff2": "font/woff2" })[path.extname(target)] || "application/octet-stream";
         } else throw new Error(`Unexpected fixture route: ${pathname}`);
-        await command("Fetch.fulfillRequest", { requestId: params.requestId, responseCode: 200, responseHeaders: [{ name: "Content-Type", value: type }], body: body.toString("base64") });
+        await command("Fetch.fulfillRequest", { requestId: params.requestId, responseCode: 200, responseHeaders: [{ name: "Content-Type", value: type }, { name: "Access-Control-Allow-Origin", value: origin }], body: body.toString("base64") });
     }
     async function close() {
         if (socket?.readyState === WebSocket.OPEN) { await command("Browser.close").catch(() => {}); socket.close(); }
@@ -134,7 +139,7 @@ export async function registrationBrowser(binary, fixtureDirectory) {
             assert.ok(posts.length, "A mocked request must be pending");
             const requestId = posts.shift();
             if (status === "network") await command("Fetch.failRequest", { requestId, errorReason: "InternetDisconnected" });
-            else await command("Fetch.fulfillRequest", { requestId, responseCode: status, responseHeaders: [{ name: "Content-Type", value: "application/json" }], body: Buffer.from(JSON.stringify(data)).toString("base64") });
+            else await command("Fetch.fulfillRequest", { requestId, responseCode: status, responsePhrase: "Test response", responseHeaders: [{ name: "Content-Type", value: "application/json" }], body: Buffer.from(JSON.stringify(data)).toString("base64") });
             await until("document.querySelector('[data-registration-form]').getAttribute('aria-busy') === 'false'");
         },
         async screenshot(name) {

@@ -7,6 +7,7 @@ use App\Jobs\SkipRegistrationVerification;
 use App\Mail\RegistrationVerificationMail;
 use App\Models\RegistrationRequest;
 use App\Models\User;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\Bus;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use RuntimeException;
@@ -32,7 +34,7 @@ class EmailRegistrationService
 
     public const INVALID_SESSION = 'Your registration session has expired or is no longer valid. Request a new verification link.';
 
-    public function requestLink(string $email): void
+    public function requestLink(string $email): string
     {
         $email = Str::lower(trim($email));
         $this->assertSafeMailTransport((string) config('mail.default'));
@@ -41,14 +43,14 @@ class EmailRegistrationService
         if ($this->emailExists($email)) {
             $this->queueVerification(new SkipRegistrationVerification);
 
-            return;
+            return Crypt::encryptString(bin2hex(random_bytes(32)));
         }
 
-        $token = bin2hex(random_bytes(32));
+        $token = str_pad((string) random_int(0, 99999999), 8, '0', STR_PAD_LEFT).bin2hex(random_bytes(28));
         $tokenHash = hash('sha256', $token);
         $now = now();
 
-        DB::transaction(function () use ($email, $token, $tokenHash, $now): void {
+        return DB::transaction(function () use ($email, $token, $tokenHash, $now): string {
             // One atomic write replaces both the previous link and any verified session.
             DB::table('registration_requests')->upsert([
                 'email' => $email,
@@ -69,7 +71,43 @@ class EmailRegistrationService
             // Queue only ciphertext and a generation hash, never a bearer URL or plaintext token.
             $encryptedToken = Crypt::encryptString($token);
             $this->queueVerification(new SendRegistrationVerification($id, $tokenHash, $encryptedToken));
+
+            return $encryptedToken;
         });
+    }
+
+    /** @return array{id: int, token: string}|null */
+    public function verifyCode(mixed $challenge, string $code): ?array
+    {
+        if (! is_string($challenge)) {
+            return null;
+        }
+
+        try {
+            $token = Crypt::decryptString($challenge);
+        } catch (DecryptException) {
+            return null;
+        }
+
+        if (! $this->validToken($token)) {
+            return null;
+        }
+
+        $tokenHash = hash('sha256', $token);
+        $attempts = RateLimiter::increment('registration-code:'.$tokenHash, self::LINK_MINUTES * 60);
+        if ($attempts > 5) {
+            return null;
+        }
+
+        if (! hash_equals(substr($token, 0, 8), $code)) {
+            if ($attempts === 5) {
+                DB::table('registration_requests')->where('token_hash', $tokenHash)->update(['token_hash' => null]);
+            }
+
+            return null;
+        }
+
+        return $this->verify($token);
     }
 
     private function queueVerification(SendRegistrationVerification|SkipRegistrationVerification $job): void
@@ -115,7 +153,8 @@ class EmailRegistrationService
             // Build the link only inside the worker, using the configured origin.
             $url = rtrim((string) config('app.url'), '/').route('registration.verify', ['token' => $token], absolute: false);
             $minutes = max(1, (int) ceil(now()->diffInSeconds($registration->expires_at) / 60));
-            Mail::to($registration->email)->send(new RegistrationVerificationMail($url, $minutes));
+            $code = substr($token, 0, 8);
+            Mail::to($registration->email)->send(new RegistrationVerificationMail($url, $minutes, ctype_digit($code) ? $code : null));
         } catch (Throwable) {
             $this->invalidateLink($id, $tokenHash);
             Log::warning('Registration verification email delivery failed.');
