@@ -6,10 +6,14 @@ use App\Actions\Fortify\ResetUserPassword;
 use App\Http\Responses\ApprovalAwareResponse;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Laravel\Fortify\Contracts\FailedPasswordResetLinkRequestResponse;
 use Laravel\Fortify\Contracts\LoginResponse;
+use Laravel\Fortify\Contracts\PasswordResetResponse;
+use Laravel\Fortify\Contracts\SuccessfulPasswordResetLinkRequestResponse;
 use Laravel\Fortify\Contracts\TwoFactorLoginResponse;
 use Laravel\Fortify\Contracts\VerifyEmailResponse;
 use Laravel\Fortify\Fortify;
@@ -22,6 +26,22 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $genericResetResponse = fn () => new \Laravel\Fortify\Http\Responses\SuccessfulPasswordResetLinkRequestResponse(
+            'If the email address is registered, a password reset link will be sent.'
+        );
+
+        $this->app->bind(SuccessfulPasswordResetLinkRequestResponse::class, $genericResetResponse);
+        $this->app->bind(PasswordResetResponse::class, fn () => new \Laravel\Fortify\Http\Responses\PasswordResetResponse(
+            'Your password has been reset. Please sign in.'
+        ));
+        $this->app->bind(FailedPasswordResetLinkRequestResponse::class, function ($app, array $parameters) use ($genericResetResponse) {
+            if (in_array($parameters['status'], [Password::INVALID_USER, Password::RESET_THROTTLED], true)) {
+                return $genericResetResponse();
+            }
+
+            return new \Laravel\Fortify\Http\Responses\FailedPasswordResetLinkRequestResponse($parameters['status']);
+        });
+
         foreach ([
             LoginResponse::class => \Laravel\Fortify\Http\Responses\LoginResponse::class,
             TwoFactorLoginResponse::class => \Laravel\Fortify\Http\Responses\TwoFactorLoginResponse::class,
