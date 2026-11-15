@@ -104,8 +104,14 @@ class PasswordResetTest extends TestCase
 
             $response
                 ->assertSessionHasNoErrors()
-                ->assertSessionHas('status', 'Your password has been reset. Please sign in.')
+                ->assertSessionHas('status', 'Your password has been reset successfully. You can now log in using your new password.')
                 ->assertRedirect(route('login', absolute: false));
+
+            $this->assertGuest();
+            $this->get(route('login'))->assertOk()
+                ->assertSee('Your password has been reset successfully. You can now log in using your new password.')
+                ->assertSee('Log in')->assertDontSee('name="password"', false);
+            $this->get(route('login'))->assertOk()->assertSee('name="password"', false);
 
             return true;
         });

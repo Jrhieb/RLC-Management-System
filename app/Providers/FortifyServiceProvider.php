@@ -32,7 +32,7 @@ class FortifyServiceProvider extends ServiceProvider
 
         $this->app->bind(SuccessfulPasswordResetLinkRequestResponse::class, $genericResetResponse);
         $this->app->bind(PasswordResetResponse::class, fn () => new \Laravel\Fortify\Http\Responses\PasswordResetResponse(
-            'Your password has been reset. Please sign in.'
+            'Your password has been reset successfully. You can now log in using your new password.'
         ));
         $this->app->bind(FailedPasswordResetLinkRequestResponse::class, function ($app, array $parameters) use ($genericResetResponse) {
             if (in_array($parameters['status'], [Password::INVALID_USER, Password::RESET_THROTTLED], true)) {

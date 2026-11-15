@@ -1,5 +1,9 @@
 <x-layouts::auth :title="__('Log in')">
     <div class="flex flex-col gap-6">
+        @if (session('status') === 'Your password has been reset successfully. You can now log in using your new password.')
+            <x-auth-header :title="__('Password reset successful')" :description="session('status')" />
+            <flux:button :href="route('login')" variant="primary">{{ __('Log in') }}</flux:button>
+        @else
         <x-auth-header :title="__('Log in to your account')" :description="__('Enter your email and password below to log in')" />
 
         <!-- Session Status -->
@@ -57,5 +61,6 @@
             <span>{{ __('Need an account?') }}</span>
             <flux:link :href="route('register')" wire:navigate>{{ __('Register') }}</flux:link>
         </div>
+        @endif
     </div>
 </x-layouts::auth>

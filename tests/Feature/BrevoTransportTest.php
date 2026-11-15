@@ -4,11 +4,17 @@ namespace Tests\Feature;
 
 use App\Mail\BrevoTransport;
 use App\Models\RegistrationRequest;
+use App\Models\User;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Mail\Markdown;
+use Illuminate\Notifications\Channels\MailChannel;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\URL;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mime\Email;
@@ -17,6 +23,39 @@ use Tests\TestCase;
 class BrevoTransportTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_password_reset_email_contains_a_working_https_button(): void
+    {
+        Http::preventStrayRequests();
+        Http::fake(['api.brevo.com/*' => Http::response(['messageId' => 'test-message'], 201)]);
+        config(['mail.default' => 'brevo', 'mail.mailers.brevo.key' => 'test-only-key']);
+        Mail::swap(Mail::getFacadeRoot()->manager);
+        URL::forceRootUrl('https://staging.example.test');
+        URL::forceScheme('https');
+
+        $user = User::factory()->create();
+        $token = Password::createToken($user);
+        $channel = new MailChannel(app('mail.manager'), app(Markdown::class));
+        $channel->send($user, new ResetPassword($token));
+
+        $requests = Http::recorded();
+        $this->assertCount(1, $requests);
+        $html = $requests->first()[0]['htmlContent'];
+        $document = new \DOMDocument;
+        @$document->loadHTML($html);
+        $buttons = (new \DOMXPath($document))->query('//a[contains(normalize-space(.), "Reset Password")]');
+        $this->assertSame(1, $buttons->length);
+        $link = $buttons->item(0)->getAttribute('href');
+        $this->assertTrue(str_starts_with($link, 'https://staging.example.test/reset-password/'));
+        $this->get($link)->assertOk()->assertSee('name="password"', false)
+            ->assertSee('name="password_confirmation"', false);
+        $this->post(route('password.update'), [
+            'email' => $user->email,
+            'token' => $token,
+            'password' => 'new-password',
+            'password_confirmation' => 'new-password',
+        ])->assertSessionHasNoErrors()->assertRedirect(route('login', absolute: false));
+    }
 
     public function test_sync_registration_sends_existing_code_and_requires_verification(): void
     {
