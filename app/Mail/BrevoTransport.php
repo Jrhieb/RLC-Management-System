@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\SentMessage;
 use Symfony\Component\Mailer\Transport\AbstractTransport;
@@ -19,8 +20,11 @@ class BrevoTransport extends AbstractTransport
 
     protected function doSend(SentMessage $message): void
     {
+        $category = 'transport_failure';
+        $status = null;
         try {
             if (trim($this->key) === '') {
+                $category = 'missing_key';
                 throw new TransportException('Missing Brevo configuration.');
             }
             $email = MessageConverter::toEmail($message->getOriginalMessage());
@@ -43,15 +47,19 @@ class BrevoTransport extends AbstractTransport
                 throw new TransportException('Attachments are not supported by this transport.');
             }
             // Do not retry ambiguous timeouts: the provider may already have accepted the email.
+            $category = 'connection_failure';
             $response = Http::acceptJson()->asJson()->withHeaders(['api-key' => $this->key])
                 ->connectTimeout(5)->timeout(15)->withoutRedirecting()
                 ->post('https://api.brevo.com/v3/smtp/email', $payload);
+            $status = $response->status();
+            $category = $status === 201 ? 'invalid_acceptance' : 'provider_rejected';
             $id = $response->json('messageId');
             if ($response->status() !== 201 || ! is_string($id) || trim($id) === '') {
                 throw new TransportException('Brevo rejected the email.');
             }
             $message->setMessageId($id);
         } catch (Throwable) {
+            Log::warning('Brevo email transport failure.', ['category' => $category, 'http_status' => $status]);
             // Provider responses and request exceptions can contain credentials and bearer content.
             throw new TransportException('Brevo email delivery was not accepted.');
         }

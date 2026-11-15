@@ -7,6 +7,7 @@ use App\Models\RegistrationRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Mailer\Exception\TransportException;
@@ -120,6 +121,33 @@ class BrevoTransportTest extends TestCase
             $this->assertNull($exception->getPrevious());
         }
         Http::assertNothingSent();
+    }
+
+    public function test_provider_diagnostic_contains_only_fixed_category_and_http_status(): void
+    {
+        Http::preventStrayRequests();
+        Http::fake(['api.brevo.com/*' => Http::response(['code' => 'private-content', 'message' => 'private-content'], 401)]);
+        Log::spy();
+        try {
+            (new BrevoTransport('test-only-key'))->send($this->email());
+        } catch (TransportException) {
+        }
+        Log::shouldHaveReceived('warning')->once()->with('Brevo email transport failure.', [
+            'category' => 'provider_rejected', 'http_status' => 401,
+        ]);
+    }
+
+    public function test_missing_key_diagnostic_never_exposes_values(): void
+    {
+        Http::preventStrayRequests();
+        Log::spy();
+        try {
+            (new BrevoTransport(''))->send($this->email());
+        } catch (TransportException) {
+        }
+        Log::shouldHaveReceived('warning')->once()->with('Brevo email transport failure.', [
+            'category' => 'missing_key', 'http_status' => null,
+        ]);
     }
 
     private function email(): Email
