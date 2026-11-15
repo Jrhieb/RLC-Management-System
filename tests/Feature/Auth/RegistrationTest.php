@@ -37,6 +37,30 @@ class RegistrationTest extends TestCase
 
     private const PASSWORD = 'Registration-Password-123!';
 
+    public function test_optional_phone_is_saved_unverified_without_bypassing_director_review(): void
+    {
+        config(['services.brevo.sms_enabled' => true]);
+        $this->verifiedSession();
+        $this->post(route('registration.complete.store'), $this->payload() + [
+            'phone_number' => '0917 123 4567', 'phone_verified_at' => now()->toDateTimeString(),
+        ])->assertRedirect(route('registration.awaiting-approval'));
+        $account = User::sole();
+        $this->assertSame('+639171234567', $account->phone_number);
+        $this->assertNull($account->phone_verified_at);
+        $this->assertSame('pending', $account->approval_status);
+        $this->assertGuest();
+    }
+
+    public function test_invalid_optional_phone_does_not_consume_verified_registration(): void
+    {
+        config(['services.brevo.sms_enabled' => true]);
+        $this->verifiedSession();
+        $this->post(route('registration.complete.store'), $this->payload() + ['phone_number' => 'invalid'])
+            ->assertSessionHasErrors('phone_number');
+        $this->assertDatabaseCount('users', 0);
+        $this->assertNull(RegistrationRequest::sole()->completed_at);
+    }
+
     public function test_resending_invalidates_the_previous_code_and_browser_challenge(): void
     {
         $this->requestLink();

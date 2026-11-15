@@ -29,6 +29,10 @@
             </div>
         </form>
 
+        @if (config('services.brevo.sms_enabled') && auth()->user()->hasVerifiedEmail())
+            <flux:link :href="route('account.phone.show')">{{ __('Verify mobile number (optional)') }}</flux:link>
+        @endif
+
         @if ($this->showDeleteUser)
             <livewire:settings.delete-user-form />
         @endif

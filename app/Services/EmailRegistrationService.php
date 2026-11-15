@@ -7,6 +7,7 @@ use App\Jobs\SkipRegistrationVerification;
 use App\Mail\RegistrationVerificationMail;
 use App\Models\RegistrationRequest;
 use App\Models\User;
+use App\Support\PhoneNumber;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -208,7 +209,7 @@ class EmailRegistrationService
 
     /**
      * @param  array{id: int, token: string}  $session
-     * @param  array{name: string, password: string}  $input
+     * @param  array{name: string, password: string, phone_number?: string|null}  $input
      */
     public function complete(array $session, array $input): User
     {
@@ -240,6 +241,9 @@ class EmailRegistrationService
                 $user->role = 'caseworker';
                 $user->email_verified_at = $registration->verified_at;
                 $user->approval_status = 'pending';
+                if (config('services.brevo.sms_enabled') && ! empty($input['phone_number'])) {
+                    $user->phone_number = PhoneNumber::normalize($input['phone_number']);
+                }
 
                 if (! $user->save()) {
                     throw ValidationException::withMessages([

@@ -27,6 +27,12 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property Carbon|null $approval_reviewed_at
  * @property string|null $rejection_reason
  * @property string $password
+ * @property string|null $phone_number
+ * @property Carbon|null $phone_verified_at
+ * @property string|null $phone_verification_hash
+ * @property Carbon|null $phone_verification_expires_at
+ * @property Carbon|null $phone_verification_sent_at
+ * @property int $phone_verification_attempts
  * @property string|null $two_factor_secret
  * @property string|null $two_factor_recovery_codes
  * @property Carbon|null $two_factor_confirmed_at
@@ -35,7 +41,8 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property Carbon|null $updated_at
  */
 #[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
+#[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token',
+    'phone_verification_hash', 'phone_verification_expires_at', 'phone_verification_sent_at', 'phone_verification_attempts'])]
 class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
 {
     /** @use HasFactory<UserFactory> */
@@ -44,6 +51,18 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
     protected $attributes = [
         'approval_status' => 'pending',
     ];
+
+    public function setPhoneNumberAttribute(?string $value): void
+    {
+        if (($this->attributes['phone_number'] ?? null) !== $value) {
+            $this->attributes['phone_verified_at'] = null;
+            $this->attributes['phone_verification_hash'] = null;
+            $this->attributes['phone_verification_expires_at'] = null;
+            $this->attributes['phone_verification_sent_at'] = null;
+            $this->attributes['phone_verification_attempts'] = 0;
+        }
+        $this->attributes['phone_number'] = $value;
+    }
 
     public function isProjectDirector(): bool
     {
@@ -101,6 +120,10 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
     {
         return [
             'email_verified_at' => 'datetime',
+            'phone_verified_at' => 'datetime',
+            'phone_verification_expires_at' => 'datetime',
+            'phone_verification_sent_at' => 'datetime',
+            'phone_verification_attempts' => 'integer',
             'approval_reviewed_by' => 'integer',
             'approval_reviewed_at' => 'datetime',
             'password' => 'hashed',

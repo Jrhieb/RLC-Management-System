@@ -17,6 +17,15 @@
             @error('name')<p class="registration-error" id="registration-name-error" role="alert">{{ $message }}</p>@enderror
         </div>
         <x-registration.password-field name="password" label="Password" />
+        @if (config('services.brevo.sms_enabled'))
+            <div class="registration-field">
+                <label for="registration-phone">Mobile number (optional)</label>
+                <input id="registration-phone" name="phone_number" type="tel" maxlength="40" autocomplete="tel"
+                    value="{{ is_string(old('phone_number')) ? old('phone_number') : '' }}" placeholder="+639171234567">
+                <p class="registration-help">You can verify your phone after signing in. This is optional and does not replace email verification or Director approval.</p>
+                @error('phone_number')<p class="registration-error" role="alert">{{ $message }}</p>@enderror
+            </div>
+        @endif
         <x-registration.password-field name="password_confirmation" label="Confirm password" />
         <button class="registration-submit" type="submit" data-test="complete-registration-button">Complete Registration <span class="registration-submit__arrow" aria-hidden="true">→</span></button>
     </form>

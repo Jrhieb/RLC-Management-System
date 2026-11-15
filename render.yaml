@@ -44,6 +44,10 @@ services:
         value: sync
       - key: MAIL_MAILER
         value: brevo
+      - key: BREVO_SMS_ENABLED
+        value: "false"
+      - key: BREVO_SMS_DAILY_LIMIT
+        value: "0"
       - key: BREVO_API_KEY
         sync: false
       - key: MAIL_FROM_ADDRESS

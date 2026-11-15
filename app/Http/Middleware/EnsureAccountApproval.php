@@ -27,7 +27,7 @@ class EnsureAccountApproval
         }
 
         if ($request->routeIs(
-            'account.status', 'logout', 'security.edit',
+            'account.status', 'account.phone.*', 'logout', 'security.edit',
             'account.notifications.index', 'account.notifications.count', 'account.notifications.read', 'account.notifications.read-all',
             'verification.notice', 'verification.verify', 'verification.send',
             'password.confirm', 'password.confirm.store', 'password.confirmation', 'user-password.update',

@@ -212,3 +212,52 @@ For each completed task, append the date, selected commit/service when relevant,
 - Automated checks: transport and existing registration tests cover success, unauthorized/sender rejection/rate-limit/server errors, malformed acceptance, connection failure, no network with missing key, sync success and failure, expiry, invalid/reused codes, and resend limits. All requests in these tests are faked and SQLite is isolated in memory.
 - Pending real verification: user must confirm Brevo transactional activation, verified sender, secure API-key entry, and provide an owned test recipient. Must then confirm actual inbox receipt, verify through the existing code/link flow, resend within limits, inspect fresh sanitized logs. Do not treat provider acceptance alone as successful delivery.
 - Official references: https://developers.brevo.com/reference/send-transac-email ; https://help.brevo.com/hc/en-us/articles/115000188150-Troubleshooting-Issues-with-Brevo-SMTP ; https://help.brevo.com/hc/en-us/articles/14925263522578-Comply-with-Gmail-Yahoo-and-Microsoft-s-requirements-for-email-senders
+
+## Optional SMS design, preparation, and zero-budget gate — 2026-11-15
+
+Confirmed baseline: deployed `3d943b9b522df1aca30b6b52ba19058173b7a35c` contains the existing Brevo HTTPS email transport. Existing email expiry/code/link/resend/Director approval logic is reused. There is no phone field on users; beneficiary contact fields describe different people and must not be reused for staff identity.
+
+Implementation plan (authorized inline execution):
+- Add nullable user phone/verification state using one additive migration. Registration may optionally collect a phone only when SMS is enabled; phone verification happens after authenticated email verification, including while Director approval is pending.
+- Add normalized international phone input (PH 09 / +639 / 00639 forms) and a dedicated phone OTP service plus HTTPS-only Brevo SMS gateway. No extra packages, no activity/reminder/bulk messaging.
+- Six-digit cryptographic OTP, HMAC stored with existing APP_KEY and bound to user+number; five-minute expiry, single use, five wrong attempts, resend invalidation; changing/removing the phone invalidates all previous phone state. Email and approval fields never change through this flow.
+- Send-attempt limits: 60-second user cooldown; 3/user/hour, 5/user/day; 3/phone/hour, 5/phone/day; 10/IP/hour; globally configured daily cap. Cross-user budget reservations use a shared cache lock; failures count toward budgets. No automatic provider retries. Code becomes usable only after explicit provider acceptance. API acceptance is not delivery confirmation.
+- Test with simulated HTTP only; run email/auth regressions, Pint, build, review, staging migration status, only the additive migration, scoped commit/push/deploy, and disabled-state HTTP/log verification.
+
+Owner decision: ZERO SMS BUDGET. `BREVO_SMS_ENABLED=false` and `BREVO_SMS_DAILY_LIMIT=0` are independent gates. Do not buy credits, submit Sender ID applications, or send real SMS. OTP tests are simulated; none prove real SMS delivery.
+
+### Brevo Philippine SMS application draft — for owner review, not submitted
+
+| Field | Prepared value / owner action |
+| --- | --- |
+| Destination | Philippines (+63) only initially |
+| Proposed Sender ID | RLCPVerify (10 letters; must be accepted by Brevo before use) |
+| Company / legal entity | Owner must provide exact registered legal/organization name; do not infer it from display name |
+| Company location | Local only if the entity is registered in the Philippines; otherwise International |
+| Website | https://rlc-staging-i6sc.onrender.com (staging; Brevo must confirm suitability) |
+| Content type | Transactional only, user-requested optional phone verification |
+| Sample content | Your RLC phone verification code is {{code}}. It expires in 5 minutes. Do not share this code. |
+| Monthly volume | Owner to confirm; no sending authorized currently |
+| Proof of brand / authority | Owner-held registration certificate or authorization to use the brand, if requested; official generic form lists proof as optional, country/account review can request more |
+| Submission | Account owner reviews all fields/documents and separately authorizes submission. No application submitted by agent |
+
+Account-owner navigation: Brevo Settings > Campaigns > SMS Sender ID > Request Sender ID > Philippines. Inspect the draft requirements and use Save for later; do not submit or purchase anything yet. Brevo's current general rule requires Sender ID registration per receiving country; Philippine IDs allow letters/digits, no special characters. Proposed ID is not an approval. Account eligibility, any country-specific additional documents, and review duration remain unconfirmed without owner/account evidence.
+
+Current pricing checked 2026-11-15: Philippines (+63) is listed as supported. Brevo prices SMS by destination and directs users to the account calculator (Usage and plan / My Plan > SMS & WhatsApp messages). Public pricing page did not expose a reliable Philippine numeric quote. Exact per-segment rate, currency, taxes, minimum pack, and any registration fee must be reviewed in the owner's account before a future approval; no invented rate or assumed free SMS allowance. The English OTP template is below 160 characters and requests non-Unicode encoding, intended as a single segment; actual billing remains provider-controlled. Spending this task: no credit purchases or real SMS sends.
+
+### Secure configuration and permissions
+
+- Email: MAIL_MAILER=brevo, BREVO_API_KEY entered privately in Render, MAIL_FROM_ADDRESS=verified sender, MAIL_FROM_NAME=RLC Management System, QUEUE_CONNECTION=sync. Preserve APP_KEY and APP_DEBUG=false.
+- API-key permissions (not OAuth scope labels): Transactional email requires All (the email resource exposes None/Read/All); Transactional SMS minimum Read/write. Other resources can stay None for sending. Existing key can support both only if active/unexpired and those permissions are granted; do not assume it does. A normal API key is required, not SMTP or MCP-version key.
+- SMS prep only: BREVO_SMS_ENABLED=false, BREVO_SMS_DAILY_LIMIT=0, BREVO_SMS_COUNTRY_CODES=63. BREVO_SMS_SENDER must eventually match the approved ID. Optional BREVO_SMS_API_KEY can isolate SMS credentials; if absent, code uses BREVO_API_KEY. No secret values in repository or chat.
+- Email sender mailbox is verified in owner's screenshot. Gmail DKIM/DMARC warnings remain: Brevo may temporarily rewrite freemail senders, but sender/account eligibility and inbox delivery need real proof. Transactional platform activation is separate; owner checks Transactional > Email and requests activation from Brevo support if needed.
+- One explicitly approved registration test to the owner's email returned HTTP503. No successful email send or inbox receipt claimed. API-key setup and transactional activation remain owner-unconfirmed; do not repeat sends blindly. Email code/expiry/resend tests use fakes and are not real delivery evidence.
+
+References checked: https://developers.brevo.com/docs/transactional-sms-endpoints ; https://developers.brevo.com/reference/send-async-transactional-sms ; https://help.brevo.com/hc/en-us/articles/28255350696466-Register-a-Sender-ID-to-send-SMS-messages ; https://help.brevo.com/hc/en-us/articles/11884482521234-Country-specific-guidelines-and-restrictions-for-SMS-messages ; https://help.brevo.com/hc/en-us/articles/208717449-Supported-countries-and-pricing-for-SMS-messages ; https://help.brevo.com/hc/en-us/articles/40158277171474-About-API-key-permissions
+
+### Technical verification result — optional SMS preparation
+
+- All 163 affected auth/email/phone simulation tests passed (1890 assertions); Pint passed; frontend build passed with the same pre-existing optional fontaine/runtime hero.svg warnings.
+- Read-only staging migration status confirmed prior migrations applied and only the new phone migration pending. Applied only `2026_11_15_005444_add_phone_verification_fields_to_users_table` to the existing Supabase staging `laravel` schema successfully. It adds nullable phone verification fields and an attempts counter; no existing records reset/imported, no seed or unrelated migration executed.
+- Independent code review found no blocking security/correctness findings. Aligned all fallback budgets to zero and added shared-number, daily-user, IP-limit, and budget-lock contention simulations.
+- No real SMS sent, no credits purchased, no Sender ID application submitted. Email's single approved live registration attempt returned503; actual inbox receipt and live verification remain blocked by unconfirmed account/key setup. Do not claim live delivery works.

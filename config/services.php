@@ -2,6 +2,14 @@
 
 return [
 
+    'brevo' => [
+        'sms_enabled' => env('BREVO_SMS_ENABLED', false),
+        'sms_key' => env('BREVO_SMS_API_KEY', env('BREVO_API_KEY')),
+        'sms_sender' => env('BREVO_SMS_SENDER'),
+        'sms_country_codes' => array_filter(array_map('trim', explode(',', (string) env('BREVO_SMS_COUNTRY_CODES', '63')))),
+        'sms_daily_limit' => env('BREVO_SMS_DAILY_LIMIT', 0),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Third Party Services

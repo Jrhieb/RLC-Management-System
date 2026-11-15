@@ -103,6 +103,7 @@ class RegistrationController extends Controller
         $validated = $request->validate([
             'name' => $this->nameRules(),
             'password' => $this->passwordRules(),
+            'phone_number' => config('services.brevo.sms_enabled') ? ['nullable', 'string', 'max:40'] : ['prohibited'],
         ]);
 
         $this->registration->complete($session, $validated);

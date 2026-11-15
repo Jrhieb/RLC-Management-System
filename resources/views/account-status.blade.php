@@ -20,6 +20,9 @@
 
         <flux:button :href="route('account.status')">{{ __('Refresh status') }}</flux:button>
         @if ($account->hasVerifiedEmail())
+            @if (config('services.brevo.sms_enabled'))
+                <flux:link :href="route('account.phone.show')">{{ __('Verify mobile number (optional)') }}</flux:link>
+            @endif
             <flux:link :href="route('security.edit')" class="text-center" wire:navigate>{{ __('Account security') }}</flux:link>
         @else
             <flux:link :href="route('verification.notice')" class="text-center" wire:navigate>{{ __('Verify your email') }}</flux:link>

@@ -33,7 +33,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias(['password.confirm' => RequirePasswordConfirmation::class]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->dontFlash(['code']);
+        $exceptions->dontFlash(['code', 'phone_code']);
         // Routing pipelines render exceptions before outer middleware can catch them.
         // Registration failures must never report a bearer URL, mail body, or password.
         $exceptions->report(function (Throwable $exception): ?bool {

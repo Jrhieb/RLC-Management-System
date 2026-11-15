@@ -10,7 +10,7 @@ class ProtectRegistrationResponse
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (! $request->is('register', 'register/*')) {
+        if (! $request->is('register', 'register/*', 'account/phone', 'account/phone/*')) {
             return $next($request);
         }
 

@@ -17,6 +17,7 @@ use App\Http\Controllers\DashboardNotificationController;
 use App\Http\Controllers\MyCaseloadController;
 use App\Http\Controllers\NfcAttendanceController;
 use App\Http\Controllers\NfcLookupController;
+use App\Http\Controllers\PhoneVerificationController;
 use App\Http\Controllers\ProgramActivityController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\ReportController;
@@ -50,6 +51,13 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::get('account/status', AccountStatusController::class)->middleware('auth')->name('account.status');
+
+Route::middleware(['auth', 'verified', 'throttle:30,1'])->prefix('account/phone')->name('account.phone.')->group(function (): void {
+    Route::get('/', [PhoneVerificationController::class, 'show'])->name('show');
+    Route::post('/', [PhoneVerificationController::class, 'save'])->name('save');
+    Route::post('send', [PhoneVerificationController::class, 'send'])->name('send');
+    Route::post('verify', [PhoneVerificationController::class, 'verify'])->name('verify');
+});
 
 Route::middleware(['auth', 'throttle:120,1'])->prefix('account/notifications')->name('account.notifications.')->group(function () {
     Route::get('/', [AccountNotificationController::class, 'index'])->name('index');

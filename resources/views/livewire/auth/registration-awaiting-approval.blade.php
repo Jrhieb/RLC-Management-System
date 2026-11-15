@@ -4,5 +4,8 @@
     <h2 class="registration-title">Registration complete</h2>
     <p class="registration-lead" role="status">Your account is awaiting Director approval.</p>
     <p class="registration-help">You can close this page. You have not been logged in.</p>
+    @if (config('services.brevo.sms_enabled'))
+        <p class="registration-help">After signing in, you can optionally verify your mobile number from your account status page.</p>
+    @endif
     <a class="registration-submit" href="{{ route('login') }}">Return to log in <span class="registration-submit__arrow" aria-hidden="true">→</span></a>
 </x-registration.page>
