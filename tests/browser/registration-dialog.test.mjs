@@ -140,7 +140,7 @@ test("Caseworker registration presentation, using only intercepted requests", { 
             assert.equal(await evaluate("document.querySelector('[data-registration-feedback]').textContent"), confirmation);
             assert.equal(await evaluate("document.querySelector('[data-registration-idle]').textContent"), "Resend verification code");
             assert.equal(await evaluate("document.querySelector('[data-registration-code-form]').hidden"), false);
-            assert.equal(await evaluate("document.querySelector('[autocomplete=one-time-code]').getAttribute('maxlength')"), "8");
+            assert.equal(await evaluate("document.querySelector('[autocomplete=one-time-code]').getAttribute('maxlength')"), "6");
             assert.equal(await evaluate("document.querySelector('.registration-steps [aria-current]').textContent.includes('Verify Email')"), true);
             assert.equal(await evaluate("document.querySelector('[data-test=registration-email-button]').disabled"), false);
             assert.equal(ui.stats.csrfPresent, true);

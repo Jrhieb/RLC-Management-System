@@ -1,12 +1,12 @@
 <x-registration.page title="Verify Registration Email" :step="1">
         <h1 class="registration-title">Verification code</h1>
-        <p class="registration-lead">Enter the eight-digit code emailed to you. Delivery may take a moment.</p>
+        <p class="registration-lead">Enter the six-digit code emailed to you. If your earlier code had eight digits, request a new code.</p>
         <form method="POST" action="{{ route('registration.code.verify') }}">
             @csrf
             <div class="registration-field">
                 <label for="registration-code">Email verification code</label>
                 <input id="registration-code" name="code" type="text" inputmode="numeric"
-                    autocomplete="one-time-code" pattern="[0-9]{8}" minlength="8" maxlength="8"
+                    autocomplete="one-time-code" pattern="[0-9]{6}" minlength="6" maxlength="6"
                     required autofocus aria-describedby="registration-code-help registration-code-error"
                     @if ($errors->has('code')) aria-invalid="true" @endif>
             </div>

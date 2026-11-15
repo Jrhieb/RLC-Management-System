@@ -14,7 +14,7 @@
                 @if ($errors->has('email')) aria-invalid="true" @endif
                 @if (! $embedded) autofocus @endif>
         </div>
-        <p class="registration-help" id="registration-email-help">We will email an eight-digit code that expires after 30 minutes. Delivery may take a moment. Wait at least one minute before requesting another code. A new code replaces the earlier code or registration session.</p>
+        <p class="registration-help" id="registration-email-help">We will email a six-digit code that expires after 30 minutes. Delivery may take a moment. Wait at least one minute before requesting another code. A new code replaces the earlier code or registration session. If your earlier code had eight digits, request a new code.</p>
         <p class="registration-feedback" role="status" aria-live="polite" aria-atomic="true" data-registration-feedback>{{ session('status') }}</p>
         <p class="registration-error" id="registration-email-error" role="alert" aria-atomic="true" data-registration-error>{{ $errors->first('email') ?: $errors->first('registration') }}</p>
         <button class="registration-submit" type="submit" data-test="registration-email-button" aria-disabled="false">
@@ -29,10 +29,10 @@
         <div class="registration-field">
             <label for="registration-inline-code">Email verification code</label>
             <input id="registration-inline-code" name="code" type="text" inputmode="numeric"
-                autocomplete="one-time-code" pattern="[0-9]{8}" minlength="8" maxlength="8" required
+                autocomplete="one-time-code" pattern="[0-9]{6}" minlength="6" maxlength="6" required
                 aria-describedby="registration-inline-code-help">
         </div>
-        <p id="registration-inline-code-help" class="registration-help">Enter the eight-digit code from your email. You have five attempts and 30 minutes.</p>
+        <p id="registration-inline-code-help" class="registration-help">Enter the six-digit code from your email. You have five attempts and 30 minutes.</p>
         <button class="registration-submit" type="submit">Verify email and continue</button>
     </form>
     @if (session('registration_code_challenge'))

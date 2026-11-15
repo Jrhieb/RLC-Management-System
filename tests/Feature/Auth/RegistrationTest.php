@@ -37,6 +37,19 @@ class RegistrationTest extends TestCase
 
     private const PASSWORD = 'Registration-Password-123!';
 
+    public function test_email_verification_code_is_exactly_six_digits(): void
+    {
+        $this->requestLink();
+        $token = $this->linkToken();
+        $code = substr($token, 0, 6);
+        $this->assertMatchesRegularExpression('/\A[0-9]{6}\z/', $code);
+        $this->post(route('registration.code.verify'), ['code' => $code.'00'])
+            ->assertSessionHasErrors('code');
+        $this->post(route('registration.code.verify'), ['code' => $code])
+            ->assertRedirect(route('registration.complete'));
+        $this->assertNotNull(RegistrationRequest::sole()->fresh()->verified_at);
+    }
+
     public function test_optional_phone_is_saved_unverified_without_bypassing_director_review(): void
     {
         config(['services.brevo.sms_enabled' => true]);
@@ -64,7 +77,7 @@ class RegistrationTest extends TestCase
     public function test_resending_invalidates_the_previous_code_and_browser_challenge(): void
     {
         $this->requestLink();
-        $oldCode = substr($this->linkToken(), 0, 8);
+        $oldCode = substr($this->linkToken(), 0, 6);
         $oldChallenge = session('registration_code_challenge');
         $this->travel(61)->seconds();
         $this->post(route('registration.request'), ['email' => self::EMAIL])->assertSessionHasNoErrors();
@@ -76,7 +89,7 @@ class RegistrationTest extends TestCase
     public function test_code_requires_the_requesting_browser_and_is_not_flashed_on_validation_error(): void
     {
         $this->requestLink();
-        $code = substr($this->linkToken(), 0, 8);
+        $code = substr($this->linkToken(), 0, 6);
         $this->withSession(['registration_code_challenge' => null])
             ->post('/register/code', ['code' => $code])->assertSessionHasErrors('code');
         $this->post('/register/code', ['code' => 'invalid-code'])
@@ -92,7 +105,7 @@ class RegistrationTest extends TestCase
         $job = Queue::pushed(SendRegistrationVerification::class)->sole();
         $job->handle(app(EmailRegistrationService::class));
         Mail::assertSent(RegistrationVerificationMail::class, function ($mail) use ($token): bool {
-            $mail->assertSeeInHtml(substr($token, 0, 8));
+            $mail->assertSeeInHtml(substr($token, 0, 6));
             $mail->assertDontSeeInHtml($token);
 
             return true;
@@ -102,8 +115,8 @@ class RegistrationTest extends TestCase
     public function test_emailed_code_verifies_registration_and_keeps_account_pending(): void
     {
         $this->requestLink();
-        $code = substr($this->linkToken(), 0, 8);
-        $this->assertMatchesRegularExpression('/^[0-9]{8}$/', $code);
+        $code = substr($this->linkToken(), 0, 6);
+        $this->assertMatchesRegularExpression('/^[0-9]{6}$/', $code);
         $this->get('/register/code')->assertOk()->assertSee('Verification code');
         $this->post('/register/code', ['code' => $code])->assertRedirect(route('registration.complete'));
         $this->post(route('registration.complete.store'), $this->payload())
@@ -117,8 +130,8 @@ class RegistrationTest extends TestCase
     public function test_registration_code_is_locked_after_five_wrong_attempts(): void
     {
         $this->requestLink();
-        $code = substr($this->linkToken(), 0, 8);
-        $wrong = $code === '00000000' ? '11111111' : '00000000';
+        $code = substr($this->linkToken(), 0, 6);
+        $wrong = $code === '000000' ? '111111' : '000000';
         for ($attempt = 0; $attempt < 5; $attempt++) {
             $this->post('/register/code', ['code' => $wrong])->assertSessionHasErrors('code');
         }
@@ -130,7 +143,7 @@ class RegistrationTest extends TestCase
     public function test_registration_code_expires_and_cannot_be_replayed(): void
     {
         $this->requestLink();
-        $code = substr($this->linkToken(), 0, 8);
+        $code = substr($this->linkToken(), 0, 6);
         $challenge = session('registration_code_challenge');
         $this->travel(31)->minutes();
         $this->post('/register/code', ['code' => $code])->assertSessionHasErrors('code');
@@ -530,7 +543,7 @@ class RegistrationTest extends TestCase
         $mail = Mail::sent(RegistrationVerificationMail::class)->last();
         $rendered = $mail->render();
         $this->assertStringContainsString('verification code', $rendered);
-        $this->assertStringContainsString(substr($this->linkToken(), 0, 8), $rendered);
+        $this->assertStringContainsString(substr($this->linkToken(), 0, 6), $rendered);
         $this->assertStringNotContainsString($this->linkToken(), $rendered);
         $this->get(route('register'))->assertDontSee($this->linkToken());
     }

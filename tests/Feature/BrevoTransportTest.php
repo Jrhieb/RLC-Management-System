@@ -32,7 +32,7 @@ class BrevoTransportTest extends TestCase
         $this->assertNull(RegistrationRequest::sole()->verified_at);
         $this->assertDatabaseCount('users', 0);
         $this->assertDatabaseCount('jobs', 0);
-        $code = substr(Crypt::decryptString(session('registration_code_challenge')), 0, 8);
+        $code = substr(Crypt::decryptString(session('registration_code_challenge')), 0, 6);
         Http::assertSent(fn ($request) => str_contains($request['htmlContent'], $code));
         $this->post(route('registration.code.verify'), ['code' => $code])
             ->assertRedirect(route('registration.complete'));

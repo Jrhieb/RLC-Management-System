@@ -49,7 +49,7 @@ class RegistrationController extends Controller
 
     public function verifyCode(Request $request): RedirectResponse
     {
-        $validated = $request->validate(['code' => ['required', 'string', 'regex:/\A[0-9]{8}\z/']]);
+        $validated = $request->validate(['code' => ['required', 'string', 'regex:/\A[0-9]{6}\z/']]);
         $session = $this->registration->verifyCode($request->session()->get('registration_code_challenge'), $validated['code']);
         if ($session === null) {
             return redirect()->route('registration.code')->withErrors([

@@ -47,7 +47,7 @@ class EmailRegistrationService
             return Crypt::encryptString(bin2hex(random_bytes(32)));
         }
 
-        $token = str_pad((string) random_int(0, 99999999), 8, '0', STR_PAD_LEFT).bin2hex(random_bytes(28));
+        $token = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT).bin2hex(random_bytes(29));
         $tokenHash = hash('sha256', $token);
         $now = now();
 
@@ -100,7 +100,7 @@ class EmailRegistrationService
             return null;
         }
 
-        if (! hash_equals(substr($token, 0, 8), $code)) {
+        if (! hash_equals(substr($token, 0, 6), $code)) {
             if ($attempts === 5) {
                 DB::table('registration_requests')->where('token_hash', $tokenHash)->update(['token_hash' => null]);
             }
@@ -154,7 +154,7 @@ class EmailRegistrationService
             // Build the link only inside the worker, using the configured origin.
             $url = rtrim((string) config('app.url'), '/').route('registration.verify', ['token' => $token], absolute: false);
             $minutes = max(1, (int) ceil(now()->diffInSeconds($registration->expires_at) / 60));
-            $code = substr($token, 0, 8);
+            $code = substr($token, 0, 6);
             Mail::to($registration->email)->send(new RegistrationVerificationMail($url, $minutes, ctype_digit($code) ? $code : null));
         } catch (Throwable) {
             $this->invalidateLink($id, $tokenHash);
