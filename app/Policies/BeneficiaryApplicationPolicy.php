@@ -14,6 +14,6 @@ class BeneficiaryApplicationPolicy
 
     public function view(User $user, BeneficiaryApplication $application): bool
     {
-        return $this->viewAny($user);
+        return $this->viewAny($user) || ($user->isEligibleCaseworker() && $application->assigned_caseworker_id === $user->id);
     }
 }

@@ -71,7 +71,13 @@ Route::middleware(['auth', 'throttle:120,1'])->prefix('account/notifications')->
 
 Route::middleware(['auth', 'verified', EnsureStaffAccess::class])->group(function () {
     Route::get('applications', [BeneficiaryApplicationController::class, 'index'])->name('applications.index');
+    Route::get('assigned-applications', [BeneficiaryApplicationController::class, 'assigned'])->name('applications.assigned');
     Route::get('applications/{application}', [BeneficiaryApplicationController::class, 'show'])->name('applications.show');
+    Route::post('applications/{application}/assign', [BeneficiaryApplicationController::class, 'assign'])->name('applications.assign');
+    Route::post('applications/{application}/assess', [BeneficiaryApplicationController::class, 'assess'])->name('applications.assess');
+    Route::post('applications/{application}/review', [BeneficiaryApplicationController::class, 'review'])->name('applications.review');
+    Route::post('applications/{application}/information', [BeneficiaryApplicationController::class, 'requestInformation'])->name('applications.information');
+    Route::post('applications/{application}/decision', [BeneficiaryApplicationController::class, 'decide'])->name('applications.decide');
     Route::get('account-requests', [AccountRequestController::class, 'index'])
         ->can('reviewAccountRequests', User::class)->name('account-requests.index');
     Route::post('account-requests/{user}/review', [AccountRequestController::class, 'review'])

@@ -109,6 +109,7 @@ test("public homepage in an isolated browser", { skip: !binary || !fixtureDirect
             body = await readFile(path.join(fixtures, `activities-${filter}.html`));
         }
         else if (pathname === "/application") body = await readFile(path.join(fixtures, "application.html"));
+        else if (pathname === "/enabled-application") body = Buffer.from((await readFile(path.join(fixtures, "application-enabled.html"), "utf8")).replaceAll("http://localhost", origin));
         else if (pathname === "/favicon.ico") body = Buffer.alloc(0);
         else if (pathname === "/scope-probe") {
             body = Buffer.from('<!doctype html><html><head><title>Scope probe</title></head><body><main><h1>Staff scope probe</h1><button id="probe">Staff action</button><nav id="public-navigation">Unrelated navigation</nav></main></body></html>');
@@ -630,6 +631,22 @@ test("public homepage in an isolated browser", { skip: !binary || !fixtureDirect
             assert.equal(await evaluate("document.querySelector('[data-application-draft] fieldset').disabled"), true);
             assert.equal(await evaluate("document.querySelector('[data-application-draft] button[type=submit]').matches(':disabled')"), true);
             await command("Emulation.setScriptExecutionDisabled", { value: false });
+            await navigate();
+        });
+
+        await t.test("enabled application handles server validation, network retry and confirmation", async () => {
+            await navigate("", "/enabled-application");
+            await until("!!document.querySelector('[data-real-intake][data-initialized]')");
+            await evaluate(`window.syntheticCalls = 0; window.fetch = async () => { window.syntheticCalls++; if (window.syntheticCalls === 1) return {status: 422, ok: false, json: async () => ({errors: {guardian_name: ['Synthetic server error']}})}; if (window.syntheticCalls === 2) throw new Error('synthetic network failure'); return {status: 200, ok: true, json: async () => ({reference: 'TEST-REFERENCE', message: 'Synthetic confirmation'})}; };`);
+            await evaluate(`document.getElementById('application-guardian').value='Synthetic Guardian'; document.getElementById('application-relationship').value='Parent'; document.getElementById('application-contact').value='+63 900 000 0000'; document.getElementById('application-barangay').value='Sample'; document.getElementById('application-city').value='Sample'; document.querySelector('[data-next]').click(); document.getElementById('application-reason').value='Synthetic reason'; document.querySelector('[data-step="2"] [data-next]').click(); document.getElementById('application-consent').checked=true; document.querySelector('[data-real-intake]').requestSubmit();`);
+            await until("document.querySelector('[data-draft-status]').textContent.includes('Synthetic server error')");
+            assert.equal(await evaluate("document.activeElement.id"), "application-guardian");
+            await evaluate(`document.querySelector('[data-next]').click(); document.querySelector('[data-step="2"] [data-next]').click(); document.querySelector('[data-real-intake]').requestSubmit()`);
+            await until("document.querySelector('[data-draft-status]').textContent.includes('could not confirm')");
+            assert.equal(await evaluate("document.getElementById('application-guardian').value"), "Synthetic Guardian");
+            await evaluate("document.querySelector('[data-real-intake]').requestSubmit()");
+            await until("document.querySelector('[data-draft-status]').textContent.includes('TEST-REFERENCE')");
+            assert.equal(await evaluate("window.syntheticCalls"), 3);
             await navigate();
         });
 

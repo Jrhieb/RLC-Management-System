@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Tests\Support\TestIsolation;
 use Tests\TestCase;
 
 class BeneficiaryApplicationTest extends TestCase
@@ -40,7 +41,12 @@ class BeneficiaryApplicationTest extends TestCase
         config(['services.application_intake.enabled' => true, 'services.application_intake.privacy_contact' => 'Synthetic contact', 'services.application_intake.privacy_acknowledgment' => 'Synthetic acknowledgment', 'services.application_intake.retention_notice' => 'Synthetic retention']);
         $token = (string) Str::uuid();
         $data = ['submission_key' => $token, 'guardian_name' => 'Synthetic Guardian', 'guardian_relationship' => 'Parent', 'contact_number' => '09123456789', 'preferred_contact' => 'email', 'email' => 'synthetic@example.test', 'barangay' => 'Test', 'municipality' => 'Test City', 'reason' => 'Synthetic reason', 'acknowledgment' => '1'];
-        $this->withSession(['application_submission_key' => $token])->get('/application')->assertOk()->assertSee('data-real-intake', false);
+        $page = $this->withSession(['application_submission_key' => $token])->get('/application')->assertOk()->assertSee('data-real-intake', false);
+        $directory = getenv('HOMEPAGE_UI_FIXTURES');
+        if (is_string($directory) && $directory !== '') {
+            TestIsolation::assertTemporaryPaths([$directory], sys_get_temp_dir());
+            file_put_contents($directory.'/application-enabled.html', $page->getContent());
+        }
         $first = $this->postJson('/application', $data)->assertOk()->json('reference');
         $this->postJson('/application', $data)->assertOk()->assertJsonPath('reference', $first);
         $this->assertDatabaseCount('beneficiary_applications', 1);
@@ -82,5 +88,43 @@ class BeneficiaryApplicationTest extends TestCase
         $this->actingAs($director)->get(route('dashboard'))->assertOk()->assertSee('Applications')->assertSee('Pending review');
         $this->getJson(route('dashboard.notifications'))->assertOk()->assertJsonFragment(['title' => 'Application awaiting review'])->assertDontSee('Private Guardian');
         $this->actingAs($worker)->getJson(route('dashboard.notifications'))->assertOk()->assertDontSee('Application awaiting review')->assertDontSee('Private Guardian');
+    }
+
+    public function test_director_can_assign_and_only_assigned_caseworker_can_assess(): void
+    {
+        $application = BeneficiaryApplication::submit(['guardian_name' => 'Synthetic Guardian', 'contact_number' => '09123456789', 'barangay' => 'Test', 'municipality' => 'Test City', 'reason' => 'Synthetic request']);
+        $director = User::factory()->create(['role' => 'project_director']);
+        $worker = User::factory()->create();
+        $other = User::factory()->create();
+        $this->actingAs($director)->post(route('applications.assign', $application), ['caseworker_id' => $worker->id])->assertRedirect();
+        $this->assertDatabaseHas('beneficiary_applications', ['id' => $application->id, 'assigned_caseworker_id' => $worker->id, 'status' => 'for_assessment']);
+        $this->assertDatabaseHas('beneficiary_application_audits', ['beneficiary_application_id' => $application->id, 'actor_id' => $director->id, 'event' => 'assigned']);
+        $this->actingAs($other)->get(route('applications.show', $application))->assertForbidden();
+        $this->post(route('applications.assess', $application), ['findings' => 'Private findings', 'recommendation' => 'Synthetic recommendation'])->assertForbidden();
+        $this->actingAs($worker)->get(route('applications.show', $application))->assertOk();
+        $this->post(route('applications.assess', $application), ['findings' => 'Private findings', 'recommendation' => 'Synthetic recommendation'])->assertRedirect();
+        $this->assertDatabaseHas('beneficiary_applications', ['id' => $application->id, 'status' => 'for_decision']);
+        $this->assertDatabaseHas('beneficiary_application_audits', ['beneficiary_application_id' => $application->id, 'actor_id' => $worker->id, 'event' => 'assessment_submitted']);
+        $this->post(route('applications.decide', $application), ['decision' => 'approved'])->assertForbidden();
+        $this->actingAs($director)->post(route('applications.decide', $application), ['decision' => 'approved'])->assertRedirect();
+        $this->assertDatabaseHas('beneficiary_application_audits', ['beneficiary_application_id' => $application->id, 'actor_id' => $director->id, 'event' => 'decision', 'status' => 'approved']);
+        $this->assertDatabaseCount('beneficiaries', 0);
+        $this->post(route('applications.decide', $application), ['decision' => 'declined'])->assertStatus(409);
+    }
+
+    public function test_review_and_information_needed_are_audited_and_ineligible_assignment_is_rejected(): void
+    {
+        $application = BeneficiaryApplication::submit(['guardian_name' => 'Synthetic Guardian', 'contact_number' => '09123456789', 'barangay' => 'Test', 'municipality' => 'Test City', 'reason' => 'Synthetic request']);
+        $director = User::factory()->create(['role' => 'project_director']);
+        $worker = User::factory()->create();
+        $pending = User::factory()->pendingApproval()->create();
+        $this->actingAs($director)->post(route('applications.review', $application))->assertRedirect();
+        $this->assertDatabaseHas('beneficiary_application_audits', ['beneficiary_application_id' => $application->id, 'actor_id' => $director->id, 'status' => 'under_review']);
+        $this->post(route('applications.assign', $application), ['caseworker_id' => $pending->id])->assertNotFound();
+        $this->post(route('applications.assign', $application), ['caseworker_id' => $worker->id])->assertRedirect();
+        $this->actingAs($worker)->post(route('applications.information', $application), ['findings' => 'Synthetic information request'])->assertRedirect();
+        $this->assertDatabaseHas('beneficiary_applications', ['id' => $application->id, 'information_needed' => 'Synthetic information request']);
+        $this->assertDatabaseHas('beneficiary_application_audits', ['beneficiary_application_id' => $application->id, 'actor_id' => $worker->id, 'status' => 'needs_information']);
+        $this->get(route('applications.assigned'))->assertOk()->assertSee('Synthetic Guardian');
     }
 }

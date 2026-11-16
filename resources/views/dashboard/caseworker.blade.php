@@ -12,6 +12,7 @@
                 <p>Your assigned beneficiaries, excluding archived profiles.</p>
             </div>
         </header>
+        <a class="rlc-button rlc-button-primary" href="{{ route('applications.assigned') }}">My assigned applications</a>
         <section aria-label="My assigned beneficiary counts" class="rlc-stats rlc-caseload-stats">
             @foreach ([['Assigned Beneficiaries', 'total', 'Active and inactive assigned profiles', '', 'violet'], ['Active', 'active', 'Active assigned beneficiaries', 'active', 'green'], ['Inactive', 'inactive', 'Inactive assigned beneficiaries', 'inactive', 'orange']] as [$label, $key, $description, $status, $tone])
                 <a href="{{ route('my-caseload.index', $status ? ['status' => $status] : []) }}" class="rlc-panel rlc-stat rlc-tone-{{ $tone }}">
