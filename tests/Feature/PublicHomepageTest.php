@@ -226,7 +226,7 @@ class PublicHomepageTest extends TestCase
     public function test_public_application_rejects_submissions_without_dispatching_anything(): void
     {
         Queue::fake();
-        $this->post(route('program-application'), ['guardian' => 'Synthetic Guardian'])->assertStatus(405);
+        $this->post(route('program-application'), ['guardian' => 'Synthetic Guardian'])->assertStatus(403);
         Mail::assertNothingOutgoing();
         Queue::assertNothingPushed();
     }

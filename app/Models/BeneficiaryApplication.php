@@ -14,7 +14,7 @@ class BeneficiaryApplication extends Model
     {
         return DB::transaction(function () use ($data): self {
             $application = new self;
-            $application->fill(collect($data)->only(['guardian_name', 'contact_number', 'email', 'barangay', 'municipality', 'reason'])->all());
+            $application->fill(collect($data)->only(['guardian_name', 'guardian_relationship', 'contact_number', 'preferred_contact', 'email', 'barangay', 'municipality', 'reason', 'submission_key'])->all());
             $application->reference = (string) Str::uuid();
             $application->status = 'pending_review';
             $application->save();

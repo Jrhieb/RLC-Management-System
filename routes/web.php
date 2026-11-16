@@ -20,6 +20,7 @@ use App\Http\Controllers\NfcAttendanceController;
 use App\Http\Controllers\NfcLookupController;
 use App\Http\Controllers\PhoneVerificationController;
 use App\Http\Controllers\ProgramActivityController;
+use App\Http\Controllers\PublicApplicationController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReportExportController;
@@ -35,6 +36,7 @@ Route::view('/about', 'public.about')->name('about');
 Route::view('/programs', 'public.programs')->name('programs');
 Route::view('/community/activities', 'public.activities')->name('public.activities.index');
 Route::view('/application', 'public.application')->name('program-application');
+Route::post('/application', [PublicApplicationController::class, 'store'])->middleware('throttle:5,1')->name('public-application.store');
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegistrationController::class, 'show'])->name('register');

@@ -35,9 +35,9 @@ export function initializeApplicationDraft(form) {
             if (field.dataset.draftField === "contact") {
                 const value = field.value.trim();
                 const digits = value.replace(/\D/g, "").length;
-                if (!/^[+\d()\s-]+$/.test(value) || digits < 7 || digits > 15) message = "Enter a sample contact number with 7–15 digits.";
+                if (!/^[+\d()\s-]+$/.test(value) || digits < 7 || digits > 15) message = "Enter a contact number with 7–15 digits.";
             }
-            if (!message && !field.checkValidity()) message = field.type === "checkbox" ? "Confirm this is a sample preview." : "Please complete this field with a valid value.";
+            if (!message && !field.checkValidity()) message = field.type === "checkbox" ? "Please confirm the acknowledgment." : "Please complete this field with a valid value.";
             if (!message && field.hasAttribute("data-preview-required") && !field.value.trim()) message = "Please complete this field.";
             if (message) {
                 field.setAttribute("aria-invalid", "true");
@@ -68,9 +68,45 @@ export function initializeApplicationDraft(form) {
     }));
     form.querySelectorAll("[data-back]").forEach(button => button.addEventListener("click", () => show(current - 1)));
     form.querySelectorAll("[data-edit]").forEach(button => button.addEventListener("click", () => show(Number(button.dataset.edit))));
-    form.addEventListener("submit", event => {
+    form.addEventListener("submit", async event => {
         event.preventDefault();
         if (!validate()) return;
+        if (form.hasAttribute("data-real-intake")) {
+            const mapping = { guardian_name: "application-guardian", guardian_relationship: "application-relationship", contact_number: "application-contact", email: "application-email", barangay: "application-barangay", municipality: "application-city", preferred_contact: "application-method", reason: "application-reason" };
+            const data = new FormData();
+            Object.entries(mapping).forEach(([name, id]) => data.set(name, form.querySelector("#" + id).value.trim()));
+            data.set("submission_key", form.querySelector('[name="submission_key"]').value);
+            data.set("_token", form.querySelector('[name="_token"]').value);
+            data.set("acknowledgment", form.querySelector("#application-consent").checked ? "1" : "0");
+            const button = form.querySelector('[type="submit"]');
+            button.disabled = true;
+            try {
+                const response = await fetch(form.action, { method: "POST", body: data, headers: { Accept: "application/json" }, credentials: "same-origin" });
+                const result = await response.json();
+                if (response.status === 422 && result.errors) {
+                    const key = Object.keys(result.errors)[0];
+                    const id = mapping[key] || (key === "acknowledgment" ? "application-consent" : null);
+                    const field = id && form.querySelector("#" + id);
+                    if (field) {
+                        show(field.closest("[data-step]") ? Number(field.closest("[data-step]").dataset.step) : 3);
+                        field.setAttribute("aria-invalid", "true");
+                        status.textContent = result.errors[key][0];
+                        field.focus();
+                    } else status.textContent = "Please review your answers and try again.";
+                    return;
+                }
+                if (!response.ok || !result.reference) throw new Error("Submission unavailable");
+                sections.forEach(section => { section.hidden = true; });
+                status.textContent = result.message + " Reference: " + result.reference;
+                status.focus();
+            } catch {
+                status.textContent = "We could not confirm your submission. Your answers remain here; please try again.";
+                status.focus();
+            } finally {
+                button.disabled = false;
+            }
+            return;
+        }
         completing = true;
         form.reset();
         completing = false;
@@ -80,7 +116,7 @@ export function initializeApplicationDraft(form) {
         status.focus();
     });
     form.addEventListener("reset", () => { if (!completing) setTimeout(() => { updateEmail(); show(1); }, 0); });
-    form.ownerDocument.defaultView.addEventListener("pagehide", () => form.reset());
+    if (!form.hasAttribute("data-real-intake")) form.ownerDocument.defaultView.addEventListener("pagehide", () => form.reset());
     form.noValidate = true;
     form.querySelector("fieldset").disabled = false;
 }

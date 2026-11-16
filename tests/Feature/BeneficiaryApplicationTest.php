@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Models\BeneficiaryApplication;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class BeneficiaryApplicationTest extends TestCase
@@ -30,7 +32,45 @@ class BeneficiaryApplicationTest extends TestCase
         $this->assertNotSame($first->reference, $second->reference);
         $this->assertSame('pending_review', $first->status);
         $this->assertDatabaseHas('beneficiary_application_audits', ['beneficiary_application_id' => $first->id, 'status' => 'pending_review']);
-        $this->post('/application', $data)->assertStatus(405);
+        $this->post('/application', $data)->assertStatus(403);
+    }
+
+    public function test_enabled_intake_saves_once_and_notifies_director(): void
+    {
+        config(['services.application_intake.enabled' => true, 'services.application_intake.privacy_contact' => 'Synthetic contact', 'services.application_intake.privacy_acknowledgment' => 'Synthetic acknowledgment', 'services.application_intake.retention_notice' => 'Synthetic retention']);
+        $token = (string) Str::uuid();
+        $data = ['submission_key' => $token, 'guardian_name' => 'Synthetic Guardian', 'guardian_relationship' => 'Parent', 'contact_number' => '09123456789', 'preferred_contact' => 'email', 'email' => 'synthetic@example.test', 'barangay' => 'Test', 'municipality' => 'Test City', 'reason' => 'Synthetic reason', 'acknowledgment' => '1'];
+        $this->withSession(['application_submission_key' => $token])->get('/application')->assertOk()->assertSee('data-real-intake', false);
+        $first = $this->postJson('/application', $data)->assertOk()->json('reference');
+        $this->postJson('/application', $data)->assertOk()->assertJsonPath('reference', $first);
+        $this->assertDatabaseCount('beneficiary_applications', 1);
+        $application = BeneficiaryApplication::firstOrFail();
+        $this->assertSame('pending_review', $application->status);
+        $this->assertNotEmpty($application->reference);
+        $this->assertSame($first, $application->reference);
+        $this->assertSame('Parent', $application->guardian_relationship);
+        $this->assertSame('email', $application->preferred_contact);
+        $this->assertDatabaseHas('beneficiary_application_audits', ['beneficiary_application_id' => $application->id, 'event' => 'submitted']);
+        $director = User::factory()->create(['role' => 'project_director']);
+        $this->actingAs($director)->get(route('applications.index'))->assertOk()->assertSee('Synthetic Guardian');
+        $this->getJson(route('dashboard.notifications'))->assertJsonFragment(['title' => 'Application awaiting review']);
+        Mail::assertNothingOutgoing();
+    }
+
+    public function test_enabled_intake_validates_fields(): void
+    {
+        config(['services.application_intake.enabled' => true, 'services.application_intake.privacy_contact' => 'Synthetic contact', 'services.application_intake.privacy_acknowledgment' => 'Synthetic acknowledgment', 'services.application_intake.retention_notice' => 'Synthetic retention']);
+        $token = (string) Str::uuid();
+        $this->withSession(['application_submission_key' => $token])->post('/application', ['submission_key' => $token])->assertSessionHasErrors(['guardian_name', 'contact_number', 'barangay', 'municipality', 'reason']);
+        $this->assertDatabaseCount('beneficiary_applications', 0);
+    }
+
+    public function test_intake_flag_alone_does_not_open_without_privacy_settings(): void
+    {
+        config(['services.application_intake.enabled' => true, 'services.application_intake.privacy_contact' => null]);
+        $this->post('/application', [])->assertForbidden();
+        $this->get('/application')->assertDontSee('data-real-intake', false);
+        $this->assertDatabaseCount('beneficiary_applications', 0);
     }
 
     public function test_dashboard_notifications_only_show_applications_to_directors(): void

@@ -1,6 +1,12 @@
 <?php
 
 return [
+    'application_intake' => [
+        'enabled' => env('APPLICATION_INTAKE_ENABLED', false),
+        'privacy_contact' => env('APPLICATION_PRIVACY_CONTACT'),
+        'privacy_acknowledgment' => env('APPLICATION_PRIVACY_ACKNOWLEDGMENT'),
+        'retention_notice' => env('APPLICATION_RETENTION_NOTICE'),
+    ],
 
     'brevo' => [
         'sms_enabled' => env('BREVO_SMS_ENABLED', false),
