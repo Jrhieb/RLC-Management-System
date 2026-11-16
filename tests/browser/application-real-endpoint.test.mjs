@@ -1,0 +1,75 @@
+import assert from 'node:assert/strict';
+import { spawn, spawnSync } from 'node:child_process';
+import { mkdtemp, mkdir, readFile, rm, writeFile, realpath } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import net from 'node:net';
+import { fileURLToPath } from 'node:url';
+import test from 'node:test';
+
+const workspace = fileURLToPath(new URL('../../', import.meta.url));
+const browserPath = process.env.HOMEPAGE_UI_BROWSER;
+const phpBinary = process.env.HOMEPAGE_UI_PHP;
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+test('enabled application uses the real isolated Laravel endpoint', { skip: !browserPath || !phpBinary, timeout: 120000 }, async () => {
+    const tempRoot = await realpath(os.tmpdir());
+    const temp = await mkdtemp(path.join(tempRoot, 'rlcp-real-intake-'));
+    const storage = path.join(temp, 'storage');
+    for (const dir of ['framework/cache/data', 'framework/sessions', 'framework/views', 'logs']) await mkdir(path.join(storage, dir), { recursive: true });
+    const db = path.join(temp, 'synthetic.sqlite');
+    await writeFile(db, '');
+    const port = await new Promise((resolve, reject) => { const s = net.createServer(); s.on('error', reject); s.listen(0, '127.0.0.1', () => { const p = s.address().port; s.close(() => resolve(p)); }); });
+    const origin = `http://127.0.0.1:${port}`;
+    const cachePath = name => { const value = path.join(temp, name); return process.platform === 'win32' ? value.slice(2) : value; };
+    const env = { ...process.env, APP_ENV: 'testing', APP_DEBUG: 'false', APP_KEY: 'base64:cnJycnJycnJycnJycnJycnJycnJycnJycnJycnJycnI=', APP_URL: origin,
+        DB_CONNECTION: 'sqlite', DB_DATABASE: db, DB_URL: '', SESSION_DRIVER: 'file', CACHE_STORE: 'file', QUEUE_CONNECTION: 'sync', MAIL_MAILER: 'array',
+        APPLICATION_INTAKE_ENABLED: 'true', APPLICATION_PRIVACY_CONTACT: 'Synthetic contact', APPLICATION_PRIVACY_ACKNOWLEDGMENT: 'Synthetic acknowledgment', APPLICATION_RETENTION_NOTICE: 'Synthetic retention',
+        BREVO_SMS_ENABLED: 'false', LARAVEL_STORAGE_PATH: storage, VIEW_COMPILED_PATH: path.join(storage, 'framework/views'),
+        APP_CONFIG_CACHE: cachePath('config.php'), APP_ROUTES_CACHE: cachePath('routes.php'), APP_EVENTS_CACHE: cachePath('events.php'), APP_SERVICES_CACHE: cachePath('services.php'), APP_PACKAGES_CACHE: cachePath('packages.php') };
+    let server, browser, socket;
+    const pending = new Map(); let nextId = 0;
+    const command = (method, params = {}) => new Promise((resolve, reject) => { const id = ++nextId; const timer = setTimeout(() => { pending.delete(id); reject(new Error('Browser command timed out')); }, 10000); pending.set(id, { resolve, reject, timer }); socket.send(JSON.stringify({ id, method, params })); });
+    const evaluate = async expression => { const result = await command('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true }); if (result.exceptionDetails) throw new Error('Browser evaluation failed'); return result.result.value; };
+    const until = async expression => { for (let i = 0; i < 150; i++) { if (await evaluate(expression)) return; await delay(100); } throw new Error('Expected browser state not reached'); };
+    try {
+        const phpProbe = spawnSync(phpBinary, ['-v'], { cwd: workspace, env, encoding: 'utf8', windowsHide: true, timeout: 10000 });
+        assert.equal(phpProbe.status, 0, 'The configured PHP executable must start');
+        const migrationCode = 'require "vendor/autoload.php"; try { $app=require "bootstrap/app.php"; $app->make(Illuminate\\Contracts\\Console\\Kernel::class)->bootstrap(); $code=Illuminate\\Support\\Facades\\Artisan::call("migrate", ["--force"=>true,"--no-interaction"=>true]); exit($code); } catch (Throwable $e) { echo get_class($e)." ".basename($e->getFile()).":".$e->getLine()." "; preg_match_all("/\\b(?:error|failed|migration|environment|database|sqlite|driver|extension|missing|cache|file|key|application|bootstrap|locked|production|testing|invalid|permission|parse|directory|table|connection|exists|found|unsafe|refused|runtime|storage|path|symlink|writable|supported|must|not|be|present|provide|specify|type|encryption)\\b/i", $e->getMessage(), $m); echo implode(" ", $m[0]); exit(1); }';
+        const migrated = spawnSync(phpBinary, ['-d', 'display_errors=stderr', '-d', 'log_errors=0', '-r', migrationCode], { cwd: workspace, env, encoding: 'utf8', windowsHide: true, timeout: 60000 });
+        assert.equal(migrated.status, 0, `Synthetic SQLite migrations must succeed (${migrated.stdout.trim()})`);
+        server = spawn(phpBinary, ['-S', `127.0.0.1:${port}`, '-t', 'public'], { cwd: workspace, env, windowsHide: true, stdio: 'ignore' });
+        for (let i = 0; i < 100; i++) { try { if ((await fetch(origin + '/up')).ok) break; } catch {} await delay(100); }
+        assert.ok((await fetch(origin + '/up')).ok, 'Isolated server must start');
+        const profile = path.join(temp, 'browser');
+        browser = spawn(browserPath, ['--headless=new', '--disable-gpu', '--disable-extensions', '--disable-background-networking', '--no-first-run', '--remote-debugging-port=0', `--user-data-dir=${profile}`, 'about:blank'], { windowsHide: true, stdio: 'ignore' });
+        let debuggerPort;
+        for (let i = 0; i < 150 && !debuggerPort; i++) { try { debuggerPort = Number((await readFile(path.join(profile, 'DevToolsActivePort'), 'utf8')).split('\n')[0]); } catch {} await delay(100); }
+        assert.ok(debuggerPort, 'Browser must start');
+        const pages = await (await fetch(`http://127.0.0.1:${debuggerPort}/json/list`)).json();
+        socket = new WebSocket(pages.find(page => page.type === 'page').webSocketDebuggerUrl);
+        await new Promise((resolve, reject) => { socket.addEventListener('open', resolve, { once: true }); socket.addEventListener('error', reject, { once: true }); });
+        socket.addEventListener('message', event => { const message = JSON.parse(event.data); if (message.method === 'Fetch.requestPaused') { const allowed = new URL(message.params.request.url).origin === origin; command(allowed ? 'Fetch.continueRequest' : 'Fetch.failRequest', allowed ? { requestId: message.params.requestId } : { requestId: message.params.requestId, errorReason: 'BlockedByClient' }).catch(() => {}); return; } const item = pending.get(message.id); if (!item) return; clearTimeout(item.timer); pending.delete(message.id); message.error ? item.reject(new Error('Browser protocol error')) : item.resolve(message.result); });
+        await command('Page.enable'); await command('Runtime.enable'); await command('Network.enable');
+        await command('Fetch.enable', { patterns: [{ urlPattern: '*' }] });
+        await command('Page.navigate', { url: origin + '/application' });
+        await until("!!document.querySelector('[data-real-intake][data-initialized]')");
+        await evaluate(`document.getElementById('application-guardian').value='Synthetic Guardian'; document.getElementById('application-relationship').value='Parent'; document.getElementById('application-contact').value='+63 900 000 0000'; document.getElementById('application-barangay').value='Synthetic Barangay'; document.getElementById('application-city').value='Synthetic City'; document.querySelector('[data-next]').click(); document.getElementById('application-reason').value='Synthetic request'; document.querySelector('[data-step="2"] [data-next]').click(); document.getElementById('application-consent').checked=true; document.querySelector('[data-real-intake]').requestSubmit();`);
+        await until("document.querySelector('[data-draft-status]').textContent.includes('Reference:')");
+        assert.equal(await evaluate("document.querySelector('[data-draft-status]').textContent.includes('received for review')"), true);
+        const confirmation = await evaluate("document.querySelector('[data-draft-status]').textContent");
+        await evaluate("document.querySelector('[data-draft-status]').textContent='Checking retry'; document.querySelector('[data-real-intake]').requestSubmit()");
+        await until("document.querySelector('[data-draft-status]').textContent.includes('Reference:')");
+        assert.equal(await evaluate("document.querySelector('[data-draft-status]').textContent"), confirmation);
+        const check = spawnSync(phpBinary, ['-r', '$p=new PDO("sqlite:".getenv("DB_DATABASE")); echo json_encode([$p->query("select count(*) from beneficiary_applications")->fetchColumn(),$p->query("select count(*) from beneficiary_application_audits")->fetchColumn()]);'], { cwd: workspace, env, encoding: 'utf8', windowsHide: true });
+        assert.equal(check.status, 0); assert.deepEqual(JSON.parse(check.stdout).map(Number), [1, 1]);
+    } finally {
+        if (socket?.readyState === WebSocket.OPEN) { await command('Browser.close').catch(() => {}); socket.close(); }
+        if (browser && browser.exitCode === null) browser.kill();
+        if (server && server.exitCode === null) server.kill();
+        await delay(500);
+        const resolved = await realpath(temp);
+        assert.equal(path.dirname(resolved), tempRoot); assert.ok(path.basename(resolved).startsWith('rlcp-real-intake-'));
+        await rm(resolved, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 });
+    }
+});
