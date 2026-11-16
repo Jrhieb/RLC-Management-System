@@ -61,7 +61,8 @@ class BrevoTransport extends AbstractTransport
         } catch (Throwable) {
             Log::warning('Brevo email transport failure.', ['category' => $category, 'http_status' => $status]);
             // Provider responses and request exceptions can contain credentials and bearer content.
-            throw new TransportException('Brevo email delivery was not accepted.');
+            $safeToRetry = $category === 'missing_key' || ($category === 'provider_rejected' && in_array($status, [400, 401, 403, 404, 422], true));
+            throw new BrevoDeliveryException($safeToRetry);
         }
     }
 

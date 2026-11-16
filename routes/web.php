@@ -5,6 +5,8 @@ use App\Http\Controllers\AccountRequestController;
 use App\Http\Controllers\AccountStatusController;
 use App\Http\Controllers\ActivityAttendanceController;
 use App\Http\Controllers\ActivityAttendanceExportController;
+use App\Http\Controllers\ApplicationContactController;
+use App\Http\Controllers\ApplicationEmailController;
 use App\Http\Controllers\AssistanceTransactionController;
 use App\Http\Controllers\BeneficiaryApplicationController;
 use App\Http\Controllers\BeneficiaryBulkArchiveController;
@@ -78,6 +80,10 @@ Route::middleware(['auth', 'verified', EnsureStaffAccess::class])->group(functio
     Route::post('applications/{application}/review', [BeneficiaryApplicationController::class, 'review'])->name('applications.review');
     Route::post('applications/{application}/information', [BeneficiaryApplicationController::class, 'requestInformation'])->name('applications.information');
     Route::post('applications/{application}/decision', [BeneficiaryApplicationController::class, 'decide'])->name('applications.decide');
+    Route::post('applications/{application}/contacts', [ApplicationContactController::class, 'store'])->name('applications.contacts.store');
+    Route::post('applications/{application}/appointments', [ApplicationEmailController::class, 'appointment'])->name('applications.appointments.store');
+    Route::post('applications/{application}/emails/{email}/retry', [ApplicationEmailController::class, 'retry'])->name('applications.emails.retry');
+    Route::post('applications/{application}/emails/{email}/receipt', [ApplicationEmailController::class, 'confirmReceipt'])->name('applications.emails.receipt');
     Route::get('account-requests', [AccountRequestController::class, 'index'])
         ->can('reviewAccountRequests', User::class)->name('account-requests.index');
     Route::post('account-requests/{user}/review', [AccountRequestController::class, 'review'])
