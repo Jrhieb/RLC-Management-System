@@ -7,6 +7,7 @@
                 ['Program Activities', $activitiesCount, 'All recorded activities', 'calendar', 'green', route('activities.index')],
                 ['Attendance Check-ins', $attendanceCount, 'All recorded attendance entries', 'radio', 'blue', route('reports.index')],
                 ['Assistance Releases', $assistanceReleasesCount, 'All recorded release transactions', 'document', 'orange', route('reports.index')],
+                ['Applications', $pendingApplicationsCount, 'Pending review', 'document', 'violet', route('applications.index')],
             ];
             $chartMax = max(4, (int) $attendanceTrend->max('count'));
         @endphp

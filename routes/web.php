@@ -6,6 +6,7 @@ use App\Http\Controllers\AccountStatusController;
 use App\Http\Controllers\ActivityAttendanceController;
 use App\Http\Controllers\ActivityAttendanceExportController;
 use App\Http\Controllers\AssistanceTransactionController;
+use App\Http\Controllers\BeneficiaryApplicationController;
 use App\Http\Controllers\BeneficiaryBulkArchiveController;
 use App\Http\Controllers\BeneficiaryBulkRestoreController;
 use App\Http\Controllers\BeneficiaryCaseworkerAssignmentController;
@@ -67,6 +68,8 @@ Route::middleware(['auth', 'throttle:120,1'])->prefix('account/notifications')->
 });
 
 Route::middleware(['auth', 'verified', EnsureStaffAccess::class])->group(function () {
+    Route::get('applications', [BeneficiaryApplicationController::class, 'index'])->name('applications.index');
+    Route::get('applications/{application}', [BeneficiaryApplicationController::class, 'show'])->name('applications.show');
     Route::get('account-requests', [AccountRequestController::class, 'index'])
         ->can('reviewAccountRequests', User::class)->name('account-requests.index');
     Route::post('account-requests/{user}/review', [AccountRequestController::class, 'review'])

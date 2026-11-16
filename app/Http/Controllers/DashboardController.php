@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ActivityAttendance;
 use App\Models\AssistanceTransaction;
 use App\Models\Beneficiary;
+use App\Models\BeneficiaryApplication;
 use App\Models\ProgramActivity;
 use App\Services\CaseworkerCaseload;
 use Illuminate\Database\Eloquent\Collection;
@@ -36,6 +37,7 @@ class DashboardController extends Controller
         $activitiesCount = ProgramActivity::query()->count();
         $attendanceCount = ActivityAttendance::query()->count();
         $assistanceReleasesCount = AssistanceTransaction::query()->count();
+        $pendingApplicationsCount = BeneficiaryApplication::query()->where('status', 'pending_review')->count();
 
         $today = Carbon::now('Asia/Manila')->startOfDay();
 
@@ -79,6 +81,7 @@ class DashboardController extends Controller
             'activitiesCount',
             'attendanceCount',
             'assistanceReleasesCount',
+            'pendingApplicationsCount',
             'todaysActivities',
             'upcomingActivities',
             'recentAssistance',

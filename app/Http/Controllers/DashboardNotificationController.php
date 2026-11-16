@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ActivityAttendance;
 use App\Models\AssistanceTransaction;
 use App\Models\Beneficiary;
+use App\Models\BeneficiaryApplication;
 use App\Models\ProgramActivity;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,6 +18,18 @@ class DashboardNotificationController extends Controller
         Gate::authorize('viewAny', Beneficiary::class);
         Gate::authorize('viewAny', ProgramActivity::class);
         $items = collect();
+        if ($request->user()->isProjectDirector() && $request->user()->hasVerifiedEmail()) {
+            foreach (BeneficiaryApplication::query()->where('status', 'pending_review')->latest()->limit(8)->get() as $application) {
+                $items->push([
+                    'id' => 'application-'.$application->id,
+                    'title' => 'Application awaiting review',
+                    'detail' => 'A new application is awaiting review.',
+                    'url' => route('applications.show', $application),
+                    'time' => $application->created_at->copy()->timezone('Asia/Manila')->format('m/d/Y g:i A').' PHT',
+                    'sort' => $application->created_at->getTimestamp(),
+                ]);
+            }
+        }
         foreach (ActivityAttendance::query()->visibleTo($request->user())->with(['activity', 'beneficiary'])->latest('created_at')->latest('id')->limit(8)->get() as $record) {
             if (! $record->activity || ! Gate::allows('view', $record->activity)) {
                 continue;
