@@ -354,6 +354,14 @@
 .rlcp-public .public-application__intro h1 { font-size: clamp(2.2rem, 4vw, 3.5rem); line-height: 1.15; }
 .rlcp-public .public-application__intro > p:last-child { color: var(--public-muted); max-width: 65ch; margin-top: 24px; }
 .rlcp-public .public-application__grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 64px; align-items: start; }
+.rlcp-public .application-steps { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; list-style: none; padding: 0; }
+.rlcp-public .application-steps li { padding: 8px 12px; border-radius: 20px; background: var(--public-soft); color: var(--public-muted); font-size: .85rem; }
+.rlcp-public .application-steps [aria-current="step"] { background: var(--public-red); color: #fff; }
+.rlcp-public .public-application select, .rlcp-public .public-application textarea { display: block; width: 100%; min-height: 52px; padding: 12px 14px; border: 1px solid #9a8778; border-radius: 10px; background: var(--public-surface); color: var(--public-ink); font: inherit; font-size: 16px; }
+.rlcp-public .public-application [data-step][hidden] { display: none; }
+.rlcp-public .public-application [data-review] dt { font-weight: 700; margin-top: 12px; }
+.rlcp-public .public-application [data-review] dd { overflow-wrap: anywhere; }
+@media (min-width: 961px) { .rlcp-public .public-application__guide { grid-column: 2; grid-row: 1; } .rlcp-public .public-application__card { grid-column: 1; grid-row: 1; } .rlcp-public .public-application__grid { grid-template-columns: 1.2fr .8fr; } }
 .rlcp-public .public-application__guide h2 { font-size: 1.65rem; margin-bottom: 20px; }
 .rlcp-public .public-application__guide > p { color: var(--public-muted); }
 .rlcp-public .public-application__icon { display: grid; place-items: center; width: 60px; height: 60px; border-radius: 50%; background: var(--public-red); color: #fff; margin-bottom: 24px; }

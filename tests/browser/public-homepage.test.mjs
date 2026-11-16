@@ -23,7 +23,7 @@ test("public homepage in an isolated browser", { skip: !binary || !fixtureDirect
     const html = await readFile(path.join(fixtures, "homepage.html"));
     const manifest = JSON.parse(await readFile(path.join(workspace, "public/build/manifest.json"), "utf8"));
     const publicRoot = await realpath(path.join(workspace, "public"));
-    const screenshots = path.join(workspace, "docs/qa/public-homepage");
+    const screenshots = process.env.HOMEPAGE_UI_SCREENSHOTS || path.join(workspace, "docs/qa/public-homepage");
     const profile = await mkdtemp(path.join(temporaryRoot, "rlcp-homepage-browser-"));
     const pending = new Map();
     const errors = [];
@@ -604,14 +604,16 @@ test("public homepage in an isolated browser", { skip: !binary || !fixtureDirect
 
         await t.test("draft validation, consent acknowledgement, clearing and success never transmit entries", async () => {
             const requestsBefore = requests.length;
-            await evaluate("document.querySelector('[data-application-draft]').requestSubmit()");
-            assert.equal(await evaluate("document.querySelectorAll('[data-draft-field][aria-invalid=true]').length"), 3);
+            await evaluate("document.querySelector('[data-next]').click()");
             assert.equal(await evaluate("document.activeElement.id"), "application-guardian");
-            await evaluate("document.getElementById('application-guardian').value='Synthetic Guardian'; document.getElementById('application-contact').value='abc'; document.getElementById('application-consent').checked=true; document.querySelector('[data-application-draft]').requestSubmit()");
+            await evaluate("document.getElementById('application-guardian').value='Synthetic Guardian'; document.getElementById('application-relationship').value='Parent'; document.getElementById('application-contact').value='abc'; document.getElementById('application-barangay').value='Sample'; document.getElementById('application-city').value='Sample'; document.querySelector('[data-next]').click()");
             assert.equal(await evaluate("document.activeElement.id"), "application-contact");
             assert.match(await evaluate("document.getElementById('application-contact-error').textContent"), /7–15 digits/);
-            await evaluate("document.getElementById('application-contact').value='+63 900 000 0000'; document.querySelector('[data-application-draft] button[type=submit]').focus()");
-            await key("Enter");
+            await evaluate("document.getElementById('application-contact').value='+63 900 000 0000'; document.getElementById('application-method').value='email'; document.getElementById('application-method').dispatchEvent(new Event('change')); document.querySelector('[data-next]').click()");
+            assert.equal(await evaluate("document.activeElement.id"), "application-email");
+            await evaluate("document.getElementById('application-email').value='sample@example.test'; document.querySelector('[data-next]').click(); document.getElementById('application-reason').value='Synthetic reason'; document.querySelector('[data-step=\"2\"] [data-next]').click()");
+            assert.match(await evaluate("document.querySelector('[data-review]').textContent"), /Synthetic Guardian/);
+            await evaluate("document.querySelector('[data-edit=\"1\"]').click(); document.querySelector('[data-next]').click(); document.querySelector('[data-step=\"2\"] [data-next]').click(); document.getElementById('application-consent').checked=true; document.querySelector('[data-application-draft]').requestSubmit()");
             assert.match(await evaluate("document.querySelector('[data-draft-status]').textContent"), /Nothing has been submitted, saved, or emailed/);
             assert.equal(await evaluate("document.querySelector('[data-draft-status]') === document.activeElement"), true);
             assert.equal(await evaluate("document.getElementById('application-guardian').value + document.getElementById('application-contact').value"), "");
