@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Mail\ApplicationNoticeMail;
 use App\Models\BeneficiaryApplication;
 use App\Models\User;
 use App\Services\ApplicationEmailService;
@@ -15,6 +16,17 @@ use Tests\TestCase;
 class ApplicationEmailTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_applicant_notice_identifies_the_reference_to_keep_for_follow_up(): void
+    {
+        $reference = (string) Str::uuid();
+        $notice = new ApplicationNoticeMail('Application decision', 'Your application has been waitlisted.', $reference);
+
+        $html = $notice->render();
+
+        $this->assertStringContainsString('Application reference: '.$reference, $html);
+        $this->assertStringContainsString('Keep this reference for any follow-up about your application.', $html);
+    }
 
     private function application(string $preference = 'email'): BeneficiaryApplication
     {

@@ -5,6 +5,7 @@
     <h1 style="font-size: 22px;">{{ $subjectLine }}</h1>
     <p style="white-space: pre-line;">{{ $applicantMessage }}</p>
     <p>Application reference: {{ $reference }}</p>
+    <p>Keep this reference for any follow-up about your application.</p>
     <p>Risen Lord Church Philippines</p>
 </body>
 </html>
