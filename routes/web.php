@@ -29,6 +29,7 @@ use App\Http\Controllers\ReportExportController;
 use App\Http\Controllers\ReportPdfExportController;
 use App\Http\Middleware\EnsureStaffAccess;
 use App\Models\Beneficiary;
+use App\Models\BeneficiaryApplication;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -72,6 +73,7 @@ Route::middleware(['auth', 'throttle:120,1'])->prefix('account/notifications')->
 });
 
 Route::middleware(['auth', 'verified', EnsureStaffAccess::class])->group(function () {
+    Route::view('deployment-event', 'deployment-event')->can('viewAny', BeneficiaryApplication::class)->name('deployment-event');
     Route::get('applications', [BeneficiaryApplicationController::class, 'index'])->name('applications.index');
     Route::get('assigned-applications', [BeneficiaryApplicationController::class, 'assigned'])->name('applications.assigned');
     Route::get('applications/{application}', [BeneficiaryApplicationController::class, 'show'])->name('applications.show');

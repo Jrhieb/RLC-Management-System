@@ -56,6 +56,12 @@
                                 {{ __('Account Requests') }}
                             </flux:sidebar.item>
                         @endcan
+                        @can('viewAny', \App\Models\BeneficiaryApplication::class)
+                            <flux:sidebar.item icon="clipboard-document-check" :href="route('deployment-event')"
+                                :current="request()->routeIs('deployment-event')" wire:navigate>
+                                {{ __('Deployment Event') }}
+                            </flux:sidebar.item>
+                        @endcan
                     @else
                         <flux:sidebar.item icon="user-circle" :href="route('account.status')"
                             :current="request()->routeIs('account.status')" wire:navigate>
