@@ -10,15 +10,18 @@
          data-config="{{ json_encode(['mode' => 'pending', 'method' => 'POST', 'url' => route('beneficiaries.nfc.check'), 'nfcUid' => $pendingNfcUid, 'pendingError' => $errors->first('nfc_uid')]) }}"
          class="mx-auto w-full max-w-4xl space-y-6 p-4 md:p-8">
         <div>
-            <a href="{{ route('beneficiaries.index') }}"
+            <a href="{{ $application ? route('applications.show', $application) : route('beneficiaries.index') }}"
                class="text-sm text-violet-600 dark:text-violet-400">
-                &larr; Back to beneficiaries
+                &larr; {{ $application ? 'Back to application' : 'Back to beneficiaries' }}
             </a>
             <h1 class="mt-3 text-3xl font-bold">Add Beneficiary</h1>
             <p class="mt-1 text-sm text-zinc-500">
                 Register a beneficiary already approved by RLCP.
                 Fields marked * are required.
             </p>
+            @if ($application)
+                <p class="mt-2 text-sm">Enrolling approved application {{ $application->reference }}. Verify the guardian details and complete all required beneficiary fields.</p>
+            @endif
         </div>
 
         @if ($errors->any())
@@ -34,7 +37,7 @@
         @endif
 
         <form method="POST" data-beneficiary-create-form
-              action="{{ route('beneficiaries.store') }}"
+              action="{{ $application ? route('applications.enrollment.store', $application) : route('beneficiaries.store') }}"
               enctype="multipart/form-data"
               class="space-y-8 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
             @csrf
@@ -153,7 +156,7 @@
                             Parent / guardian name
                         </label>
                         <input id="guardian_name" name="guardian_name"
-                               value="{{ old('guardian_name') }}"
+                               value="{{ old('guardian_name', $application?->guardian_name) }}"
                                maxlength="255"
                                class="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 dark:border-zinc-600 dark:bg-zinc-800">
                     </div>
@@ -163,7 +166,7 @@
                             Contact number
                         </label>
                         <input id="guardian_contact" name="guardian_contact" type="tel"
-                               value="{{ old('guardian_contact') }}"
+                               value="{{ old('guardian_contact', $application ? preg_replace('/[^+0-9]/', '', $application->contact_number) : null) }}"
                                maxlength="30" placeholder="09XXXXXXXXX"
                                class="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 dark:border-zinc-600 dark:bg-zinc-800">
                     </div>

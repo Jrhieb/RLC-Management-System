@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\ActivityAttendance;
 use App\Models\AssistanceTransaction;
 use App\Models\Beneficiary;
+use App\Models\BeneficiaryApplication;
 use App\Models\User;
 use App\Services\AccountNotificationService;
+use App\Services\ApplicationEmailService;
 use App\Support\NfcCardUid;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
@@ -92,14 +94,18 @@ class BeneficiaryController extends Controller
         return $view;
     }
 
-    public function create(Request $request): View|RedirectResponse
+    public function create(Request $request, ?BeneficiaryApplication $application = null): View|RedirectResponse|Response
     {
-        if ($request->user()?->isEligibleCaseworker()) {
+        if ($application === null && $request->user()?->isEligibleCaseworker()) {
             return redirect()->route('beneficiaries.index')
                 ->with('error', 'Only Directors can add beneficiaries.');
         }
 
         Gate::authorize('create', Beneficiary::class);
+        if ($application !== null) {
+            Gate::authorize('viewAny', BeneficiaryApplication::class);
+            abort_unless($application->status === 'approved' && $application->beneficiary_id === null, 409);
+        }
 
         if ($request->has('caseworker_id')) {
             Gate::authorize('assignCaseworker', Beneficiary::class);
@@ -113,12 +119,20 @@ class BeneficiaryController extends Controller
             : null;
         $preselectionUnavailable = $requestedCaseworkerId !== null && $requestedCaseworkerId !== '' && $selectedCaseworkerId === null;
 
-        return view('beneficiaries.create', compact('caseworkers', 'selectedCaseworkerId', 'preselectionUnavailable'));
+        $formData = compact('caseworkers', 'selectedCaseworkerId', 'preselectionUnavailable', 'application');
+
+        return $application === null
+            ? view('beneficiaries.create', $formData)
+            : response()->view('beneficiaries.create', $formData)->header('Cache-Control', 'private, no-store');
     }
 
-    public function store(Request $request, AccountNotificationService $notifications): RedirectResponse
+    public function store(Request $request, AccountNotificationService $notifications, ?BeneficiaryApplication $application = null): RedirectResponse
     {
         Gate::authorize('create', Beneficiary::class);
+        if ($application !== null) {
+            Gate::authorize('viewAny', BeneficiaryApplication::class);
+            abort_unless($application->status === 'approved' && $application->beneficiary_id === null, 409);
+        }
 
         if ($request->has('caseworker_id')) {
             Gate::authorize('assignCaseworker', Beneficiary::class);
@@ -175,7 +189,13 @@ class BeneficiaryController extends Controller
 
         $operationId = (string) Str::uuid();
         try {
-            $beneficiary = DB::transaction(function () use ($validated, $nfcUid, $caseworkerId, $notifications, $operationId) {
+            $beneficiary = DB::transaction(function () use ($validated, $nfcUid, $caseworkerId, $notifications, $operationId, $application, $request): Beneficiary {
+                $enrollment = null;
+                if ($application !== null) {
+                    $enrollment = BeneficiaryApplication::query()->lockForUpdate()->findOrFail($application->id);
+                    Gate::forUser(User::query()->lockForUpdate()->findOrFail($request->user()->id))->authorize('viewAny', BeneficiaryApplication::class);
+                    abort_unless($enrollment->status === 'approved' && $enrollment->beneficiary_id === null, 409);
+                }
                 $caseworker = null;
                 if ($caseworkerId !== null) {
                     $caseworker = User::eligibleCaseworkers()->whereKey($caseworkerId)->lockForUpdate()->first();
@@ -200,6 +220,22 @@ class BeneficiaryController extends Controller
                 if ($caseworker !== null) {
                     $notifications->assignmentsChanged([$caseworker->id => ['added' => 1, 'removed' => 0]], $operationId);
                 }
+                if ($enrollment !== null) {
+                    $enrollment->beneficiary_id = $record->id;
+                    $enrollment->status = 'enrolled';
+                    abort_unless($enrollment->save(), 500, 'Unable to save the enrollment.');
+                    DB::table('beneficiary_application_audits')->insert([
+                        'beneficiary_application_id' => $enrollment->id,
+                        'actor_id' => $request->user()->id,
+                        'event' => 'enrolled',
+                        'status' => 'enrolled',
+                        'created_at' => now(),
+                    ]);
+                    app(ApplicationEmailService::class)->record(
+                        $enrollment, 'enrollment_completed', 'enrollment_completed', 'Enrollment completed',
+                        'Your application has been enrolled in the RLCP program.', $request->user()->id,
+                    );
+                }
 
                 return $record;
             }, 3);
@@ -219,7 +255,7 @@ class BeneficiaryController extends Controller
 
         return redirect()
             ->route('beneficiaries.show', $beneficiary)
-            ->with('success', 'Beneficiary registered successfully.');
+            ->with('success', $application === null ? 'Beneficiary registered successfully.' : 'Beneficiary registered and application marked Enrolled.');
     }
 
     public function edit(Beneficiary $beneficiary): View

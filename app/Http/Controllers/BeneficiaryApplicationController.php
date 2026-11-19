@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Beneficiary;
 use App\Models\BeneficiaryApplication;
 use App\Models\User;
 use App\Services\ApplicationEmailService;
@@ -33,7 +34,10 @@ class BeneficiaryApplicationController extends Controller
         $emails = DB::table('application_emails')->where('beneficiary_application_id', $application->id)->latest()->get();
         $appointments = DB::table('application_appointments')->where('beneficiary_application_id', $application->id)->latest()->get();
 
-        return response()->view('applications.show', compact('application', 'caseworkers', 'contacts', 'emails', 'appointments'))->header('Cache-Control', 'private, no-store');
+        $beneficiary = $application->beneficiary_id === null ? null : Beneficiary::find($application->beneficiary_id);
+        $canViewBeneficiary = $beneficiary !== null && Gate::allows('view', $beneficiary);
+
+        return response()->view('applications.show', compact('application', 'caseworkers', 'contacts', 'emails', 'appointments', 'beneficiary', 'canViewBeneficiary'))->header('Cache-Control', 'private, no-store');
     }
 
     public function assigned(Request $request): Response

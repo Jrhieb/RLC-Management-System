@@ -2,7 +2,12 @@
     <div class="mx-auto max-w-5xl space-y-4">
         <flux:heading size="xl">Application details</flux:heading>
         <p>Reference: {{ $application->reference }}</p>
-        <p>Status: {{ $application->status === 'pending_review' ? 'Pending Review' : $application->status }}</p>
+        <p>Status: {{ ucwords(str_replace('_', ' ', $application->status)) }}</p>
+        @if ($application->status === 'approved' && auth()->user()->isProjectDirector())
+            <flux:link :href="route('applications.enrollment.create', $application)">Enroll beneficiary</flux:link>
+        @elseif ($canViewBeneficiary)
+            <flux:link :href="route('beneficiaries.show', $beneficiary)">View enrolled beneficiary</flux:link>
+        @endif
         <dl class="space-y-2">
             <dt>Parent or guardian</dt><dd>{{ $application->guardian_name }}</dd>
             <dt>Contact number</dt><dd>{{ $application->contact_number }}</dd>

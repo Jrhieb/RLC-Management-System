@@ -80,6 +80,8 @@ Route::middleware(['auth', 'verified', EnsureStaffAccess::class])->group(functio
     Route::post('applications/{application}/review', [BeneficiaryApplicationController::class, 'review'])->name('applications.review');
     Route::post('applications/{application}/information', [BeneficiaryApplicationController::class, 'requestInformation'])->name('applications.information');
     Route::post('applications/{application}/decision', [BeneficiaryApplicationController::class, 'decide'])->name('applications.decide');
+    Route::get('applications/{application}/enrollment', [BeneficiaryController::class, 'create'])->name('applications.enrollment.create');
+    Route::post('applications/{application}/enrollment', [BeneficiaryController::class, 'store'])->name('applications.enrollment.store');
     Route::post('applications/{application}/contacts', [ApplicationContactController::class, 'store'])->name('applications.contacts.store');
     Route::post('applications/{application}/appointments', [ApplicationEmailController::class, 'appointment'])->name('applications.appointments.store');
     Route::post('applications/{application}/emails/{email}/retry', [ApplicationEmailController::class, 'retry'])->name('applications.emails.retry');

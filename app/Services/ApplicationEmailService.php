@@ -19,8 +19,8 @@ class ApplicationEmailService
         if (DB::transactionLevel() === 0) {
             throw new LogicException('Application email events require a transaction.');
         }
-        if ($eventType === 'enrollment_completed') {
-            throw new LogicException('Enrollment email requires the future linked enrollment workflow.');
+        if ($eventType === 'enrollment_completed' && ($application->status !== 'enrolled' || $application->beneficiary_id === null)) {
+            throw new LogicException('Enrollment email requires a linked beneficiary.');
         }
         if ($application->preferred_contact !== 'email' || ! filter_var($application->email, FILTER_VALIDATE_EMAIL)) {
             return null;

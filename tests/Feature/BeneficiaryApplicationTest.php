@@ -14,6 +14,44 @@ class BeneficiaryApplicationTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_director_enrolls_an_approved_application_through_the_beneficiary_form_once(): void
+    {
+        $application = BeneficiaryApplication::submit([
+            'guardian_name' => 'Synthetic Guardian', 'contact_number' => '09123456789',
+            'barangay' => 'Sample', 'municipality' => 'Sample', 'reason' => 'Private synthetic reason',
+            'preferred_contact' => 'email', 'email' => 'synthetic@example.test',
+        ]);
+        $director = User::factory()->create(['role' => 'project_director']);
+        $worker = User::factory()->create();
+        $application->update(['assigned_caseworker_id' => $worker->id]);
+        $form = route('applications.enrollment.create', $application);
+        $save = route('applications.enrollment.store', $application);
+        $payload = ['beneficiary_id' => 'SYN-005', 'full_name' => 'Synthetic Beneficiary', 'registered_at' => '2026-11-19'];
+
+        $this->actingAs($director)->get($form)->assertStatus(409);
+        $this->postJson($save, $payload)->assertStatus(409);
+        $application->update(['status' => 'approved']);
+        $this->actingAs($worker)->get($form)->assertForbidden();
+        $this->postJson($save, $payload)->assertForbidden();
+
+        $this->actingAs($director)->get(route('applications.show', $application))->assertSee($form);
+        $this->get($form)->assertOk()->assertSee('Synthetic Guardian')->assertSee('09123456789')->assertDontSee('Private synthetic reason');
+        $this->from($form)->post($save, [])->assertRedirect($form)->assertSessionHasErrors(['beneficiary_id', 'full_name', 'registered_at']);
+        $this->assertDatabaseCount('beneficiaries', 0);
+        $this->assertSame('approved', $application->fresh()->status);
+        $this->assertDatabaseMissing('application_emails', ['event_type' => 'enrollment_completed']);
+
+        $this->post($save, $payload)->assertRedirect()->assertSessionHasNoErrors();
+        $enrolled = $application->fresh();
+        $this->assertSame('enrolled', $enrolled->status);
+        $this->assertDatabaseHas('beneficiaries', ['id' => $enrolled->beneficiary_id, 'beneficiary_id' => 'SYN-005']);
+        $this->assertDatabaseHas('beneficiary_application_audits', ['beneficiary_application_id' => $application->id, 'actor_id' => $director->id, 'event' => 'enrolled']);
+        $this->assertDatabaseHas('application_emails', ['beneficiary_application_id' => $application->id, 'event_type' => 'enrollment_completed']);
+        $this->get(route('applications.show', $application))->assertSee(route('beneficiaries.show', $enrolled->beneficiary_id))->assertDontSee($form);
+        $this->postJson($save, ['beneficiary_id' => 'SYN-006'] + $payload)->assertStatus(409);
+        $this->assertDatabaseCount('beneficiaries', 1);
+    }
+
     public function test_director_can_view_applications_and_caseworker_cannot(): void
     {
         $application = BeneficiaryApplication::submit(['guardian_name' => 'Test Guardian', 'contact_number' => '09123456789', 'barangay' => 'Test', 'municipality' => 'Test City', 'reason' => 'Synthetic request']);
