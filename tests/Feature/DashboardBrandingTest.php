@@ -59,7 +59,7 @@ class DashboardBrandingTest extends TestCase
             'start_time' => '09:00', 'location' => 'Test location', 'development_area' => 'spiritual',
         ]);
         $data = [
-            'activeBeneficiariesCount' => 7, 'activitiesCount' => 4, 'attendanceCount' => 11,
+            'activeBeneficiariesCount' => 7, 'activitiesCount' => 4, 'attendanceCount' => 11, 'pendingApplicationsCount' => 0,
             'assistanceReleasesCount' => 3, 'todaysActivities' => collect(), 'recentAssistance' => collect(),
             'upcomingActivities' => collect([$activity]), 'caseloadCounts' => ['total' => 2, 'active' => 1, 'inactive' => 1],
             'caseloadPreview' => $people,
@@ -75,7 +75,10 @@ class DashboardBrandingTest extends TestCase
             ->assertSee($user->name)->assertSee('dashboard-beneficiary-search')
             ->assertSee('rlc-notification-panel')->assertSee('sidebar-menu-button')
             ->assertSee('Upcoming Activities')->assertSee('Synthetic activity for layout review');
+        $response->assertSeeInOrder(['dashboard-beneficiary-search', 'Color theme', 'Dark mode', 'Light mode', 'rlc-notification-panel'])
+            ->assertDontSee('class="rlc-date"', false);
         $html = $response->getContent();
+        $this->assertSame(1, substr_count($html, 'id="rlc-notification-panel"'));
         $this->assertSame($cards, substr_count($html, 'rlc-panel rlc-stat '));
         $this->assertSame($role === 'caseworker', str_contains($html, 'data-caseload-dashboard'));
         $this->assertSame($role === 'project_director', str_contains($html, 'Account Requests'));
@@ -102,8 +105,9 @@ class DashboardBrandingTest extends TestCase
             'role' => 'project_director', 'approval_status' => 'approved', 'email_verified_at' => now(),
         ]);
         $this->actingAs($user);
-        Route::getRoutes()->getByName('dashboard')->uses(fn () => Blade::render($template));
-        $response = $this->get(route('dashboard'))->assertOk()->assertSee('rlc-notification-panel');
+        Route::get('/test/staff-module', fn () => Blade::render($template))->middleware('web');
+        $response = $this->get('/test/staff-module')->assertOk()->assertSee('rlc-notification-panel')
+            ->assertDontSee('class="rlc-dashboard-appearance"', false);
         $this->exportFixture($name, $response->getContent());
         Queue::assertNothingPushed();
         Mail::assertNothingOutgoing();
@@ -119,7 +123,7 @@ class DashboardBrandingTest extends TestCase
 
     public static function roles(): array
     {
-        return [['project_director', 'dashboard', 4], ['caseworker', 'dashboard.caseworker', 3]];
+        return [['project_director', 'dashboard', 5], ['caseworker', 'dashboard.caseworker', 3]];
     }
 
     private function exportFixture(string $name, string $html): void

@@ -87,7 +87,9 @@
 
             <flux:spacer />
 
-            <x-rlcp-notifications />
+            @unless (request()->routeIs('dashboard'))
+                <x-rlcp-notifications />
+            @endunless
 
             <flux:dropdown position="top" align="end" class="lg:hidden">
                 <flux:profile

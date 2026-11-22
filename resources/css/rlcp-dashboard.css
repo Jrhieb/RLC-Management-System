@@ -82,3 +82,15 @@
 .rlc-recent {
     align-self: stretch;
 }
+
+.rlc-dashboard .rlc-dashboard-toolbar { flex-wrap: wrap; margin-bottom: 12px; }
+.rlc-dashboard-toolbar .rlc-search-wrap { order: 0; margin-right: 0; }
+.rlc-dashboard-appearance { display: flex; align-items: stretch; flex: none; gap: 2px; padding: 4px; min-height: 46px; border: 1px solid var(--rlc-border); border-radius: 16px; background: var(--rlc-surface); }
+.rlc-dashboard-appearance button { display: grid; place-items: center; width: 40px; border-radius: 11px; cursor: pointer; }
+.rlc-dashboard-appearance button[aria-pressed="true"] { background: #a41417; color: #fff; }
+.rlc-dashboard-appearance button:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.rlc-dashboard-appearance svg { width: 20px; height: 20px; }
+.rlc-dashboard-toolbar .rlc-notification-button { width: 46px; height: 46px; padding: 0; }
+@media (max-width: 639px) {
+    .rlc-dashboard-toolbar .rlc-search-wrap { flex: 0 0 100%; min-width: 0; }
+}

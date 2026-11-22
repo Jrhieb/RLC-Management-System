@@ -12,10 +12,7 @@
             $chartMax = max(4, (int) $attendanceTrend->max('count'));
         @endphp
 
-        <div class="rlc-toolbar rlc-enter">
-            <x-rlcp-beneficiary-search />
-            <div class="rlc-date"><x-rlcp-icon name="calendar" /><span>{{ now('Asia/Manila')->format('D, M d, Y') }}</span></div>
-        </div>
+        <x-rlcp-dashboard-toolbar />
 
         <header class="rlc-welcome rlc-enter">
             <div class="rlc-landscape" aria-hidden="true">

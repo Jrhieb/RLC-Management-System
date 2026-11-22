@@ -1,10 +1,7 @@
 <x-layouts::app :title="'Dashboard'">
     <div class="rlc-dashboard rlcp-dashboard-brand rlc-registry rlc-registry-index rlc-caseworker-dashboard" x-data="caseloadDashboard"
          data-caseload-dashboard data-endpoint="{{ route('dashboard.caseload', absolute: false) }}">
-        <div class="rlc-toolbar">
-            <x-rlcp-beneficiary-search />
-            <div class="rlc-date"><x-rlcp-icon name="calendar" /><span>{{ now('Asia/Manila')->format('D, M d, Y') }}</span></div>
-        </div>
+        <x-rlcp-dashboard-toolbar />
         <header class="rlc-welcome">
             <div class="rlc-welcome-copy">
                 <p class="rlc-eyebrow">My Caseload</p>
