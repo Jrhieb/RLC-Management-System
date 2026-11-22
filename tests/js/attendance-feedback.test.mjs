@@ -137,7 +137,9 @@ function workspace(t, replies, { audioBlocked = false } = {}) {
     document.querySelector = (selector) => selector === 'meta[name="csrf-token"]' ? { content: 'synthetic-csrf' } : null;
     const requests = [];
     const audio = [];
+    const toasts = [];
     const globals = { document, window, location: new URL('http://attendance.test/attendance?activity_id=7'),
+        Flux: { toast: (message) => toasts.push(message) },
         setTimeout: clock.set, clearTimeout: clock.clear,
         AudioContext: class extends Audio {
             constructor() {
@@ -171,7 +173,7 @@ function workspace(t, replies, { audioBlocked = false } = {}) {
         find('[name="nfc_uid"]').value = uid;
         find('[data-uid-form]').emit('submit');
     };
-    return { clock, document, root, find, scan, audio, cleanup, requests,
+    return { clock, document, root, find, scan, audio, cleanup, requests, toasts,
         start: () => find('[data-start-scanning]').emit('click'),
         posts: () => requests.filter(({ options }) => options.method === 'POST'),
     };
@@ -189,6 +191,7 @@ test('submitting shows Checking card without claiming success or changing the UI
     assert.equal(JSON.parse(h.posts()[0].options.body).nfc_uid === uid, true);
     assert.equal(h.find('[name="nfc_uid"]').value, '');
     assert.equal(h.audio[0].notes.length, 0);
+    assert.deepEqual(h.toasts, []);
     finish(result());
     await flush();
     h.clock.tick(450);
@@ -202,6 +205,7 @@ test('a confirmed save shows a green check, returned name/photo, polite feedback
     h.document.activeElement = h.find('[name="search"]');
     await flush();
     assert.equal(h.find('[data-profile-card]').dataset.result, 'created');
+    assert.deepEqual(h.toasts, [{ text: 'Attendance recorded.', variant: 'success', duration: 3000 }]);
     assert.equal(h.find('[data-card-icon]').textContent, '✓');
     assert.equal(h.find('[data-card-result]').textContent, 'Checked in successfully');
     assert.equal(h.find('[data-profile-name]').textContent, 'Synthetic NFC Tester');
@@ -227,6 +231,7 @@ test('duplicate uses the original returned PHT time and does not refresh records
     h.scan();
     await flush();
     assert.equal(h.find('[data-profile-card]').dataset.result, 'duplicate');
+    assert.deepEqual(h.toasts, []);
     assert.equal(h.find('[data-card-icon]').textContent, '↺');
     assert.equal(h.find('[data-card-result]').textContent, 'Already checked in');
     assert.equal(h.find('[data-profile-time]').textContent, 'Oct 22, 2026 - 9:30 AM');

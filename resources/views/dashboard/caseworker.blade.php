@@ -21,9 +21,12 @@
             <section class="rlc-panel" aria-labelledby="my-caseload-preview-title">
                 <div class="rlc-panel-heading">
                     <div class="rlc-heading-title"><x-rlcp-icon name="users" /><div><h2 id="my-caseload-preview-title">My Caseload</h2><p>First 5 beneficiaries &middot; Name A&ndash;Z</p></div></div>
-                    <button type="button" class="rlc-button rlc-button-small" x-on:click="refresh()" :disabled="refreshing" :aria-busy="refreshing.toString()">Refresh caseload</button>
+                    <button type="button" class="rlc-button rlc-button-small" x-on:click="refresh(true)" :disabled="refreshing" :aria-busy="refreshing.toString()">Refresh caseload</button>
                 </div>
-                @include('dashboard.partials.caseload-preview')
+                <div class="rlc-caseload-loading-region" :aria-busy="refreshing.toString()">
+                    @include('dashboard.partials.caseload-preview')
+                    <x-rlcp-loading-skeleton class="rlc-caseload-skeleton" />
+                </div>
                 <a class="rlc-text-link" href="{{ route('my-caseload.index') }}" wire:navigate>View My Caseload <x-rlcp-icon name="arrow" /></a>
                 <p class="rlc-caseload-error" role="status" aria-live="polite" x-cloak x-show="error" x-text="error"></p>
             </section>

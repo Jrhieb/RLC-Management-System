@@ -18,7 +18,7 @@ const response = (counts = { total: 3, active: 2, inactive: 1 }, preview = "fres
     json: async () => ({ counts, preview }),
 });
 
-function fixture({ hidden = false, request: customRequest } = {}) {
+function fixture({ hidden = false, request: customRequest, notify } = {}) {
     const listeners = new Set(),
         timers = new Map(),
         calls = [],
@@ -55,6 +55,7 @@ function fixture({ hidden = false, request: customRequest } = {}) {
     };
     const model = caseloadDashboard({
         document: page,
+        notify,
         request: (url, options) => {
             calls.push({ url, options });
             return customRequest ? customRequest(url, options) : Promise.resolve(response());
@@ -100,6 +101,26 @@ function fixture({ hidden = false, request: customRequest } = {}) {
         },
     };
 }
+
+test("only manual refresh reports results and a failed refresh keeps the loaded rows", async () => {
+    let fail = false;
+    const toasts = [];
+    const f = fixture({
+        notify: (toast) => toasts.push(toast),
+        request: async () => fail ? { ok: false } : response(),
+    });
+
+    await f.model.refresh();
+    assert.deepEqual(toasts, []);
+    await f.model.refresh(true);
+    assert.deepEqual(toasts.map(({ variant, duration }) => [variant, duration]), [["success", 3000]]);
+
+    fail = true;
+    await f.model.refresh(true);
+    assert.deepEqual(toasts.map(({ variant, duration }) => [variant, duration]), [["success", 3000], ["danger", 0]]);
+    assert.deepEqual(f.replacements, ["fresh rows"]);
+    assert.equal(f.model.refreshing, false);
+});
 
 test("visible dashboard polls only its small endpoint and keeps the server-rendered initial data", async () => {
     const f = fixture();

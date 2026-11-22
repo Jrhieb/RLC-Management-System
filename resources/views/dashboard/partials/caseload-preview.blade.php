@@ -1,6 +1,6 @@
 <div data-caseload-preview data-caseload-preview-version="{{ hash('sha256', $caseloadPreview->toJson()) }}">
     @if ($caseloadPreview->isEmpty())
-        <div class="rlc-empty rlc-empty-compact" role="status"><x-rlcp-icon name="users" /><p>No assigned beneficiaries yet.</p></div>
+        <div class="rlc-empty rlc-empty-compact" data-caseload-empty role="status"><x-rlcp-icon name="users" /><p>No assigned beneficiaries yet.</p></div>
     @else
         <ul class="rlc-caseload-preview" aria-label="My Caseload preview, sorted by name">
             @foreach ($caseloadPreview as $beneficiary)

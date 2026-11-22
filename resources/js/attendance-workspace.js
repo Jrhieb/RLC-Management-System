@@ -436,7 +436,10 @@ export function createWorkspace(root) {
         }
         feedback.show(job, data.result, data.result === 'created' ? 'Checked in successfully' : 'Already checked in', data);
         // Refresh failures do not turn a confirmed check-in into a failed submission.
-        if (data.result === 'created') await refreshRecords();
+        if (data.result === 'created') {
+            globalThis.Flux?.toast({ text: 'Attendance recorded.', variant: 'success', duration: 3000 });
+            await refreshRecords();
+        }
         await new Promise((resolve) => setTimeout(resolve, 450));
     }
 

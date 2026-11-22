@@ -20,6 +20,7 @@
         changed(event) {
             clearTimeout(this.timer);
             this.controller?.abort();
+            this.controller = null;
             const version = ++this.version;
             this.results = []; this.active = -1; this.error = '';
             if (this.registry && event?.isComposing) { this.open = false; this.loading = false; return; }
@@ -160,7 +161,9 @@
     <div x-ref="dropdown" @if ($registry) popover="manual" @endif x-cloak x-show="open" x-transition.opacity.duration.150ms class="rlc-search-dropdown">
         <p class="rlc-search-message" role="status" aria-live="polite"
            x-show="loading || error || results.length === 0"
+           :class="{ 'sr-only': loading }"
            x-text="loading ? 'Searching...' : (error || 'No beneficiaries found.')"></p>
+        <x-rlcp-loading-skeleton x-cloak x-show="open &amp;&amp; loading &amp;&amp; controller !== null &amp;&amp; results.length === 0" />
         <ul id="{{ $listId }}" role="listbox" aria-label="Beneficiary suggestions" :aria-busy="loading.toString()">
             <template x-for="(person, index) in results" :key="person.id">
                 <li role="presentation">

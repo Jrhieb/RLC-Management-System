@@ -29,8 +29,10 @@
                 <button type="button" x-on:click="markRead()" :disabled="marking || unreadCount === 0">Mark all read</button>
             </div>
             <p class="rlc-notification-message" role="status" aria-live="polite"
-               x-show="error || countError || (items.length === 0)"
+               x-show="loading || error || countError || (items.length === 0)"
+               :class="{ 'sr-only': loading }"
                x-text="loading ? 'Loading notifications...' : (error || countError || 'No notifications yet.')"></p>
+            <x-rlcp-loading-skeleton x-cloak x-show="open &amp;&amp; loading &amp;&amp; items.length === 0" />
             <ul :aria-busy="loading.toString()">
                 <template x-for="item in items" :key="item.id">
                     <li :class="!item.read_at && 'rlc-notification-unread'">
@@ -48,8 +50,10 @@
         @if ($activityFeed)
             <section class="rlc-notification-section" aria-labelledby="rlc-activity-feed-title">
                 <div class="rlc-notification-section-heading"><h3 id="rlc-activity-feed-title">Activity feed</h3></div>
-                <p class="rlc-notification-message" role="status" x-show="activityError || activity.length === 0"
+                <p class="rlc-notification-message" role="status" x-show="activityLoading || activityError || activity.length === 0"
+                   :class="{ 'sr-only': activityLoading }"
                    x-text="activityLoading ? 'Loading activity...' : (activityError || 'No recorded activity yet.')"></p>
+                <x-rlcp-loading-skeleton x-cloak x-show="open &amp;&amp; activityLoading &amp;&amp; activity.length === 0" />
                 <ul :aria-busy="activityLoading.toString()">
                     <template x-for="item in activity" :key="item.id">
                         <li><a :href="item.url"><strong x-text="item.title"></strong><span x-text="item.detail"></span><small x-text="item.time"></small></a></li>

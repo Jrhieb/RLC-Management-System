@@ -5,6 +5,7 @@ export function caseloadDashboard({
     request = (...args) => globalThis.fetch(...args),
     schedule = (callback, delay) => globalThis.setInterval(callback, delay),
     unschedule = (timer) => globalThis.clearInterval(timer),
+    notify = (message) => globalThis.Flux?.toast(message),
     parse = (html) =>
         new DOMParser().parseFromString(html, "text/html").querySelector("[data-caseload-preview]"),
     replace = (previous, next) => {
@@ -57,7 +58,7 @@ export function caseloadDashboard({
             this.controller = null;
             this.refreshing = false;
         },
-        async refresh() {
+        async refresh(manual = false) {
             if (this.disposed || page.hidden || this.refreshing) return;
             this.refreshing = true;
             const controller = new AbortController();
@@ -96,10 +97,13 @@ export function caseloadDashboard({
                 )
                     replace(previous, next);
                 this.error = "";
+                if (manual) notify({ text: "Caseload refreshed.", variant: "success", duration: 3000 });
             } catch (error) {
-                if (!this.disposed && version === this.version && error.name !== "AbortError")
+                if (!this.disposed && version === this.version && error.name !== "AbortError") {
                     this.error =
                         "Unable to refresh your caseload. Showing previous results. Try Refresh caseload.";
+                    if (manual) notify({ text: this.error, variant: "danger", duration: 0 });
+                }
             } finally {
                 if (this.controller === controller) {
                     this.controller = null;
