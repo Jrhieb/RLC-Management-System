@@ -14,21 +14,6 @@
 
         <x-rlcp-dashboard-toolbar />
 
-        <header class="rlc-welcome rlc-enter">
-            <div class="rlc-landscape" aria-hidden="true">
-                <svg viewBox="0 0 1000 180" preserveAspectRatio="xMidYMax slice">
-                    <path class="rlc-mountain-back" d="M0 170 130 115 190 130 290 65 340 88 450 30 530 72 600 50 700 108 775 60 855 100 920 72 1000 110V180H0Z"/>
-                    <path class="rlc-mountain-front" d="M0 180 190 148 300 120 395 152 520 94 600 132 710 108 780 142 890 125 1000 151V180Z"/>
-                    <g class="rlc-church"><path d="M918 174v-70h40v70z M910 104l28-22 28 22z M935 82V60h6v22 M927 67h22v5h-22 M931 117h14v21h-14 M930 151h16v23h-16"/></g>
-                </svg>
-            </div>
-            <div class="rlc-welcome-copy">
-                <p class="rlc-eyebrow">Risen Lord Church Phils., Inc.</p>
-                <h1>Welcome back, {{ auth()->user()->name }} <span class="rlc-wave" aria-hidden="true">&#128075;</span></h1>
-                <p>Here's an overview of your beneficiaries and program activities.</p>
-            </div>
-        </header>
-
         <div class="rlc-stats">
             @foreach ($cards as [$label, $count, $description, $icon, $tone, $href])
                 <a href="{{ $href }}" class="rlc-panel rlc-stat rlc-enter rlc-interactive rlc-tone-{{ $tone }}" style="--rlc-delay: {{ $loop->index * 45 }}ms">

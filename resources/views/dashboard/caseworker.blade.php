@@ -4,8 +4,7 @@
         <x-rlcp-dashboard-toolbar />
         <header class="rlc-welcome">
             <div class="rlc-welcome-copy">
-                <p class="rlc-eyebrow">My Caseload</p>
-                <h1>Welcome back, {{ auth()->user()->name }}</h1>
+                <h1>My Caseload</h1>
                 <p>Your assigned beneficiaries, excluding archived profiles.</p>
             </div>
         </header>
