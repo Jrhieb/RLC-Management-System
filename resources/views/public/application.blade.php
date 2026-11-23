@@ -14,7 +14,7 @@
     <a class="public-skip" href="#main-content">Skip to content</a>
     <x-public.header />
     <main id="main-content" tabindex="-1">
-        <div class="ppi-hero" style="--ppi-hero-image: url('{{ asset('images/homepage/placeholders/ppi-church.jpg') }}');">
+        <div class="ppi-hero">
             <div class="public-container">
                 <h1>Apply for the <span>Beneficiary Program</span></h1>
                 <p>Complete the household information and assessment form. No account is required.</p>

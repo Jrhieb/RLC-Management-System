@@ -29,19 +29,7 @@
 }
 
 .rlcp-public.ppi-page .public-navigation .public-nav-apply { background: var(--ppi-red); color: #fff; text-decoration: none; }
-.ppi-hero { position: relative; isolation: isolate; padding: 44px 0 34px; overflow: clip; }
-.ppi-hero::before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    inset: 0 0 0 48%;
-    background:
-        linear-gradient(90deg, var(--ppi-canvas), transparent 48%),
-        linear-gradient(0deg, var(--ppi-canvas), transparent 36%),
-        var(--ppi-hero-image) center 42% / cover;
-    opacity: .65;
-}
-.ppi-page[data-public-theme="dark"] .ppi-hero::before { opacity: .36; }
+.ppi-hero { padding: 44px 0 34px; }
 .ppi-page .ppi-hero h1 { max-width: 760px; font-size: clamp(2.25rem, 4.7vw, 4.25rem); letter-spacing: -.04em; }
 .ppi-hero h1 span { display: block; color: var(--ppi-accent); }
 .ppi-hero p { margin-top: 12px; max-width: 54ch; font-size: 1.12rem; }
@@ -154,7 +142,6 @@
 @media (max-width: 580px) {
     .ppi-page .public-container { width: calc(100% - 32px); }
     .ppi-hero { padding: 25px 0 23px; }
-    .ppi-hero::before { inset-inline-start: 34%; opacity: .27; }
     .ppi-hero p { font-size: 1rem; }
     .ppi-card { padding: 15px; border-radius: 14px; }
     .ppi-steps { margin-bottom: 22px; }
