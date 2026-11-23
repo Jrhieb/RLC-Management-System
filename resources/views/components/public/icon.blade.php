@@ -37,6 +37,21 @@
         @case('calendar')
             <rect x="3" y="5" width="18" height="16" rx="2" /><path d="M7 3v4m10-4v4M3 11h18M8 15h2m4 0h2m-8 3h2" />
             @break
+        @case('home')
+            <path d="m2 11 10-8 10 8M5 9v12h5v-7h4v7h5V9" />
+            @break
+        @case('pin')
+            <path d="M20 10c0 5-8 11-8 11s-8-6-8-11a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" />
+            @break
+        @case('info')
+            <circle cx="12" cy="12" r="9" /><path d="M12 11v5m0-8h.01" />
+            @break
+        @case('clipboard')
+            <path d="M9 4H5v17h14V4h-4M9 3h6v4H9zM8 11h8m-8 4h8m-8 3h4" />
+            @break
+        @case('shield')
+            <path d="M12 22c5-2 8-6 8-11V5l-8-3-8 3v6c0 5 3 9 8 11Z" /><path d="m8 12 3 3 5-6" />
+            @break
         @default
             <path d="M5 12h14m-6-6 6 6-6 6" />
     @endswitch

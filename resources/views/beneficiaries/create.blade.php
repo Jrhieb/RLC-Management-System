@@ -20,7 +20,7 @@
                 Fields marked * are required.
             </p>
             @if ($application)
-                <p class="mt-2 text-sm">Enrolling approved application {{ $application->reference }}. Verify the guardian details and complete all required beneficiary fields.</p>
+                <p class="mt-2 text-sm">Enrolling approved application {{ $application->contactReference() }}. Verify the guardian details and complete all required beneficiary fields.</p>
             @endif
         </div>
 

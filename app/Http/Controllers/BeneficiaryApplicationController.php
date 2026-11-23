@@ -17,7 +17,7 @@ class BeneficiaryApplicationController extends Controller
     public function index(): Response
     {
         Gate::authorize('viewAny', BeneficiaryApplication::class);
-        $applications = BeneficiaryApplication::query()->latest()->paginate(15);
+        $applications = BeneficiaryApplication::query()->with('ppiApplication')->latest()->paginate(15);
 
         return response()->view('applications.index', compact('applications'))->header('Cache-Control', 'private, no-store');
     }
@@ -43,7 +43,7 @@ class BeneficiaryApplicationController extends Controller
     public function assigned(Request $request): Response
     {
         abort_unless($request->user()->isEligibleCaseworker(), 403);
-        $applications = BeneficiaryApplication::query()->where('assigned_caseworker_id', $request->user()->id)->latest()->paginate(15);
+        $applications = BeneficiaryApplication::query()->with('ppiApplication')->where('assigned_caseworker_id', $request->user()->id)->latest()->paginate(15);
 
         return response()->view('applications.index', compact('applications'))->header('Cache-Control', 'private, no-store');
     }

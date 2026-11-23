@@ -2,6 +2,7 @@ import "./registration-ui.js";
 import "./staff-login-dialog.js";
 import { initializePublicTheme } from "./public-theme.js";
 import { initializeApplicationDraft } from "./public-application.js";
+import { initializePpiApplication } from "./ppi-application.js";
 
 // Homepage navigation never fetches operational application data.
 export function initializePublicHome(root) {
@@ -11,6 +12,7 @@ export function initializePublicHome(root) {
     root.dataset.publicInitialized = "true";
     initializePublicTheme(root);
     initializeApplicationDraft(root.querySelector("[data-application-draft]"));
+    initializePpiApplication(root.querySelector("[data-ppi-application]"));
 
     const toggle = root.querySelector("[data-menu-toggle]");
     const navigation = root.querySelector("[data-public-navigation]");

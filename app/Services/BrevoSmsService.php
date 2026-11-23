@@ -10,6 +10,11 @@ class BrevoSmsService
 {
     public function send(string $phone, #[\SensitiveParameter] string $code): void
     {
+        $this->sendMessage($phone, 'Your RLC phone verification code is '.$code.'. It expires in 5 minutes. Do not share this code.');
+    }
+
+    public function sendMessage(string $phone, #[\SensitiveParameter] string $message): void
+    {
         try {
             $key = (string) config('services.brevo.sms_key');
             $sender = (string) config('services.brevo.sms_sender');
@@ -21,7 +26,7 @@ class BrevoSmsService
                 ->connectTimeout(5)->timeout(15)->withoutRedirecting()
                 ->post('https://api.brevo.com/v3/transactionalSMS/send', [
                     'sender' => $sender, 'recipient' => $phone, 'type' => 'transactional',
-                    'content' => 'Your RLC phone verification code is '.$code.'. It expires in 5 minutes. Do not share this code.',
+                    'content' => $message,
                     'unicodeEnabled' => false,
                 ]);
             if ($response->status() !== 201 || ! is_numeric($response->json('messageId')) || (float) $response->json('messageId') <= 0) {

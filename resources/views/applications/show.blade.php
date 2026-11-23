@@ -1,7 +1,10 @@
 <x-layouts::app :title="__('Application details')">
     <div class="mx-auto max-w-5xl space-y-4">
         <flux:heading size="xl">Application details</flux:heading>
-        <p>Reference: {{ $application->reference }}</p>
+        <p>Reference: {{ $application->contactReference() }}</p>
+        @if ($application->ppiApplication && auth()->user()->can('view', $application->ppiApplication))
+            <a class="underline" href="{{ route('ppi-applications.show', $application->ppiApplication) }}">View PPI application</a>
+        @endif
         <p>Status: {{ ucwords(str_replace('_', ' ', $application->status)) }}</p>
         @if ($application->status === 'approved' && auth()->user()->isProjectDirector())
             <flux:link :href="route('applications.enrollment.create', $application)">Enroll beneficiary</flux:link>

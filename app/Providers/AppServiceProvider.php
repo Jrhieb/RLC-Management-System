@@ -6,6 +6,7 @@ use App\Http\Middleware\EnsureAccountApproval;
 use App\Http\Middleware\EnsureStaffAccess;
 use App\Http\Middleware\RequirePasswordConfirmation;
 use App\Mail\BrevoTransport;
+use App\Services\PpiScorecardResolver;
 use Carbon\CarbonImmutable;
 use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
 use Illuminate\Support\Facades\Date;
@@ -22,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(PpiScorecardResolver::class);
     }
 
     /**

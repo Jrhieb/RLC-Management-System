@@ -3,6 +3,7 @@
 @import "./public-about.css";
 @import "./public-programs.css";
 @import "./public-activities.css";
+@import "./ppi-application.css";
 
 /* Public pages only. No staff layout or authentication selectors. */
 .rlcp-public-document { scroll-behavior: smooth; scroll-padding-top: 24px; }

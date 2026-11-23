@@ -1,0 +1,81 @@
+{
+    "name": "Fictional Invalid PPI Scorecard",
+    "version": "fixture-9",
+    "country": "PH",
+    "source_reference": "FICTIONAL TEST FIXTURE ONLY - NOT AN OFFICIAL PPI SCORECARD",
+    "effective_from": "2026-01-01",
+    "questions": [
+        {
+            "code": "Q1",
+            "prompt": "Fictional question 1",
+            "options": [
+                { "code": "A", "label": "Fictional option A", "points": 1 },
+                { "code": "B", "label": "Fictional option B", "points": 0 }
+            ]
+        },
+        {
+            "code": "Q2",
+            "prompt": "Fictional question 2",
+            "options": [
+                { "code": "A", "label": "Fictional option A", "points": 2 },
+                { "code": "B", "label": "Fictional option B", "points": 0 }
+            ]
+        },
+        {
+            "code": "Q3",
+            "prompt": "Fictional question 3",
+            "options": [
+                { "code": "A", "label": "Fictional option A", "points": 3 },
+                { "code": "B", "label": "Fictional option B", "points": 0 }
+            ]
+        },
+        {
+            "code": "Q4",
+            "prompt": "Fictional question 4",
+            "options": [
+                { "code": "A", "label": "Fictional option A", "points": 4 },
+                { "code": "B", "label": "Fictional option B", "points": 0 }
+            ]
+        },
+        {
+            "code": "Q5",
+            "prompt": "Fictional question 5",
+            "options": [
+                { "code": "A", "label": "Fictional option A", "points": 5 },
+                { "code": "B", "label": "Fictional option B", "points": 0 }
+            ]
+        },
+        {
+            "code": "Q6",
+            "prompt": "Fictional question 6",
+            "options": [
+                { "code": "A", "label": "Fictional option A", "points": 6 },
+                { "code": "B", "label": "Fictional option B", "points": 0 }
+            ]
+        },
+        {
+            "code": "Q7",
+            "prompt": "Fictional question 7",
+            "options": [
+                { "code": "A", "label": "Fictional option A", "points": 7 },
+                { "code": "B", "label": "Fictional option B", "points": 0 }
+            ]
+        },
+        {
+            "code": "Q8",
+            "prompt": "Fictional question 8",
+            "options": [
+                { "code": "A", "label": "Fictional option A", "points": 8 },
+                { "code": "B", "label": "Fictional option B", "points": 0 }
+            ]
+        },
+        {
+            "code": "Q9",
+            "prompt": "Fictional question 9",
+            "options": [
+                { "code": "A", "label": "Fictional option A", "points": 9 },
+                { "code": "B", "label": "Fictional option B", "points": 0 }
+            ]
+        }
+    ]
+}

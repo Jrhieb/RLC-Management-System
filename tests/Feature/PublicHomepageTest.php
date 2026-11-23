@@ -105,11 +105,11 @@ class PublicHomepageTest extends TestCase
     {
         Queue::fake();
         $response = $this->get(route('program-application'))->assertOk()->assertViewIs('public.application')
-            ->assertSee('Draft preview')->assertSee('Applications are not open')
+            ->assertSee('Sample preview')->assertSee('Applications are not open')
             ->assertSee('Nothing is sent, saved, or emailed.')
             ->assertSee('form-action', false)->assertSee('method="dialog"', false)
             ->assertSee('<fieldset disabled>', false)
-            ->assertDontSee('name="guardian', false)->assertDontSee('name="contact', false)
+            ->assertDontSee('action="/ppi-applications"', false)->assertDontSee('name="submission_key"', false)
             ->assertDontSee('data-flux-sidebar', false);
         $directory = getenv('HOMEPAGE_UI_FIXTURES');
         if (is_string($directory) && $directory !== '') {

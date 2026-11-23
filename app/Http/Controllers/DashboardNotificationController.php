@@ -6,6 +6,7 @@ use App\Models\ActivityAttendance;
 use App\Models\AssistanceTransaction;
 use App\Models\Beneficiary;
 use App\Models\BeneficiaryApplication;
+use App\Models\PpiDirectorNotification;
 use App\Models\ProgramActivity;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,6 +20,18 @@ class DashboardNotificationController extends Controller
         Gate::authorize('viewAny', ProgramActivity::class);
         $items = collect();
         if ($request->user()->isProjectDirector() && $request->user()->hasVerifiedEmail()) {
+            foreach (PpiDirectorNotification::query()->forRecipient($request->user())->unread()
+                ->whereHas('application')->latest()->limit(8)->get() as $notification) {
+                $items->push([
+                    'id' => 'ppi-application-'.$notification->id,
+                    'title' => $notification->title(),
+                    'detail' => 'A household submitted a PPI application.',
+                    'url' => $notification->destination(),
+                    'time' => $notification->created_at->copy()->timezone('Asia/Manila')->format('m/d/Y g:i A').' PHT',
+                    'sort' => $notification->created_at->getTimestamp(),
+                ]);
+            }
+
             foreach (BeneficiaryApplication::query()->where('status', 'pending_review')->latest()->limit(8)->get() as $application) {
                 $items->push([
                     'id' => 'application-'.$application->id,

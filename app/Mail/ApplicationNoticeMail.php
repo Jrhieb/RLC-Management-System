@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailables\Envelope;
 
 class ApplicationNoticeMail extends Mailable
 {
-    public function __construct(public string $subjectLine, public string $applicantMessage, public string $reference) {}
+    public function __construct(public string $subjectLine, public string $applicantMessage, public ?string $reference) {}
 
     public function envelope(): Envelope
     {

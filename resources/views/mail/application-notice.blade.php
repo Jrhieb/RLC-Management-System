@@ -4,8 +4,10 @@
 <body style="font-family: sans-serif; line-height: 1.6; color: #18181b;">
     <h1 style="font-size: 22px;">{{ $subjectLine }}</h1>
     <p style="white-space: pre-line;">{{ $applicantMessage }}</p>
-    <p>Application reference: {{ $reference }}</p>
-    <p>Keep this reference for any follow-up about your application.</p>
+    @if ($reference)
+        <p>Application reference: {{ $reference }}</p>
+        <p>Keep this reference for any follow-up about your application.</p>
+    @endif
     <p>Risen Lord Church Philippines</p>
 </body>
 </html>

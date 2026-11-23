@@ -109,7 +109,6 @@ test("public homepage in an isolated browser", { skip: !binary || !fixtureDirect
             body = await readFile(path.join(fixtures, `activities-${filter}.html`));
         }
         else if (pathname === "/application") body = await readFile(path.join(fixtures, "application.html"));
-        else if (pathname === "/enabled-application") body = Buffer.from((await readFile(path.join(fixtures, "application-enabled.html"), "utf8")).replaceAll("http://localhost", origin));
         else if (pathname === "/favicon.ico") body = Buffer.alloc(0);
         else if (pathname === "/scope-probe") {
             body = Buffer.from('<!doctype html><html><head><title>Scope probe</title></head><body><main><h1>Staff scope probe</h1><button id="probe">Staff action</button><nav id="public-navigation">Unrelated navigation</nav></main></body></html>');
@@ -486,7 +485,7 @@ test("public homepage in an isolated browser", { skip: !binary || !fixtureDirect
             assert.equal(await evaluate("document.querySelector('.programs-article-preview').open"), false);
             await command("Emulation.setScriptExecutionDisabled", { value: false });
             await evaluate("document.querySelector('.programs-application a').click()");
-            await until("location.pathname === '/application' && !!document.querySelector('[data-application-draft]')");
+            await until("location.pathname === '/application' && !!document.querySelector('[data-ppi-application]')");
             await viewport(1440);
             await navigate();
         });
@@ -584,18 +583,37 @@ test("public homepage in an isolated browser", { skip: !binary || !fixtureDirect
             await navigate();
         });
 
-        await t.test("Start an Application reaches the separate draft with responsive accessible fields", async () => {
+        const fillPpiDetails = () => evaluate(`(() => {
+            const form = document.querySelector('[data-ppi-application]');
+            const details = { child_first_name: 'Sample', child_last_name: 'Child', child_date_of_birth: '2016-03-15',
+                guardian_name: 'Sample Guardian', guardian_relationship: 'Parent', contact_number: '09171234567',
+                barangay: 'Sample Barangay', city_municipality: 'Sample City', complete_address: '123 Sample Street' };
+            for (const [name, value] of Object.entries(details)) form.elements.namedItem(name).value = value;
+            form.querySelector('[name=child_sex][value=female]').checked = true;
+            form.querySelector('[data-ppi-step="0"] [data-ppi-next]').click();
+        })()`);
+
+        const answerPpiQuestions = () => evaluate(`(() => {
+            for (let index = 0; index < 10; index++) {
+                const question = document.querySelector('[data-ppi-question]:not([hidden])');
+                const select = question.querySelector('select');
+                if (select) select.selectedIndex = 1;
+                else question.querySelector('input[type=radio]').click();
+                document.querySelector('[data-ppi-step="1"] [data-ppi-next]').click();
+            }
+        })()`);
+
+        await t.test("Start an Application opens the responsive four-step PPI form", async () => {
             await evaluate("document.querySelector('.public-nav-apply').click()");
-            await until("location.pathname === '/application' && !!document.querySelector('[data-application-draft][data-initialized]')");
+            await until("location.pathname === '/application' && !!document.querySelector('[data-ppi-application] > fieldset:enabled')");
             assert.equal(await evaluate("document.querySelectorAll('h1').length"), 1);
-            assert.equal(await evaluate("[...document.querySelectorAll('[data-draft-field]')].every(input => document.querySelector('label[for=\"' + input.id + '\"]'))"), true);
-            assert.equal(await evaluate("document.querySelector('[data-application-draft]').getAttribute('method')"), "dialog");
-            assert.equal(await evaluate("document.querySelectorAll('[data-application-draft] [name]').length"), 0);
+            assert.equal(await evaluate("document.querySelectorAll('.ppi-steps li').length"), 4);
+            assert.equal(await evaluate("document.querySelector('[data-ppi-application]').hasAttribute('action')"), false);
             for (const [width, name] of [[1440, "desktop"], [768, "tablet"], [390, "mobile"], [320, "narrow"]]) {
                 await viewport(width, width < 640 ? 844 : 950);
                 assert.equal(await evaluate("document.documentElement.scrollWidth > innerWidth"), false);
-                await loadAllImages();
-                if (name !== "narrow") await screenshot(`application-${name}`);
+                assert.equal(await evaluate("document.querySelector('[data-public-header]').getBoundingClientRect().bottom <= document.querySelector('main h1').getBoundingClientRect().top"), true);
+                if (name !== "narrow") await screenshot("application-" + name);
             }
             await viewport(1440);
             await evaluate("document.querySelector('[data-public-theme-toggle]').click()");
@@ -603,52 +621,37 @@ test("public homepage in an isolated browser", { skip: !binary || !fixtureDirect
             await evaluate("document.querySelector('[data-public-theme-toggle]').click()");
         });
 
-        await t.test("draft validation, consent acknowledgement, clearing and success never transmit entries", async () => {
+        await t.test("PPI preview validates, retains edits, and never sends an application", async () => {
             const requestsBefore = requests.length;
-            await evaluate("document.querySelector('[data-next]').click()");
-            assert.equal(await evaluate("document.activeElement.id"), "application-guardian");
-            await evaluate("document.getElementById('application-guardian').value='Synthetic Guardian'; document.getElementById('application-relationship').value='Parent'; document.getElementById('application-contact').value='abc'; document.getElementById('application-barangay').value='Sample'; document.getElementById('application-city').value='Sample'; document.querySelector('[data-next]').click()");
-            assert.equal(await evaluate("document.activeElement.id"), "application-contact");
-            assert.match(await evaluate("document.getElementById('application-contact-error').textContent"), /7–15 digits/);
-            await evaluate("document.getElementById('application-contact').value='+63 900 000 0000'; document.getElementById('application-method').value='email'; document.getElementById('application-method').dispatchEvent(new Event('change')); document.querySelector('[data-next]').click()");
-            assert.equal(await evaluate("document.activeElement.id"), "application-email");
-            await evaluate("document.getElementById('application-email').value='sample@example.test'; document.querySelector('[data-next]').click(); document.getElementById('application-reason').value='Synthetic reason'; document.querySelector('[data-step=\"2\"] [data-next]').click()");
-            assert.match(await evaluate("document.querySelector('[data-review]').textContent"), /Synthetic Guardian/);
-            await evaluate("document.querySelector('[data-edit=\"1\"]').click(); document.querySelector('[data-next]').click(); document.querySelector('[data-step=\"2\"] [data-next]').click(); document.getElementById('application-consent').checked=true; document.querySelector('[data-application-draft]').requestSubmit()");
-            assert.match(await evaluate("document.querySelector('[data-draft-status]').textContent"), /Nothing has been submitted, saved, or emailed/);
-            assert.equal(await evaluate("document.querySelector('[data-draft-status]') === document.activeElement"), true);
-            assert.equal(await evaluate("document.getElementById('application-guardian').value + document.getElementById('application-contact').value"), "");
-            assert.equal(await evaluate("document.getElementById('application-consent').checked"), false);
-            await evaluate("document.getElementById('application-guardian').value='Synthetic Guardian'; document.querySelector('[data-application-draft] button[type=reset]').click()");
-            assert.equal(await evaluate("document.getElementById('application-guardian').value"), "");
-            assert.equal(await evaluate("document.querySelector('[data-draft-status]').textContent"), "");
-            assert.equal(await evaluate("location.search"), "");
-            assert.equal(await evaluate("[...Object.values(localStorage), ...Object.values(sessionStorage)].some(value => value.includes('Synthetic') || value.includes('900'))"), false);
-            assert.equal(requests.length, requestsBefore, "Draft interactions must not issue any network requests");
+            await evaluate("document.querySelector('[data-ppi-next]').click()");
+            assert.equal(await evaluate("document.activeElement.name"), "child_first_name");
+            await fillPpiDetails();
+            await evaluate("document.querySelector('[data-ppi-step=\"1\"] [data-ppi-next]').click()");
+            assert.match(await evaluate("document.querySelector('[data-ppi-error]').textContent"), /Choose an answer/);
+            await answerPpiQuestions();
+            await evaluate("document.querySelector('[data-skip-members]').click()");
+            assert.match(await evaluate("document.querySelector('[data-ppi-summary=\"2\"]').textContent"), /No members listed/);
+            await evaluate("document.querySelector('[data-ppi-edit=\"2\"]').click(); document.querySelector('[data-add-member]').click(); document.querySelector('[data-ppi-step=\"2\"] [data-ppi-next]').click()");
+            assert.equal(await evaluate("document.activeElement.dataset.memberField"), "name");
+            await evaluate("document.querySelector('[data-member-field=name]').value='Sample Member'; document.querySelector('[data-ppi-step=\"2\"] [data-ppi-next]').click()");
+            assert.match(await evaluate("document.querySelector('[data-ppi-summary=\"2\"]').textContent"), /Sample Member/);
+            await evaluate("document.querySelector('[data-ppi-edit=\"0\"]').click()");
+            assert.equal(await evaluate("document.querySelector('[name=guardian_name]').value"), "Sample Guardian");
+            await fillPpiDetails();
+            assert.equal(await evaluate("document.querySelectorAll('[data-ppi-summary=\"1\"] dd').length"), 10);
+            await evaluate("document.querySelector('[data-ppi-application]').requestSubmit()");
+            assert.match(await evaluate("document.querySelector('[data-ppi-error]').textContent"), /Acknowledge/);
+            await evaluate("document.querySelector('[name=privacy_acknowledgment]').checked=true; document.querySelector('[data-ppi-application]').requestSubmit()");
+            assert.match(await evaluate("document.querySelector('[data-result-message]').textContent"), /No application was submitted/);
+            assert.equal(requests.length, requestsBefore);
             await command("Emulation.setScriptExecutionDisabled", { value: true });
             await command("Page.reload", { ignoreCache: true });
             await until("document.readyState === 'complete' && !document.body.dataset.publicInitialized");
-            assert.equal(await evaluate("document.querySelector('[data-application-draft] fieldset').disabled"), true);
-            assert.equal(await evaluate("document.querySelector('[data-application-draft] button[type=submit]').matches(':disabled')"), true);
+            assert.equal(await evaluate("document.querySelector('[data-ppi-application] > fieldset').disabled"), true);
             await command("Emulation.setScriptExecutionDisabled", { value: false });
             await navigate();
         });
 
-        await t.test("enabled application handles server validation, network retry and confirmation", async () => {
-            await navigate("", "/enabled-application");
-            await until("!!document.querySelector('[data-real-intake][data-initialized]')");
-            await evaluate(`window.syntheticCalls = 0; window.fetch = async () => { window.syntheticCalls++; if (window.syntheticCalls === 1) return {status: 422, ok: false, json: async () => ({errors: {guardian_name: ['Synthetic server error']}})}; if (window.syntheticCalls === 2) throw new Error('synthetic network failure'); return {status: 200, ok: true, json: async () => ({reference: 'TEST-REFERENCE', message: 'Synthetic confirmation'})}; };`);
-            await evaluate(`document.getElementById('application-guardian').value='Synthetic Guardian'; document.getElementById('application-relationship').value='Parent'; document.getElementById('application-contact').value='+63 900 000 0000'; document.getElementById('application-barangay').value='Sample'; document.getElementById('application-city').value='Sample'; document.querySelector('[data-next]').click(); document.getElementById('application-reason').value='Synthetic reason'; document.querySelector('[data-step="2"] [data-next]').click(); document.getElementById('application-consent').checked=true; document.querySelector('[data-real-intake]').requestSubmit();`);
-            await until("document.querySelector('[data-draft-status]').textContent.includes('Synthetic server error')");
-            assert.equal(await evaluate("document.activeElement.id"), "application-guardian");
-            await evaluate(`document.querySelector('[data-next]').click(); document.querySelector('[data-step="2"] [data-next]').click(); document.querySelector('[data-real-intake]').requestSubmit()`);
-            await until("document.querySelector('[data-draft-status]').textContent.includes('could not confirm')");
-            assert.equal(await evaluate("document.getElementById('application-guardian').value"), "Synthetic Guardian");
-            await evaluate("document.querySelector('[data-real-intake]').requestSubmit()");
-            await until("document.querySelector('[data-draft-status]').textContent.includes('TEST-REFERENCE')");
-            assert.equal(await evaluate("window.syntheticCalls"), 3);
-            await navigate();
-        });
 
         await t.test("reduced motion disables animation and smooth scrolling", async () => {
             await command("Emulation.setEmulatedMedia", { features: [{ name: "prefers-reduced-motion", value: "reduce" }] });

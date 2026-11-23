@@ -55,7 +55,7 @@ class ApplicationEmailService
             return;
         }
         try {
-            $sent = Mail::mailer('brevo')->to($application->email)->send(new ApplicationNoticeMail($event->subject, $event->applicant_message, $application->reference));
+            $sent = Mail::mailer('brevo')->to($application->email)->send(new ApplicationNoticeMail($event->subject, $event->applicant_message, $application->contactReference()));
             if (! $sent || ! $sent->getMessageId()) {
                 $event->update(['status' => 'uncertain']);
 

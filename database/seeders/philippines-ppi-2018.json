@@ -1,0 +1,285 @@
+{
+    "name": "Philippines Poverty Probability Index (2015 FIES)",
+    "version": "ph-2015-fies-2018-05",
+    "country": "PH",
+    "source_reference": "PPI Form - English, Household Survey pages 1–3; https://www.povertyindex.org/node/8036",
+    "effective_from": "2018-05-01",
+    "questions": [
+        {
+            "code": "Q1",
+            "prompt": "In what region does your family live?",
+            "options": [
+                {
+                    "code": "A",
+                    "label": "ARMM",
+                    "points": 0
+                },
+                {
+                    "code": "B",
+                    "label": "Ilocos",
+                    "points": 8
+                },
+                {
+                    "code": "C",
+                    "label": "Cagayan Valley",
+                    "points": 8
+                },
+                {
+                    "code": "D",
+                    "label": "Central Luzon",
+                    "points": 6
+                },
+                {
+                    "code": "E",
+                    "label": "Calabarzon",
+                    "points": 9
+                },
+                {
+                    "code": "F",
+                    "label": "Mimaropa",
+                    "points": 8
+                },
+                {
+                    "code": "G",
+                    "label": "Western Mindanao",
+                    "points": 5
+                },
+                {
+                    "code": "H",
+                    "label": "Bicol",
+                    "points": 3
+                },
+                {
+                    "code": "I",
+                    "label": "Western Visayas",
+                    "points": 8
+                },
+                {
+                    "code": "J",
+                    "label": "Central Visayas",
+                    "points": 5
+                },
+                {
+                    "code": "K",
+                    "label": "Eastern Visayas",
+                    "points": 2
+                },
+                {
+                    "code": "L",
+                    "label": "Northern Mindanao",
+                    "points": 0
+                },
+                {
+                    "code": "M",
+                    "label": "Southern Mindanao",
+                    "points": 6
+                },
+                {
+                    "code": "N",
+                    "label": "Central Mindanao",
+                    "points": 2
+                },
+                {
+                    "code": "O",
+                    "label": "NCR",
+                    "points": 12
+                },
+                {
+                    "code": "P",
+                    "label": "CAR",
+                    "points": 8
+                },
+                {
+                    "code": "Q",
+                    "label": "Caraga",
+                    "points": 0
+                }
+            ]
+        },
+        {
+            "code": "Q2",
+            "prompt": "How many members are there in the family? (exclude members who are overseas Filipinos)",
+            "guidance": "Count relatives of the household head who share living expenses and live in the same home. Include immediate family members who still consider it their permanent home while away for work, and visiting relatives who stay 30 days or more and meet the membership criteria. Exclude overseas Filipinos. Use the household roster to help count.",
+            "options": [
+                {
+                    "code": "A",
+                    "label": "7 or more",
+                    "points": 0
+                },
+                {
+                    "code": "B",
+                    "label": "5 or 6",
+                    "points": 9
+                },
+                {
+                    "code": "C",
+                    "label": "4 and below",
+                    "points": 18
+                }
+            ]
+        },
+        {
+            "code": "Q3",
+            "prompt": "What is the highest grade completed by the head of the family?",
+            "options": [
+                {
+                    "code": "A",
+                    "label": "6th grade of school or lower",
+                    "points": 0
+                },
+                {
+                    "code": "B",
+                    "label": "Some high school",
+                    "points": 6
+                },
+                {
+                    "code": "C",
+                    "label": "Completed high school",
+                    "points": 8
+                }
+            ]
+        },
+        {
+            "code": "Q4",
+            "prompt": "What type of construction materials are the roofs made of?",
+            "options": [
+                {
+                    "code": "A",
+                    "label": "Light materials (cogon, nipa, anahaw), Salvaged/makeshift materials, Mixed but predominantly light materials, Mixed but predominantly salvaged materials",
+                    "points": 0
+                },
+                {
+                    "code": "B",
+                    "label": "Mixed but predominantly strong materials",
+                    "points": 4
+                },
+                {
+                    "code": "C",
+                    "label": "Strong materials (galvanized iron, aluminum, tile, concrete, brick, stone, asbestos)",
+                    "points": 6
+                }
+            ]
+        },
+        {
+            "code": "Q5",
+            "prompt": "What type of construction materials are the outer walls made of?",
+            "options": [
+                {
+                    "code": "A",
+                    "label": "Light materials (bamboo, sawali, cogon, nipa, anahaw), Salvaged/makeshift materials, Mixed but predominantly light materials, Mixed but predominantly salvaged materials",
+                    "points": 0
+                },
+                {
+                    "code": "B",
+                    "label": "Mixed but predominantly strong materials",
+                    "points": 6
+                },
+                {
+                    "code": "C",
+                    "label": "Strong materials (galvanized iron, aluminium, tile, concrete, brick, stone, wood, plywood, asbestos)",
+                    "points": 8
+                }
+            ]
+        },
+        {
+            "code": "Q6",
+            "prompt": "Is there any electricity in the building/house?",
+            "options": [
+                {
+                    "code": "A",
+                    "label": "No",
+                    "points": 0
+                },
+                {
+                    "code": "B",
+                    "label": "Yes",
+                    "points": 6
+                }
+            ]
+        },
+        {
+            "code": "Q7",
+            "prompt": "What is the family’s main source of water supply?",
+            "options": [
+                {
+                    "code": "A",
+                    "label": "Other",
+                    "points": 0
+                },
+                {
+                    "code": "B",
+                    "label": "Dug well",
+                    "points": 5
+                },
+                {
+                    "code": "C",
+                    "label": "Own use, faucet, community water system",
+                    "points": 10
+                },
+                {
+                    "code": "D",
+                    "label": "Own use, tubed / piped deep well or tubed / piped shallow well",
+                    "points": 7
+                },
+                {
+                    "code": "E",
+                    "label": "Shared, faucet, community water system",
+                    "points": 6
+                },
+                {
+                    "code": "F",
+                    "label": "Shared, tubed / piped deep well",
+                    "points": 5
+                }
+            ]
+        },
+        {
+            "code": "Q8",
+            "prompt": "Does the family own a refrigerator/freezer?",
+            "options": [
+                {
+                    "code": "A",
+                    "label": "No",
+                    "points": 0
+                },
+                {
+                    "code": "B",
+                    "label": "Yes",
+                    "points": 14
+                }
+            ]
+        },
+        {
+            "code": "Q9",
+            "prompt": "Does the family own a television set?",
+            "options": [
+                {
+                    "code": "A",
+                    "label": "No",
+                    "points": 0
+                },
+                {
+                    "code": "B",
+                    "label": "Yes",
+                    "points": 11
+                }
+            ]
+        },
+        {
+            "code": "Q10",
+            "prompt": "Does the family own a washing machine?",
+            "options": [
+                {
+                    "code": "A",
+                    "label": "No",
+                    "points": 0
+                },
+                {
+                    "code": "B",
+                    "label": "Yes",
+                    "points": 7
+                }
+            ]
+        }
+    ]
+}

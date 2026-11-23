@@ -21,12 +21,14 @@ use App\Http\Controllers\MyCaseloadController;
 use App\Http\Controllers\NfcAttendanceController;
 use App\Http\Controllers\NfcLookupController;
 use App\Http\Controllers\PhoneVerificationController;
+use App\Http\Controllers\PpiApplicationController;
 use App\Http\Controllers\ProgramActivityController;
 use App\Http\Controllers\PublicApplicationController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReportExportController;
 use App\Http\Controllers\ReportPdfExportController;
+use App\Http\Middleware\EnsurePpiIntakeReady;
 use App\Http\Middleware\EnsureStaffAccess;
 use App\Models\Beneficiary;
 use App\Models\BeneficiaryApplication;
@@ -38,8 +40,11 @@ Route::view('/', 'welcome')->name('home');
 Route::view('/about', 'public.about')->name('about');
 Route::view('/programs', 'public.programs')->name('programs');
 Route::view('/community/activities', 'public.activities')->name('public.activities.index');
-Route::view('/application', 'public.application')->name('program-application');
+Route::get('/application', [PpiApplicationController::class, 'application'])->name('program-application');
 Route::post('/application', [PublicApplicationController::class, 'store'])->middleware('throttle:5,1')->name('public-application.store');
+Route::post('/ppi-applications', [PpiApplicationController::class, 'store'])
+    ->middleware(['throttle:5,1', EnsurePpiIntakeReady::class])
+    ->name('ppi-applications.store');
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegistrationController::class, 'show'])->name('register');
@@ -88,6 +93,17 @@ Route::middleware(['auth', 'verified', EnsureStaffAccess::class])->group(functio
     Route::post('applications/{application}/appointments', [ApplicationEmailController::class, 'appointment'])->name('applications.appointments.store');
     Route::post('applications/{application}/emails/{email}/retry', [ApplicationEmailController::class, 'retry'])->name('applications.emails.retry');
     Route::post('applications/{application}/emails/{email}/receipt', [ApplicationEmailController::class, 'confirmReceipt'])->name('applications.emails.receipt');
+
+    Route::prefix('ppi-applications')->name('ppi-applications.')->group(function (): void {
+        Route::get('/', [PpiApplicationController::class, 'index'])->name('index');
+        Route::get('{application}', [PpiApplicationController::class, 'show'])
+            ->whereNumber('application')->name('show');
+        Route::patch('{application}/status', [PpiApplicationController::class, 'updateStatus'])
+            ->whereNumber('application')->name('status.update');
+        Route::post('{application}/assessment', [PpiApplicationController::class, 'beginAssessment'])
+            ->whereNumber('application')->name('assessment.store');
+    });
+
     Route::get('account-requests', [AccountRequestController::class, 'index'])
         ->can('reviewAccountRequests', User::class)->name('account-requests.index');
     Route::post('account-requests/{user}/review', [AccountRequestController::class, 'review'])

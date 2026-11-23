@@ -7,7 +7,6 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use Tests\Support\TestIsolation;
 use Tests\TestCase;
 
 class BeneficiaryApplicationTest extends TestCase
@@ -79,13 +78,7 @@ class BeneficiaryApplicationTest extends TestCase
         config(['services.application_intake.enabled' => true, 'services.application_intake.privacy_contact' => 'Synthetic contact', 'services.application_intake.privacy_acknowledgment' => 'Synthetic acknowledgment', 'services.application_intake.retention_notice' => 'Synthetic retention']);
         $token = (string) Str::uuid();
         $data = ['submission_key' => $token, 'guardian_name' => 'Synthetic Guardian', 'guardian_relationship' => 'Parent', 'contact_number' => '09123456789', 'preferred_contact' => 'email', 'email' => 'synthetic@example.test', 'barangay' => 'Test', 'municipality' => 'Test City', 'reason' => 'Synthetic reason', 'acknowledgment' => '1'];
-        $page = $this->withSession(['application_submission_key' => $token])->get('/application')->assertOk()->assertSee('data-real-intake', false);
-        $directory = getenv('HOMEPAGE_UI_FIXTURES');
-        if (is_string($directory) && $directory !== '') {
-            TestIsolation::assertTemporaryPaths([$directory], sys_get_temp_dir());
-            file_put_contents($directory.'/application-enabled.html', $page->getContent());
-        }
-        $first = $this->postJson('/application', $data)->assertOk()->json('reference');
+        $first = $this->withSession(['application_submission_key' => $token])->postJson('/application', $data)->assertOk()->json('reference');
         $this->postJson('/application', $data)->assertOk()->assertJsonPath('reference', $first);
         $this->assertDatabaseCount('beneficiary_applications', 1);
         $application = BeneficiaryApplication::firstOrFail();

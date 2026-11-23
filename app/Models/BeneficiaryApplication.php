@@ -4,12 +4,24 @@ namespace App\Models;
 
 use App\Services\ApplicationEmailService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class BeneficiaryApplication extends Model
 {
     protected $guarded = ['id'];
+
+    /** @return HasOne<PpiHouseholdApplication, $this> */
+    public function ppiApplication(): HasOne
+    {
+        return $this->hasOne(PpiHouseholdApplication::class);
+    }
+
+    public function contactReference(): string
+    {
+        return $this->ppiApplication?->reference ?? $this->reference;
+    }
 
     public static function submit(array $data): self
     {
