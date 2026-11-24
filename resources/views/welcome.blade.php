@@ -17,7 +17,7 @@
     <x-public.header :landing="true" />
     <main id="main-content" tabindex="-1">
         <section class="public-hero" id="home" aria-labelledby="hero-title">
-            <img class="public-hero__image" src="{{ asset('images/homepage/placeholders/Herobanner.png') }}" alt="" width="1920" height="1280" fetchpriority="high">
+            <img class="public-hero__image" src="{{ asset('images/Image%20assets/499755501_122248739426015911_6605334484464686771_n.jpg') }}" alt="" width="1920" height="1280" fetchpriority="high">
             <div class="public-hero__content public-container">
                 <p class="public-eyebrow public-eyebrow--hero">Faith <span>•</span> Care <span>•</span> Community</p>
                 <h1 id="hero-title">Growing in Faith.<br><span>Building Brighter Futures.</span></h1>
@@ -33,8 +33,8 @@
             <div class="public-container">
                 <div class="public-about__grid">
                     <div class="public-collage" data-public-reveal>
-                        <img class="public-collage__rectangle" src="{{ asset('images/homepage/placeholders/learning.png') }}" alt="Learning activities" width="960" height="640" loading="lazy" decoding="async">
-                        <img class="public-collage__circle" src="{{ asset('images/homepage/placeholders/family.jpg') }}" alt="Family engagement" width="640" height="640" loading="lazy" decoding="async">
+                        <img class="public-collage__rectangle" src="{{ asset('images/Image%20assets/475277119_1027787949390104_1773204911861391301_n.jpg') }}" alt="Learning activities" width="960" height="640" loading="lazy" decoding="async">
+                        <img class="public-collage__circle" src="{{ asset('images/Image%20assets/484810440_1064942369007995_1951277791144367540_n.jpg') }}" alt="Family engagement" width="640" height="640" loading="lazy" decoding="async">
                         <span class="public-faith-seal">Rooted<br>in Faith<span aria-hidden="true"></span></span>
                     </div>
                     <div class="public-about__copy" data-public-reveal>
@@ -86,12 +86,12 @@
                 </div>
                 <div class="public-card-grid">
                     @foreach ([
-                        ['education-learning', 'learning.png', 'Education & Learning', 'Creating learning opportunities for a brighter tomorrow.', 'A space to learn, build confidence, and develop everyday skills, with care and encouragement along the way.'],
-                        ['health-wellbeing', 'wellbeing.jpg', 'Health & Well-being', 'Promoting healthy and happy children and families.', 'Care begins with well-being. We encourage healthy habits, kindness, and supportive connections for children and their families.'],
-                        ['faith-community', 'fellowship.jpg', 'Faith & Community', 'Building strong families through faith and fellowship.', 'Shared faith brings us together. Through fellowship and community life, we make room for connection, encouragement, and spiritual growth.'],
+                        ['education-learning', '475277119_1027787949390104_1773204911861391301_n.jpg', 'Education & Learning', 'Creating learning opportunities for a brighter tomorrow.', 'A space to learn, build confidence, and develop everyday skills, with care and encouragement along the way.'],
+                        ['health-wellbeing', '475717669_1032137442288488_2091060833055381694_n.jpg', 'Health & Well-being', 'Promoting healthy and happy children and families.', 'Care begins with well-being. We encourage healthy habits, kindness, and supportive connections for children and their families.'],
+                        ['faith-community', '471950061_122219733956015911_7061962689076303098_n.jpg', 'Faith & Community', 'Building strong families through faith and fellowship.', 'Shared faith brings us together. Through fellowship and community life, we make room for connection, encouragement, and spiritual growth.'],
                     ] as [$id, $photo, $title, $description, $detail])
                         <article class="public-program-card" id="{{ $id }}" data-public-reveal>
-                            <img src="{{ asset('images/homepage/placeholders/'.$photo) }}" alt="{{ $title }}" width="960" height="640" loading="lazy" decoding="async">
+                            <img src="{{ asset('images/Image%20assets/'.$photo) }}" alt="{{ $title }}" width="960" height="640" loading="lazy" decoding="async">
                             <div class="public-program-card__body">
                                 <h3>{{ $title }}</h3><p>{{ $description }}</p>
                                 <details class="public-program-detail">
@@ -107,7 +107,7 @@
 
         <section class="public-section public-care" id="care" aria-labelledby="care-title">
             <div class="public-container public-care__grid">
-                <img class="public-care__image" src="{{ asset('images/homepage/placeholders/community.jpg') }}" alt="RLCP community" width="1200" height="680" loading="lazy" decoding="async" data-public-reveal>
+                <img class="public-care__image" src="{{ asset('images/Image%20assets/475819601_1032137408955158_7026391996698759231_n.jpg') }}" alt="RLCP community" width="1200" height="680" loading="lazy" decoding="async" data-public-reveal>
                 <div data-public-reveal>
                     <p class="public-eyebrow">Walking alongside families</p>
                     <h2 id="care-title">Growing Together<br>Through Care</h2>
@@ -122,12 +122,12 @@
                 <h2 class="public-lined-heading" id="community-title">Life in <span class="public-warm-text">Our Community</span></h2>
                 <div class="public-card-grid">
                     @foreach ([
-                        ['learning.png', 'Learning Activities', 'Fun and meaningful learning experiences for children.', 'education-learning', 'Explore Education & Learning'],
-                        ['fellowship.jpg', 'Community Fellowship', 'Building friendships and stronger community ties.', 'faith-community', 'Explore Faith & Community'],
-                        ['family.jpg', 'Family Engagement', 'Supporting and empowering families for a better tomorrow.', 'care', 'Learn about our care'],
+                        ['475277119_1027787949390104_1773204911861391301_n.jpg', 'Learning Activities', 'Fun and meaningful learning experiences for children.', 'education-learning', 'Explore Education & Learning'],
+                        ['471950061_122219733956015911_7061962689076303098_n.jpg', 'Community Fellowship', 'Building friendships and stronger community ties.', 'faith-community', 'Explore Faith & Community'],
+                        ['484810440_1064942369007995_1951277791144367540_n.jpg', 'Family Engagement', 'Supporting and empowering families for a better tomorrow.', 'care', 'Learn about our care'],
                     ] as [$photo, $title, $description, $target, $label])
                         <figure class="public-gallery-card" data-public-reveal>
-                            <img src="{{ asset('images/homepage/placeholders/'.$photo) }}" alt="{{ $title }}" width="960" height="640" loading="lazy" decoding="async">
+                            <img src="{{ asset('images/Image%20assets/'.$photo) }}" alt="{{ $title }}" width="960" height="640" loading="lazy" decoding="async">
                             <figcaption>
                                 <div><h3>{{ $title }}</h3><p>{{ $description }}</p></div>
                                 <a class="public-card-arrow" href="#{{ $target }}" aria-label="{{ $label }}"><x-public.icon name="arrow" /></a>
@@ -135,11 +135,20 @@
                         </figure>
                     @endforeach
                 </div>
+                <details class="public-program-detail">
+                    <summary>View more RLCP photos</summary>
+                    <div class="public-card-grid">
+                        @foreach (\Illuminate\Support\Facades\File::glob(public_path('images/Image assets/*.{jpg,jpeg,png,webp}'), GLOB_BRACE) as $image)
+                            <img src="{{ asset('images/Image%20assets/'.rawurlencode(basename($image))) }}" alt="RLCP community photo" width="960" height="640" loading="lazy" decoding="async" style="width: 100%; height: auto;">
+                        @endforeach
+                    </div>
+                </details>
+
             </div>
         </section>
 
         <section class="public-section public-contact" id="contact" aria-labelledby="contact-title">
-            <img class="public-contact__image" src="{{ asset('images/homepage/placeholders/contact.jpg') }}" alt="" width="1200" height="680" loading="lazy" decoding="async">
+            <img class="public-contact__image" src="{{ asset('images/Image%20assets/475634194_1028374149331484_2893038508779317236_n.jpg') }}" alt="" width="1200" height="680" loading="lazy" decoding="async">
             <div class="public-container public-contact__content" data-public-reveal>
                 <p class="public-eyebrow">Faith. Care. Connection.</p>
                 <h2 id="contact-title">Let’s Connect With Our Community</h2>
