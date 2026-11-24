@@ -113,3 +113,14 @@
     .rlcp-public.public-programs-page .programs-application__copy { border-left: 0; padding-left: 0; }
     .rlcp-public.public-programs-page .programs-application__photo { aspect-ratio: 2 / 1; }
 }
+
+.rlcp-public.public-programs-page img.programs-hero__photo,
+.rlcp-public.public-programs-page img.programs-overview__photo,
+.rlcp-public.public-programs-page img.programs-article__photo,
+.rlcp-public.public-programs-page img.programs-application__photo {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 16px;
+    padding: 0;
+}

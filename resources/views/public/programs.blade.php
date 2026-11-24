@@ -23,7 +23,7 @@
                     <p>Draft introduction: exploring learning, family connection, community, and faith-centered care. Content pending RLCP approval.</p>
                     <a class="public-button public-button--gold programs-button" href="#program-overview">Explore Programs <x-public.icon name="arrow" /></a>
                 </div>
-                <x-public.media-placeholder class="programs-hero__photo" label="Community hero photo placeholder" />
+                <img class="programs-hero__photo" src="{{ asset('images/Image%20assets/499755501_122248739426015911_6605334484464686771_n.jpg') }}" alt="RLCP community gathering" fetchpriority="high">
             </div>
         </section>
 
@@ -32,7 +32,7 @@
                 <h2 class="programs-section-title" id="program-overview-title">How We Support <span>Growth</span></h2>
                 <p class="programs-section-intro">These are proposed categories for this preview, not confirmed RLCP programs.</p>
                 <div class="programs-overview__grid">
-                    <x-public.media-placeholder class="programs-overview__photo" label="Family and community photo placeholder" />
+                    <img class="programs-overview__photo" src="{{ asset('images/Image%20assets/475819601_1032137408955158_7026391996698759231_n.jpg') }}" alt="Community gathering outdoors" loading="lazy" decoding="async">
                     <div class="programs-categories">
                         {{-- Editable draft categories. Replace only with RLCP-approved names and descriptions. --}}
                         @foreach (['Learning & Development' => 'faith', 'Family & Community Care' => 'community', 'Faith & Formation' => 'church'] as $title => $icon)
@@ -54,7 +54,7 @@
                     @foreach ([
                         [
                             'title' => 'Growing Together, One Conversation at a Time',
-                            'image' => 'Family connection article photo placeholder',
+                            'image' => '484810440_1064942369007995_1951277791144367540_n.jpg',
                             'excerpt' => 'Draft reflection on listening, shared activities, and making room for family connection.',
                             'paragraphs' => [
                                 'A shared story, a simple drawing, or a question about the day can become an invitation to spend time together. This draft explores small moments of curiosity and patient attention.',
@@ -63,7 +63,7 @@
                         ],
                         [
                             'title' => 'A Place to Learn and Belong',
-                            'image' => 'Learning and community article photo placeholder',
+                            'image' => '475277119_1027787949390104_1773204911861391301_n.jpg',
                             'excerpt' => 'Draft reflection on welcoming spaces where children and families can ask questions and share ideas.',
                             'paragraphs' => [
                                 'Welcoming spaces make room for questions, different experiences, and time to listen. This sample considers how an invitation to read, create, or explore might begin with the interests of a child and their family.',
@@ -72,7 +72,7 @@
                         ],
                         [
                             'title' => 'Serving Together with Purpose',
-                            'image' => 'Faith and care article photo placeholder',
+                            'image' => '471950061_122219733956015911_7061962689076303098_n.jpg',
                             'excerpt' => 'Draft reflection on faith, kindness, and everyday choices that make room for care in a community.',
                             'paragraphs' => [
                                 'Offering time, listening with patience, or sharing a task are ordinary ways to express care. This sample explores those themes without describing a specific RLCP activity or participant.',
@@ -81,7 +81,7 @@
                         ],
                     ] as $article)
                         <article class="programs-article {{ $loop->first ? 'programs-article--featured' : '' }}" data-public-reveal>
-                            <x-public.media-placeholder class="programs-article__photo" :label="$article['image']" />
+                            <img class="programs-article__photo" src="{{ asset('images/Image%20assets/'.$article['image']) }}" alt="" loading="lazy" decoding="async">
                             <div class="programs-article__content">
                                 <p class="programs-article__status"><strong>Draft article</strong><span>Pending RLCP approval</span></p>
                                 <h3>{{ $article['title'] }}</h3>
@@ -104,7 +104,7 @@
 
         <section class="public-section programs-application" aria-labelledby="program-application-title">
             <div class="public-container programs-application__grid">
-                <x-public.media-placeholder class="programs-application__photo" label="Community care image placeholder" />
+                <img class="programs-application__photo" src="{{ asset('images/Image%20assets/475645835_1028374385998127_9134754074080059052_n.jpg') }}" alt="Families gathered for an RLCP program" loading="lazy" decoding="async">
                 <div class="programs-application__copy">
                     <h2 id="program-application-title">Start an <span>Application</span></h2>
                     <p>The application page is a draft preview. Online applications are not open yet. Eligibility and intake details are awaiting RLCP approval.</p>
