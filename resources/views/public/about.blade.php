@@ -18,7 +18,7 @@
         <section class="about-hero" aria-labelledby="about-title">
             <div class="public-container">
                 <div class="about-hero__frame">
-                    <img class="about-hero__photo" src="{{ asset('images/Image%20assets/499755501_122248739426015911_6605334484464686771_n.jpg') }}" alt="" fetchpriority="high">
+                    <img class="about-hero__photo" src="{{ asset('images/Image%20assets/475760812_1032137598955139_4231820125491115815_n.jpg') }}" alt="" fetchpriority="high">
                     <h1 id="about-title">About RLCP</h1>
                 </div>
             </div>
@@ -49,9 +49,9 @@
 
                 <div class="about-media" aria-label="Community photographs" data-public-reveal>
                     <figure class="about-community-photo">
-                        <img class="about-community-photo__image" src="{{ asset('images/Image%20assets/475634194_1028374149331484_2893038508779317236_n.jpg') }}" alt="RLCP community members gathered indoors" loading="lazy" decoding="async">
+                        <img class="about-community-photo__image" src="{{ asset('images/Image%20assets/475303188_1027808906054675_6168913969418295088_n.jpg') }}" alt="RLCP community members gathered indoors" loading="lazy" decoding="async">
                     </figure>
-                    <figure class="about-video about-media-photo"><img src="{{ asset('images/Image%20assets/475819601_1032137408955158_7026391996698759231_n.jpg') }}" alt="RLCP community gathering outdoors" loading="lazy" decoding="async"></figure>
+                    <figure class="about-video about-media-photo"><img src="{{ asset('images/Image%20assets/476110220_1035851531917079_2258772082870141505_n.jpg') }}" alt="RLCP community members outdoors" loading="lazy" decoding="async"></figure>
                 </div>
 
                 <section class="about-journey" aria-labelledby="about-journey-title">
@@ -75,7 +75,7 @@
                     <h2 id="about-people-title"><span>Our</span> People</h2>
                 </div>
                 <div class="about-people__grid">
-                    @foreach (['471950061_122219733956015911_7061962689076303098_n.jpg', '475645835_1028374385998127_9134754074080059052_n.jpg', '476833248_1035851791917053_485477017824102922_n.jpg', '499773338_122248801982015911_8301704947418968676_n.jpg'] as $photo)
+                    @foreach (['471948425_122219736194015911_4095597393788039557_n.jpg', '472001715_122219733776015911_4599790007291003162_n.jpg', '475705819_1028373129331586_3566612749568777442_n.jpg', '475349199_1028373252664907_148055406827141127_n.jpg'] as $photo)
                         <figure class="about-person" data-public-reveal>
                             <img class="about-person__portrait" src="{{ asset('images/Image%20assets/' . rawurlencode($photo)) }}" alt="RLCP community gathering" loading="lazy" decoding="async">
                         </figure>
