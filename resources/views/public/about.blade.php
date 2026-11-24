@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="About RLCP — a preview awaiting approved organization information and photographs.">
+    <meta name="description" content="Get to know Risen Lord Church Phils., Inc. and see its community in photos.">
     <meta name="theme-color" content="#B91C1C">
     <meta name="robots" content="noindex, nofollow">
     <title>About RLCP | Risen Lord Church Phils., Inc.</title>
@@ -18,9 +18,8 @@
         <section class="about-hero" aria-labelledby="about-title">
             <div class="public-container">
                 <div class="about-hero__frame">
-                    <p class="about-hero__label"><x-public.icon name="image" /> Approved hero photo — placeholder · 3:1</p>
+                    <img class="about-hero__photo" src="{{ asset('images/Image%20assets/499755501_122248739426015911_6605334484464686771_n.jpg') }}" alt="" fetchpriority="high">
                     <h1 id="about-title">About RLCP</h1>
-                    <p class="about-hero__note">Photograph pending RLCP approval</p>
                 </div>
             </div>
         </section>
@@ -48,16 +47,11 @@
                     @endforeach
                 </div>
 
-                <div class="about-media" aria-label="Community media placeholders" data-public-reveal>
+                <div class="about-media" aria-label="Community photographs" data-public-reveal>
                     <figure class="about-community-photo">
-                        <div class="about-community-photo__art" role="img" aria-label="Community photo placeholder. No approved photograph has been supplied."><x-public.icon name="image" /></div>
-                        <figcaption><strong>Community photo — placeholder · 3:2</strong><span>Approved photograph pending</span></figcaption>
+                        <img class="about-community-photo__image" src="{{ asset('images/Image%20assets/475634194_1028374149331484_2893038508779317236_n.jpg') }}" alt="RLCP community members gathered indoors" loading="lazy" decoding="async">
                     </figure>
-                    <aside class="about-video" aria-label="Optional video placeholder">
-                        <x-public.icon name="image" />
-                        <h3>Optional video</h3>
-                        <p>Video, captions, and transcript pending RLCP approval.</p>
-                    </aside>
+                    <figure class="about-video about-media-photo"><img src="{{ asset('images/Image%20assets/475819601_1032137408955158_7026391996698759231_n.jpg') }}" alt="RLCP community gathering outdoors" loading="lazy" decoding="async"></figure>
                 </div>
 
                 <section class="about-journey" aria-labelledby="about-journey-title">
@@ -79,13 +73,11 @@
                 <div class="about-section-heading">
                     <p class="about-section-label">Our People</p>
                     <h2 id="about-people-title"><span>Our</span> People</h2>
-                    <p class="about-section-note">Optional profiles — portraits and details awaiting approval.</p>
                 </div>
                 <div class="about-people__grid">
-                    @foreach (range(1, 4) as $position)
+                    @foreach (['471950061_122219733956015911_7061962689076303098_n.jpg', '475645835_1028374385998127_9134754074080059052_n.jpg', '476833248_1035851791917053_485477017824102922_n.jpg', '499773338_122248801982015911_8301704947418968676_n.jpg'] as $photo)
                         <figure class="about-person" data-public-reveal>
-                            <div class="about-person__portrait" role="img" aria-label="Portrait placeholder {{ $position }}. No approved portrait has been supplied."><x-public.icon name="person" /></div>
-                            <figcaption><strong>Name and role pending approval.</strong><span class="about-gold-rule" aria-hidden="true"></span></figcaption>
+                            <img class="about-person__portrait" src="{{ asset('images/Image%20assets/' . rawurlencode($photo)) }}" alt="RLCP community gathering" loading="lazy" decoding="async">
                         </figure>
                     @endforeach
                 </div>
